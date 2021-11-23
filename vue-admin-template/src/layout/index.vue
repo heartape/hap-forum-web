@@ -1,18 +1,18 @@
 <template>
   <div :class="classObj" class="app-wrapper">
-    <div v-if="device==='mobile'&&sidebar.opened" class="drawer-bg" @click="handleClickOutside" />
-    <sidebar class="sidebar-container" />
+    <div :class="{'fixed-header':fixedHeader}">
+      <navbar />
+    </div>
     <div class="main-container">
-      <div :class="{'fixed-header':fixedHeader}">
-        <navbar />
-      </div>
+      <sidebar class="sidebar-container" />
       <app-main />
+      <right-sidebar />
     </div>
   </div>
 </template>
 
 <script>
-import { Navbar, Sidebar, AppMain } from './components'
+import { Navbar, Sidebar, RightSidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
 
 export default {
@@ -20,6 +20,7 @@ export default {
   components: {
     Navbar,
     Sidebar,
+    RightSidebar,
     AppMain
   },
   mixins: [ResizeMixin],
@@ -41,11 +42,6 @@ export default {
         mobile: this.device === 'mobile'
       }
     }
-  },
-  methods: {
-    handleClickOutside() {
-      this.$store.dispatch('app/closeSideBar', { withoutAnimation: false })
-    }
   }
 }
 </script>
@@ -56,22 +52,9 @@ export default {
 
   .app-wrapper {
     @include clearfix;
-    position: relative;
     height: 100%;
-    width: 100%;
-    &.mobile.openSidebar{
-      position: fixed;
-      top: 0;
-    }
-  }
-  .drawer-bg {
-    background: #000;
-    opacity: 0.3;
-    width: 100%;
-    top: 0;
-    height: 100%;
-    position: absolute;
-    z-index: 999;
+    width: 1200px;
+    margin: 0 auto 0 auto;
   }
 
   .fixed-header {
