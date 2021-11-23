@@ -1,16 +1,8 @@
 <template>
   <div class="navbar">
+    <hamburger :is-active="sidebar.opened" class="hamburger-container" @toggleClick="toggleSideBar" />
 
-    <header id="header" class="header">
-      <div class="header-container container">
-        <div class="header-header">
-          <img draggable="false" src="https://cdn.surmon.me/images/logo.svg" class="header-logo">
-          <span class="header-slogan">来苏之望，鞭狂马猖</span>
-          <a aria-current="page" href="/" class="link-active router-link-exact-active header-link" title="来苏之望，鞭狂马猖"></a>
-        </div>
-        <div class="client-only-empty"></div>
-      </div><div class="pre-load"></div>
-    </header>
+    <breadcrumb class="breadcrumb-container" />
 
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
@@ -21,14 +13,17 @@
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
             <el-dropdown-item>
-              我的主页
+              Home
             </el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://www.baidu.com/">
-            <el-dropdown-item>百度</el-dropdown-item>
+          <a target="_blank" href="https://github.com/PanJiaChen/vue-admin-template/">
+            <el-dropdown-item>Github</el-dropdown-item>
+          </a>
+          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
+            <el-dropdown-item>Docs</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">退出登录</span>
+            <span style="display:block;">Log Out</span>
           </el-dropdown-item>
         </el-dropdown-menu>
       </el-dropdown>
@@ -71,17 +66,6 @@ export default {
   position: relative;
   background: #fff;
   box-shadow: 0 1px 4px rgba(0,21,41,.08);
-
-  .header {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 5.1rem;
-    z-index: 999;
-    background-color: var(--module-bg);
-    backdrop-filter: blur(5px);
-  }
 
   .hamburger-container {
     line-height: 46px;
