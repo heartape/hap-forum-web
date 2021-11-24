@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <div>Savour Hub</div>
+    <div style="background-color: #1b95e0;height: 60px;width: 120px;line-height:50px;text-align: center">Savour Hub</div>
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -34,6 +34,9 @@ export default {
     ])
   },
   methods: {
+    toggleSideBar() {
+      this.$store.dispatch('app/toggleSideBar')
+    },
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)

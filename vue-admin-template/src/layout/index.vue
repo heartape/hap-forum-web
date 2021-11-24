@@ -36,8 +36,6 @@ export default {
     },
     classObj() {
       return {
-        hideSidebar: !this.sidebar.opened,
-        openSidebar: this.sidebar.opened,
         withoutAnimation: this.sidebar.withoutAnimation,
         mobile: this.device === 'mobile'
       }
@@ -54,7 +52,20 @@ export default {
     @include clearfix;
     height: 100%;
     width: 1200px;
-    margin: 0 auto 0 auto;
+    &.mobile.openSidebar{
+      position: fixed;
+      top: 0;
+    }
+  }
+
+  .drawer-bg {
+    background: #000;
+    opacity: 0.3;
+    width: 100%;
+    top: 0;
+    height: 100%;
+    position: absolute;
+    z-index: 999;
   }
 
   .fixed-header {
