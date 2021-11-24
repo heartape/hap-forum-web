@@ -1,6 +1,7 @@
 <template>
   <div class="navbar">
-    <div style="background-color: #1b95e0;height: 60px;width: 120px;line-height:50px;text-align: center">Savour Hub</div>
+    <div class="head-title">Savour Hub</div>
+    <div class="head-content">heart like a capering monkey, mind like a galloping horse</div>
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">
@@ -29,14 +30,10 @@ import { mapGetters } from 'vuex'
 export default {
   computed: {
     ...mapGetters([
-      'sidebar',
       'avatar'
     ])
   },
   methods: {
-    toggleSideBar() {
-      this.$store.dispatch('app/toggleSideBar')
-    },
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
@@ -47,17 +44,32 @@ export default {
 
 <style lang="scss" scoped>
 .navbar {
-  height: 50px;
+  height: 100%;
   width: 1200px;
   overflow: hidden;
   position: relative;
-  background: #e8e8e8;
-  box-shadow: 0 1px 4px rgba(0,21,41,.08);
+  left:50%;
+  margin-left: -600px;
+
+  .head-title, .head-content {
+    float: left;
+    background-color: #1b95e0;
+    height: 100%;
+    width: 150px;
+    line-height:65px;
+    text-align: center
+  }
+
+  .head-content {
+    margin-left: 50px;
+    width: 500px;
+  }
 
   .right-menu {
     float: right;
     height: 100%;
-    line-height: 50px;
+    margin-top: 6px;
+    line-height: 65px;
 
     &:focus {
       outline: none;

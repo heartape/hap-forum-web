@@ -8,7 +8,7 @@
         :text-color="variables.menuText"
         :unique-opened="true"
         :active-text-color="variables.menuActiveText"
-        :collapse-transition="false"
+        :collapse-transition="true"
         mode="vertical"
       >
         <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
@@ -18,16 +18,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import SidebarItem from './SidebarItem'
 import variables from '@/styles/variables.scss'
 
 export default {
   components: { SidebarItem },
   computed: {
-    ...mapGetters([
-      'sidebar'
-    ]),
     routes() {
       return this.$router.options.routes
     },

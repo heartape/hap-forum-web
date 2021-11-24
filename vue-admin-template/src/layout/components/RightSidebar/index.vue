@@ -9,3 +9,11 @@
 export default {
 }
 </script>
+
+<style>
+  .rightSidebar {
+    float: right;
+    width: 270px;
+    background-color: #409EFF;
+  }
+</style>
