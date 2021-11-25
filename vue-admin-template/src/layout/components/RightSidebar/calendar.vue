@@ -128,7 +128,7 @@
   text-align: center;
 
   padding:1px;
-  font-size:8px;
+  font-size:0.2em;
   line-height: 1.2;
   color:#444;
 }
@@ -148,9 +148,6 @@
   text-transform: uppercase;
   height:30px;
   vertical-align: middle;
-}
-.calendar-button{
-  text-align: center;
 }
 .calendar-button span{
   cursor: pointer;
@@ -235,7 +232,7 @@
         <!-- {{monthString}} -->
         <div class="month">
           <div class="month-inner" :style="{'top':-(month*20)+'px'}">
-            <span v-for="m in months" :key="m">{{ m }}</span>
+            <span v-for="m in months" :key="m.id">{{ m }}</span>
           </div>
         </div>
         <div class="year">{{ year }}</div>
@@ -244,12 +241,12 @@
     <table cellpadding="5">
       <thead>
         <tr>
-          <td v-for="week in weeks" :key="week" class="week">{{ week }}</td>
+          <td v-for="week in weeks" :key="week.id" class="week">{{ week }}</td>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="(day1,k1) in days" :key="day1" style="{'animation-delay',(k1*30)+'ms'}">
-          <td v-for="(child,k2) in day1" :key="child" :class="{'selected':child.selected,'disabled':child.disabled}" @click="select(k1, k2, $event)">
+        <tr v-for="(day1,k1) in days" :key="day1.id" style="{'animation-delay',(k1*30)+'ms'}">
+          <td v-for="(child,k2) in day1" :key="child.id" :class="{'selected':child.selected,'disabled':child.disabled}" @click="select(k1, k2, $event)">
             <span :class="{'red':k2 === 0||k2 === 6||((child.isLunarFestival||child.isGregorianFestival) && lunar)}">{{ child.day }}</span>
             <div v-if="child.eventName !== undefined" class="text">{{ child.eventName }}</div>
             <div v-if="lunar" class="text" :class="{'isLunarFestival':child.isLunarFestival,'isGregorianFestival':child.isGregorianFestival}">{{ child.lunar }}</div>
@@ -259,7 +256,7 @@
     </table>
 
     <div class="calendar-years" :class="{'show':yearsShow}">
-      <span v-for="y in years" :key="y" :class="{'active':y === year}" @click.stop="selectYear(y)">{{ y }}</span>
+      <span v-for="y in years" :key="y.id" :class="{'active':y === year}" @click.stop="selectYear(y)">{{ y }}</span>
     </div>
 
   </div>
