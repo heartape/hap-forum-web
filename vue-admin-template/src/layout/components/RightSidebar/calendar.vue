@@ -74,7 +74,7 @@
   margin:2px !important;
   padding:0px 0;
   width: 14.28571429%;
-  height:44px;
+  height:40px;
   text-align: center;
   vertical-align: middle;
   font-size:14px;
@@ -98,10 +98,10 @@
 }
 .calendar td span{
   display:block;
-  max-width:25px;
-  height:25px;
-  font-size: 16px;
-  line-height:26px;
+  max-width:20px;
+  height:20px;
+  font-size: 12px;
+  line-height:20px;
   margin:0px auto;
   border-radius:20px;
 }
@@ -122,7 +122,7 @@
 }
 .calendar td .text{
   position: absolute;
-  top:28px;
+  top:18px;
   left:0;
   right:0;
   text-align: center;

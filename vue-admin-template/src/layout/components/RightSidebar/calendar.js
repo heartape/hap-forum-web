@@ -460,59 +460,6 @@ var calendar = {
     var astro = calendar.toAstro(m, d)
 
     return { 'lYear': year, 'lMonth': month, 'lDay': day, 'Animal': calendar.getAnimal(year), 'IMonthCn': (isLeap ? '\u95f0' : '') + calendar.toChinaMonth(month), 'IDayCn': calendar.toChinaDay(day), 'cYear': y, 'cMonth': m, 'cDay': d, 'gzYear': gzY, 'gzMonth': gzM, 'gzDay': gzD, 'isToday': isToday, 'isLeap': isLeap, 'nWeek': nWeek, 'ncWeek': '\u661f\u671f' + cWeek, 'isTerm': isTerm, 'Term': Term, 'astro': astro }
-  },
-
-  /**
-   * 传入农历年月日以及传入的月份是否闰月获得详细的公历、农历object信息 <=>JSON
-   * @param y  lunar year
-   * @param m  lunar month
-   * @param d  lunar day
-   * @param isLeapMonth  lunar month is leap or not.[如果是农历闰月第四个参数赋值true即可]
-   * @return JSON object
-   * @eg:console.log(calendar.lunar2solar(1987,9,10));
-   */
-  lunar2solar: function(y, m, d, isLeapMonth1) { // 参数区间1900.1.31~2100.12.1
-    var isLeapMonth = !!isLeapMonth1
-    // var leapOffset = 0
-    var leapMonth = calendar.leapMonth(y)
-    // var leapDay = calendar.leapDays(y)
-    if (isLeapMonth && (leapMonth !== m)) { return -1 }// 传参要求计算该闰月公历 但该年得出的闰月与传参的月份并不同
-    if (y === 2100 && m === 12 && d > 1 || y === 1900 && m === 1 && d < 31) { return -1 }// 超出了最大极限值
-    var day = calendar.monthDays(y, m)
-    var _day = day
-    // bugFix 2016-9-25
-    // if month is leap, _day use leapDays method
-    if (isLeapMonth) {
-      _day = calendar.leapDays(y, m)
-    }
-    if (y < 1900 || y > 2100 || d > _day) { return -1 }// 参数合法性效验
-
-    // 计算农历的时间差
-    var offset = 0
-    for (var i = 1900; i < y; i++) {
-      offset += calendar.lYearDays(i)
-    }
-    var leap = 0
-    var isAdd = false
-    for (var i1 = 1; i1 < m; i1++) {
-      leap = calendar.leapMonth(y)
-      if (!isAdd) { // 处理闰月
-        if (leap <= i1 && leap > 0) {
-          offset += calendar.leapDays(y); isAdd = true
-        }
-      }
-      offset += calendar.monthDays(y, i1)
-    }
-    // 转换闰月农历 需补充该年闰月的前一个月的时差
-    if (isLeapMonth) { offset += day }
-    // 1900年农历正月一日的公历时间为1900年1月30日0时0分0秒(该时间也是本农历的最开始起始点)
-    var stmap = Date.UTC(1900, 1, 30, 0, 0, 0)
-    var calObj = new Date((offset + d - 31) * 86400000 + stmap)
-    var cY = calObj.getUTCFullYear()
-    var cM = calObj.getUTCMonth() + 1
-    var cD = calObj.getUTCDate()
-
-    return calendar.solar2lunar(cY, cM, cD)
   }
 }
 
