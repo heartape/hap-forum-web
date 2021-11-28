@@ -22,3 +22,10 @@ export function logout() {
     method: 'post'
   })
 }
+
+export function userDetail(uid) {
+  return request({
+    url: '/vue-admin-template/user/' + uid,
+    method: 'get'
+  })
+}

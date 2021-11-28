@@ -1,15 +1,15 @@
 <template>
   <div class="rightSidebar">
-    <el-table :data="hot" style="width: 100%" @row-click="rowClick">
+    <el-table :data="hot" style="width: 100%; margin: 10px auto" :cell-class-name="hotStyle" @row-click="rowClick">
       <el-table-column
-        prop="date"
-        label="日期"
+        prop="title"
+        label="热点"
         width="250"
         highlight-current-row="true"
-        fit="false"
       />
     </el-table>
     <calendar-app />
+    <!--  todo:标签列表  -->
   </div>
 </template>
 
@@ -26,7 +26,6 @@ export default {
   },
   mounted() {
     this.getHot().then(hot => {
-      console.log(hot)
       this.hot = hot
     })
   },
@@ -60,13 +59,13 @@ export default {
         }).catch(error => {
           // todo:右边栏目数据,source:来源(out,in),type类型(news,knowledge,article,topic等)
           const hot = [{
-            date: '2016-05-022016-05-022016-05-022016-05-02',
+            title: '美国入侵阿富汗',
             source: 'out',
             // 外部来源只有网址
             type: 'website',
             param: 'https://www.baidu.com'
           }, {
-            date: '2016-05-04',
+            title: '美国撤离阿富汗',
             source: 'in',
             type: 'article',
             // 此时的url就是文章id
@@ -77,6 +76,9 @@ export default {
           this.loading = false
         })
       })
+    },
+    hotStyle() {
+      return 'hot'
     }
   }
 }
@@ -86,6 +88,14 @@ export default {
   .rightSidebar {
     float: right;
     width: 270px;
-    background-color: #409EFF;
+  }
+  /*单元格内属性*/
+  .hot {
+    padding: 8px 0 !important;
+  }
+  .hot .cell {
+    height: 16px;
+    font-size: 12px;
+    line-height: 16px;
   }
 </style>

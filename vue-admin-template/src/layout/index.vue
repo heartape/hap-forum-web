@@ -28,11 +28,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  @import "~@/styles/mixin.scss";
-  @import "~@/styles/variables.scss";
+
+  .sidebar-container {
+    margin-top: 20px;
+  }
 
   .app-wrapper {
-    @include clearfix;
     height: 100%;
     width: 100%;
   }

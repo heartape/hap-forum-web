@@ -47,12 +47,42 @@ export const constantRoutes = [
     path: '/',
     component: Layout,
     redirect: '/article',
-    children: [{
-      path: 'article',
-      name: 'Article',
-      component: () => import('@/views/article/index'),
-      meta: { title: '文章阅读', icon: 'article' }
-    }]
+    children: [
+      {
+        path: 'article',
+        name: 'Article',
+        component: () => import('@/views/article/index'),
+        meta: { title: '文章阅读', icon: 'article' }
+      }
+    ]
+  },
+
+  {
+    path: '/article',
+    component: Layout,
+    children: [
+      {
+        path: 'detail',
+        name: 'ArticleDetail',
+        component: () => import('@/views/article/detail'),
+        meta: { title: '详情', icon: 'article-detail' },
+        hidden: true
+      }
+    ]
+  },
+
+  {
+    path: '/article',
+    component: Layout,
+    children: [
+      {
+        path: 'publish',
+        name: 'ArticlePublish',
+        component: () => import('@/views/article/publish'),
+        meta: { title: '文章发布', icon: 'article-publish' },
+        hidden: true
+      }
+    ]
   },
 
   {
@@ -80,6 +110,31 @@ export const constantRoutes = [
   },
 
   {
+    path: '/news',
+    component: Layout,
+    children: [
+      {
+        path: 'index',
+        name: 'News',
+        component: () => import('@/views/news/index'),
+        meta: { title: '站内热点', icon: 'news' }
+      }
+    ]
+  },
+
+  {
+    path: '/news',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: 'detail',
+      name: 'NewsDetail',
+      component: () => import('@/views/news/detail'),
+      meta: { title: '热点详情', icon: 'news-detail' }
+    }]
+  },
+
+  {
     path: '/picture',
     component: Layout,
     children: [
@@ -88,19 +143,6 @@ export const constantRoutes = [
         name: 'Picture',
         component: () => import('@/views/picture/index'),
         meta: { title: '精彩瞬间', icon: 'picture' }
-      }
-    ]
-  },
-
-  {
-    path: '/news',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'News',
-        component: () => import('@/views/news/index'),
-        meta: { title: '热点新闻', icon: 'news' }
       }
     ]
   },

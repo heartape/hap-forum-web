@@ -100,7 +100,7 @@
   display:block;
   max-width:20px;
   height:20px;
-  font-size: 12px;
+  font-size: 14px;
   line-height:20px;
   margin:0px auto;
   border-radius:20px;

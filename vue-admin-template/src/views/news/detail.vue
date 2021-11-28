@@ -1,10 +1,10 @@
 <template>
-
+  <div>热点详情</div>
 </template>
 
 <script>
 export default {
-  name: "detail"
+  name: 'NewsDetail'
 }
 </script>
 
