@@ -12,7 +12,8 @@
         :on-success="handleSuccess"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        action="https://139.224.245.120"
+        :http-request="httpRequest"
+        action=""
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
@@ -30,7 +31,7 @@
 </template>
 
 <script>
-// import { getToken } from 'api/qiniu'
+import { upload } from '@/api/upload'
 
 export default {
   name: 'EditorSlideUpload',
@@ -96,6 +97,11 @@ export default {
         }
         resolve(true)
       })
+    },
+    // 覆盖elemen的上传函数
+    async httpRequest(item) {
+      const result = await upload(item)
+      console.log(result)
     }
   }
 }

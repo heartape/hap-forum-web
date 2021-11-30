@@ -1,19 +1,11 @@
 <template>
-  <!-- 富文本 -->
-  <div class="components-container">
-    <div>
-      <tinymce v-model="content" :height="300" />
-    </div>
-    <div class="editor-content" v-html="content" />
-  </div>
+  <div class="editor-content" v-html="content" />
 </template>
 
 <script>
-import Tinymce from '@/components/Tinymce'
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce },
   data() {
     return {
       content:

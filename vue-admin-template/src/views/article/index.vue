@@ -11,7 +11,7 @@
       </el-carousel-item>
     </el-carousel>
     <!--文章列表-->
-    <el-row v-for="(item) in article" :key="item.id">
+    <el-row v-for="item in article" :key="item.id">
       <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px' }">
         <el-image
           style="width: 200px; height: 140px; margin: 10px"

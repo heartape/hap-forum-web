@@ -28,6 +28,7 @@ const mutations = {
 }
 
 const actions = {
+  // todo:先完成登录,后修改状态码
   // user login
   login({ commit }, userInfo) {
     const { username, password } = userInfo
