@@ -2,7 +2,7 @@
   <!-- 富文本 -->
   <div class="article-publish-container">
     <div>
-      <tinymce v-model="content" :height="600" @imagesUpload="imagesUpload(arguments)" />
+      <tinymce v-model="article.content" :height="600" @imagesUpload="imagesUpload(arguments)" />
     </div>
     <el-button
       class="publish-button"
@@ -10,7 +10,7 @@
       icon="el-icon-finished"
       @click="contentUpload"
     >发布</el-button>
-    <div class="editor-content" v-html="content" />
+    <div class="editor-content" v-html="article.content" />
   </div>
 </template>
 
@@ -18,6 +18,7 @@
 import Tinymce from '@/components/Tinymce'
 import { getFileUrl, getOssToken } from '@/api/upload'
 import axios from 'axios'
+import { publishArticle } from '@/api/article'
 const UUID = require('uuid')
 
 export default {
@@ -25,7 +26,10 @@ export default {
   components: { Tinymce },
   data() {
     return {
-      content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
+      article: {
+        title: `无敌`,
+        content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
+      }
     }
   },
   methods: {
@@ -47,7 +51,8 @@ export default {
           const ossUrl = policyData.host
           const uuid = UUID.v4().toString().replace(/-/g, '')
           // 设置上传的访问路径
-          const fileName = uuid + blobInfo.filename
+          const fileName = uuid + blobInfo.filename()
+          console.log(fileName)
           /**
            * 在oos内部路径
            * 例如 front/article/dog.png
@@ -83,7 +88,13 @@ export default {
       })
     },
     contentUpload: function() {
-      alert('发布')
+      const body = this.article
+      // todo:丢失请求体
+      publishArticle(body).then(() => {
+        alert('发布成功')
+      }).catch(() => {
+        alert('发布失败')
+      })
     }
   }
 }
