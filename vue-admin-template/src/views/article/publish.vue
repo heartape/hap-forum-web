@@ -4,6 +4,12 @@
     <div>
       <tinymce v-model="content" :height="600" @imagesUpload="imagesUpload(arguments)" />
     </div>
+    <el-button
+      class="publish-button"
+      type="info"
+      icon="el-icon-finished"
+      @click="contentUpload"
+    >发布</el-button>
     <div class="editor-content" v-html="content" />
   </div>
 </template>
@@ -75,6 +81,9 @@ export default {
       }).catch(() => {
         failure('出现未知问题，请刷新页面')
       })
+    },
+    contentUpload: function() {
+      alert('发布')
     }
   }
 }
@@ -86,7 +95,16 @@ export default {
   margin: 20px auto;
   /*border: #2b2f3a solid 1px;*/
 }
-.editor-content{
+.publish-button {
+  position: absolute;
+  right: 4px;
+  top: 21px;
+  height: 34px;
+  border-color: transparent;
+  border-radius: 0;
+  padding: 10px;
+}
+.editor-content {
   margin-top: 20px;
 }
 </style>
