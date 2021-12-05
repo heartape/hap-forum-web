@@ -1,21 +1,18 @@
 <template>
   <div class="upload-container">
     <el-button :style="{background:color,borderColor:color}" icon="el-icon-upload" size="mini" type="primary" @click=" dialogVisible=true">
-      上传图片
+      upload
     </el-button>
     <el-dialog :visible.sync="dialogVisible">
       <el-upload
         :multiple="true"
         :file-list="fileList"
-        :limit="5"
         :show-file-list="true"
         :on-remove="handleRemove"
         :on-success="handleSuccess"
-        :on-exceed="handleExceed"
         :before-upload="beforeUpload"
         class="editor-slide-upload"
-        :http-request="Uploadfile"
-        action=""
+        action="https://httpbin.org/post"
         list-type="picture-card"
       >
         <el-button size="small" type="primary">
@@ -33,9 +30,7 @@
 </template>
 
 <script>
-import { getOssToken, getFileUrl } from '@/api/upload'
-import axios from 'axios'
-const UUID = require('uuid')
+// import { getToken } from 'api/qiniu'
 
 export default {
   name: 'EditorSlideUpload',
@@ -59,7 +54,7 @@ export default {
     handleSubmit() {
       const arr = Object.keys(this.listObj).map(v => this.listObj[v])
       if (!this.checkAllSuccess()) {
-        this.$message('Please wait for all images to be uploaded successfully.')
+        this.$message('Please wait for all images to be uploaded successfully. If there is a network problem, please refresh the page and upload again!')
         return
       }
       this.$emit('successCBK', arr)
@@ -67,12 +62,12 @@ export default {
       this.fileList = []
       this.dialogVisible = false
     },
-    handleSuccess(url, file) {
+    handleSuccess(response, file) {
       const uid = file.uid
       const objKeyArr = Object.keys(this.listObj)
       for (let i = 0, len = objKeyArr.length; i < len; i++) {
         if (this.listObj[objKeyArr[i]].uid === uid) {
-          this.listObj[objKeyArr[i]].url = url
+          this.listObj[objKeyArr[i]].url = response.files.file
           this.listObj[objKeyArr[i]].hasSuccess = true
           return
         }
@@ -88,9 +83,6 @@ export default {
         }
       }
     },
-    handleExceed() {
-      this.$message.warning(`当前上传限制5个文件`)
-    },
     beforeUpload(file) {
       const _self = this
       const _URL = window.URL || window.webkitURL
@@ -98,63 +90,11 @@ export default {
       this.listObj[fileName] = {}
       return new Promise((resolve, reject) => {
         const img = new Image()
-        // 上传之前创建的blob链接
         img.src = _URL.createObjectURL(file)
         img.onload = function() {
           _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
         }
         resolve(true)
-      })
-    },
-    // 覆盖elemen的上传函数
-    Uploadfile(param) {
-      // 得到文件的内容
-      const file = param.file
-      // 获取oss签名
-      getOssToken().then((response) => {
-        if (response.code === 20000) {
-          const policyData = response.data
-          /**
-           ossUrl 换成自己的Bucket的外网地址，
-           例如 https://heartape-test.oss-cn-shenzhen.aliyuncs.com
-           */
-          const ossUrl = policyData.host
-          const uuid = UUID.v4().toString().replace(/-/g, '')
-          // 设置上传的访问路径
-          const fileName = uuid + file.name
-          /**
-           * 在oos内部路径
-           * 例如 front/article/dog.png
-           */
-          const accessUrl = policyData.dir + fileName
-          // 上传文件的data参数
-          const sendData = new FormData()
-          sendData.append('OSSAccessKeyId', policyData.accessid)
-          sendData.append('policy', policyData.policy)
-          sendData.append('Signature', policyData.signature)
-          // sendData.append('callback', policyData.callback)
-          sendData.append('keys', policyData.dir)
-          sendData.append('key', accessUrl) // 上传的文件路径
-          sendData.append('success_action_status', 200) // 指定返回的状态码
-          sendData.append('type', 'image/jpeg')
-          sendData.append('file', file)
-          axios.post(
-            ossUrl,
-            sendData
-          ).then(() => {
-            getFileUrl(accessUrl).then(res => {
-              const temporaryUrl = res.data.url
-              const pictureObject = { name: fileName, url: temporaryUrl }
-              this.fileList.push(pictureObject)
-              const pictureUrl = ossUrl + '/' + accessUrl
-              console.log(temporaryUrl)
-              console.log('上传到阿里云的图片地址:' + pictureUrl)
-              this.handleSuccess(temporaryUrl, file)
-            })
-          }).catch(() => {
-            console.log('上传失败')
-          })
-        }
       })
     }
   }

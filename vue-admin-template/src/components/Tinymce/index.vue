@@ -54,6 +54,10 @@ export default {
       type: [Number, String],
       required: false,
       default: 'auto'
+    },
+    imagesUpload: {
+      type: Function,
+      default: function() {}
     }
   },
   data() {
@@ -129,10 +133,12 @@ export default {
         code_dialog_width: 1000,
         advlist_bullet_styles: 'square',
         advlist_number_styles: 'default',
-        imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
+        // imagetools_cors_hosts: ['www.tinymce.com', 'codepen.io'],
+        image_dimensions: false,
+        paste_data_images: true, // 设置为“true”将允许粘贴图像，而将其设置为“false”将不允许粘贴图像。
         default_link_target: '_blank',
         link_title: false,
-        nonbreaking_force_tab: true, // inserting nonbreaking space &nbsp; need Nonbreaking Space Plugin
+        nonbreaking_force_tab: true,
         init_instance_callback: editor => {
           if (_this.value) {
             editor.setContent(_this.value)
@@ -151,40 +157,15 @@ export default {
         // it will try to keep these URLs intact
         // https://www.tiny.cloud/docs-3x/reference/configuration/Configuration3x@convert_urls/
         // https://stackoverflow.com/questions/5196205/disable-tinymce-absolute-to-relative-url-conversions
-        convert_urls: false
-        // 整合七牛上传
-        // images_dataimg_filter(img) {
-        //   setTimeout(() => {
-        //     const $image = $(img);
-        //     $image.removeAttr('width');
-        //     $image.removeAttr('height');
-        //     if ($image[0].height && $image[0].width) {
-        //       $image.attr('data-wscntype', 'image');
-        //       $image.attr('data-wscnh', $image[0].height);
-        //       $image.attr('data-wscnw', $image[0].width);
-        //       $image.addClass('wscnph');
-        //     }
-        //   }, 0);
-        //   return img
-        // },
-        // images_upload_handler(blobInfo, success, failure, progress) {
-        //   progress(0);
-        //   const token = _this.$store.getters.token;
-        //   getToken(token).then(response => {
-        //     const url = response.data.qiniu_url;
-        //     const formData = new FormData();
-        //     formData.append('token', response.data.qiniu_token);
-        //     formData.append('key', response.data.qiniu_key);
-        //     formData.append('file', blobInfo.blob(), url);
-        //     upload(formData).then(() => {
-        //       success(url);
-        //       progress(100);
-        //     })
-        //   }).catch(err => {
-        //     failure('出现未知问题，刷新页面')
-        //     console.log(err);
-        //   });
-        // },
+        convert_urls: false,
+        // 整合oss上传
+        images_dataimg_filter: function(img) {
+          console.log(img)
+          return img.hasAttribute('internal-blob')
+        },
+        images_upload_handler: (blobInfo, success, failure, progress) => {
+          this.$emit('imagesUpload', blobInfo, success, failure, progress)
+        }
       })
     },
     destroyTinymce() {
