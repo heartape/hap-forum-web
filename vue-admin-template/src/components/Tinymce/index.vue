@@ -116,7 +116,7 @@ export default {
       const _this = this
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
-        language: this.languageTypeList['en'],
+        language: this.languageTypeList['zh'],
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,
@@ -181,7 +181,7 @@ export default {
         //       progress(100);
         //     })
         //   }).catch(err => {
-        //     failure('出现未知问题，刷新页面，或者联系程序员')
+        //     failure('出现未知问题，刷新页面')
         //     console.log(err);
         //   });
         // },
@@ -244,4 +244,5 @@ export default {
 .editor-upload-btn {
   display: inline-block;
 }
+
 </style>

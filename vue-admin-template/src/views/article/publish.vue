@@ -16,7 +16,7 @@ export default {
   components: { Tinymce },
   data() {
     return {
-      content: ``
+      content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
     }
   }
 }
