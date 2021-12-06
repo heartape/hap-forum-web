@@ -12,7 +12,7 @@
     </el-carousel>
     <!--文章列表-->
     <el-row v-for="item in article" :key="item.id">
-      <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px' }">
+      <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ccc' }">
         <el-image
           style="width: 200px; height: 140px; margin: 10px"
           :src="item.url"
@@ -56,7 +56,19 @@ export default {
         { id: 1, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
         { id: 2, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
         { id: 3, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
-        { id: 4, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null }
+        { id: 4, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 5, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 6, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 7, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 8, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 9, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 10, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 11, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 12, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 13, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 14, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 15, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null },
+        { id: 16, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'text', url: null }
       ]
     }
   }
@@ -67,6 +79,7 @@ export default {
 .box-card {
   width: 740px;
   max-height: 160px;
+  background-color: #ccc;
 }
 .introduce {
   float: right;

@@ -3,7 +3,7 @@
   margin:auto;
   width: 100%;
   min-width:300px;
-  background: #fff;
+  background: transparent;
   font-family: 'PingFang SC','Hiragino Sans GB','STHeiti','Microsoft YaHei','WenQuanYi Micro Hei',sans-serif;
   user-select:none;
 }
@@ -102,22 +102,22 @@
   height:20px;
   font-size: 14px;
   line-height:20px;
-  margin:0px auto;
+  margin:0 auto;
   border-radius:20px;
 }
 .calendar td:not(.selected) span:not(.red):hover{
-  background:#f3f8fa;
+  background:#b3e8f1;
   color:black;
 }
 .calendar td:not(.selected) span.red:hover{
-  background:#f9efef;
+  background:#fbd4d4;
 }
 
 .calendar td:not(.disabled) span.red{
   color:black;
 }
 .calendar td.selected span{
-  background-color: #dedede;
+  background-color: #30d4f5;
   color: black;
 }
 .calendar td .text{
@@ -137,11 +137,11 @@
   color:black;
 }
 .calendar td.selected span.red{
-  background-color: #1b95e0;
+  background-color: #e17272;
   color: black;
 }
 .calendar td.selected span.red:hover{
-  background-color: #1b95e0;
+  background-color: #e17272;
   color: black;
 }
 .calendar thead td {
@@ -149,32 +149,13 @@
   height:30px;
   vertical-align: middle;
 }
-.calendar-button span{
-  cursor: pointer;
-  display: inline-block;
-  min-height: 1em;
-  min-width: 5em;
-  vertical-align: baseline;
-  background:#5e7a88;
-  color:#fff;
-  margin: 0 .25em 0 0;
-  padding: .6em 2em;
-  font-size: 1em;
-  line-height: 1em;
-  text-align: center;
-  border-radius: .3em;
-}
-.calendar-button span.cancel{
-  background:#efefef;
-  color:#666;
-}
 .calendar-years{
   position: absolute;
-  left:0px;
+  left:0;
   top:60px;
-  right:0px;
-  bottom:0px;
-  background:#fff;
+  right:0;
+  bottom:0;
+  background:#ececec;
   display: flex;
   justify-content: center;
   align-items: center;

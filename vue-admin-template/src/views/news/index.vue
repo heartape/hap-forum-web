@@ -11,9 +11,9 @@
       </el-carousel-item>
     </el-carousel>
     <!--带图新闻列表-->
-    <div class="news-picture" style="width: 480px; display: inline-block">
+    <div class="news-picture">
       <el-row v-for="(item) in news" :key="item.nid" style="width: 480px">
-        <el-card class="box-card" :body-style="{ padding: '0px' }">
+        <el-card class="box-card" shadow="hover" :body-style="{ padding: '0px', backgroundColor: '#ccc'}">
           <el-image
             style="width: 200px; height: 130px; margin: 10px"
             :src="item.url"
@@ -31,16 +31,16 @@
       </el-row>
     </div>
     <!--不带图新闻列表-->
-    <div class="news-simple" style="float: right; width: 250px; margin-top: 20px">
+    <div class="news-simple">
       <el-row v-for="(item) in newsSimple" :key="item.nid" style="width: 250px">
-        <div class="news-simple">
+        <el-card class="news-simple-card" shadow="hover" :body-style="{padding: '10px', backgroundColor: '#ccc'}">
           <span class="title">{{ item.title }}</span>
           <span class="content">{{ item.content }}</span>
           <div class="bottom clearfix">
             <span class="time">{{ item.publishTime }}</span>
             <el-button type="text" class="source" @click="toAuthor(item.uid)">{{ item.author }}</el-button>
           </div>
-        </div>
+        </el-card>
       </el-row>
     </div>
   </div>
@@ -82,6 +82,11 @@ export default {
 </script>
 
 <style scoped>
+.news-picture {
+  margin-top: 10px;
+  width: 480px;
+  display: inline-block;
+}
 .box-card {
   width: 480px;
   max-height: 150px;
@@ -130,8 +135,13 @@ export default {
   max-width: 100px;
   overflow: hidden;
 }
+.news-simple {
+  float: right;
+  width: 250px;
+  margin-top: 10px
+}
 .news-simple .title {
-  margin-bottom: 0;
+  margin: 0;
 }
 .news-simple .content {
   height: 20px;

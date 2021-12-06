@@ -68,8 +68,8 @@ export default {
 }
 .flex>div>span{
   position: absolute;
-  left:0px;
-  top:0px;
+  left:0;
+  top:0;
   padding:2px 8px;
   font-size:7px;
   border-radius:0 0 2px 0;

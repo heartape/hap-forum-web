@@ -25,7 +25,6 @@
   }
 
   .sidebar-container {
-    //display: inline-block;
     transition: width 0.28s;
     width: $sideBarWidth !important;
     background-color: $menuBg;
@@ -33,7 +32,6 @@
     position: absolute;
     font-size: 0;
     z-index: 1001;
-    //overflow: hidden;
     margin-right: 10px;
     margin-top: 10px;
 
