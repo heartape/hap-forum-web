@@ -6,6 +6,7 @@
 
 body {
   height: 100%;
+  background-color: #666666;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -61,5 +62,6 @@ div:focus {
 
 // main-container global css
 .app-container {
-  padding: 20px;
+  padding: 10px;
+  position: relative;
 }

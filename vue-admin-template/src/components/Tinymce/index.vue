@@ -116,6 +116,7 @@ export default {
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
         language: this.languageTypeList['zh'],
+        fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
         height: this.height,
         body_class: 'panel-body ',
         object_resizing: false,

@@ -1,10 +1,5 @@
 // cover some element-ui styles
 
-.el-breadcrumb__inner,
-.el-breadcrumb__inner a {
-  font-weight: 400 !important;
-}
-
 .el-upload {
   input[type="file"] {
     display: none !important;
@@ -46,4 +41,20 @@
 // to fix el-date-picker css style
 .el-range-separator {
   box-sizing: content-box;
+}
+
+// el-table去除背景
+.right-sidebar-container {
+  .el-table, .el-table__expanded-cell,
+  .el-table--enable-row-transition .el-table__body td,
+  .el-table .cell,
+  .el-table .el-table__header-wrapper th,
+  .el-table tr,
+  .el-table td{
+    background-color: transparent !important;
+  }
+
+  .el-table__body tr:hover > td{
+    background-color: $menuHover !important;
+  }
 }

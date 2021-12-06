@@ -5,8 +5,11 @@
     </div>
     <div class="main-container">
       <sidebar class="sidebar-container" />
-      <app-main />
-      <right-sidebar />
+      <app-main class="in-main-container" />
+      <right-sidebar class="right-sidebar-container" />
+    </div>
+    <div class="footer-container">
+      <footer-bar />
     </div>
   </div>
 </template>
@@ -14,10 +17,12 @@
 <script>
 import { Navbar, Sidebar, RightSidebar, AppMain } from './components'
 import ResizeMixin from './mixin/ResizeHandler'
+import FooterBar from '@/layout/components/FooterBar'
 
 export default {
   name: 'Layout',
   components: {
+    FooterBar,
     Navbar,
     Sidebar,
     RightSidebar,
@@ -28,10 +33,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-  .sidebar-container {
-    margin-top: 20px;
-  }
 
   .app-wrapper {
     height: 100%;

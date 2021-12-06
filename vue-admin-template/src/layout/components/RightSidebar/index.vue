@@ -1,10 +1,10 @@
 <template>
   <div class="rightSidebar">
-    <el-table :data="hot" style="width: 100%; margin: 10px auto" :cell-class-name="hotStyle" @row-click="rowClick">
+    <el-table :data="hot" style="width: 100%" :cell-class-name="hotStyle" @row-click="rowClick">
       <el-table-column
         prop="title"
         label="热点"
-        width="250"
+        width="270"
         highlight-current-row="true"
       />
     </el-table>
@@ -59,13 +59,13 @@ export default {
         }).catch(error => {
           // todo:右边栏目数据,source:来源(out,in),type类型(news,knowledge,article,topic等)
           const hot = [{
-            title: '美国入侵阿富汗',
+            title: '美军入侵阿富汗',
             source: 'out',
             // 外部来源只有网址
             type: 'website',
             param: 'https://www.baidu.com'
           }, {
-            title: '美国撤离阿富汗',
+            title: '美军撤离阿富汗',
             source: 'in',
             type: 'article',
             // 此时的url就是文章id
@@ -89,6 +89,7 @@ export default {
     float: right;
     width: 270px;
   }
+
   /*单元格内属性*/
   .hot {
     padding: 8px 0 !important;
@@ -98,4 +99,5 @@ export default {
     font-size: 12px;
     line-height: 16px;
   }
+
 </style>

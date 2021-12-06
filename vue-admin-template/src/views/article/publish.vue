@@ -10,7 +10,6 @@
       icon="el-icon-finished"
       @click="contentUpload"
     >发布</el-button>
-    <div class="editor-content" v-html="article.content" />
   </div>
 </template>
 

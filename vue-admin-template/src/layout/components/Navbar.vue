@@ -50,10 +50,11 @@ export default {
   position: relative;
   left:50%;
   margin-left: -600px;
+  padding-left: 60px;
+  font-family: jetBrains Mono;
 
   .head-title, .head-content {
     float: left;
-    background-color: #1b95e0;
     height: 100%;
     width: 150px;
     line-height:65px;
