@@ -5,7 +5,16 @@
       <navbar />
     </div>
     <div class="article-publish-container">
-      <tinymce v-model="article.content" :height="600" @imagesUpload="imagesUpload(arguments)" />
+      <el-input
+        v-model="article.title"
+        clearable="true"
+        maxlength="30"
+        show-word-limit
+        size="30px"
+      >
+        <template slot="prepend">标题</template>
+      </el-input>
+      <tinymce v-model="article.content" :width="1000" @imagesUpload="imagesUpload(arguments)" />
     </div>
   </div>
 </template>
@@ -89,8 +98,15 @@ export default {
 
 <style scoped>
 .article-publish-container {
-  width: 770px;
+  width: 1000px;
   margin: 20px auto;
   /*border: #2b2f3a solid 1px;*/
+}
+.article-publish-container >>> .el-input > input{
+  height: 60px;
+  font-size: 25px;
+}
+.el-input {
+  margin-bottom: 40px;
 }
 </style>

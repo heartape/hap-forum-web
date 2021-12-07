@@ -124,10 +124,9 @@ export default {
       const _this = this
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
+        min_height: 800,
         language: this.languageTypeList['zh'],
-        // language_url: '/Tinymce/languages/zh_CN.js',
         language_url: require('./plugins/languages/zh_CN.js'),
-        indent2em_url: require('./plugins/indent2em/plugin.js'),
         fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
         height: this.height,
         body_class: 'panel-body ',
@@ -245,7 +244,7 @@ export default {
   position: absolute;
   right: 0;
   top: 0;
-  height: 34px;
+  height: 40px;
   border-color: transparent;
   border-radius: 0;
   padding: 10px;

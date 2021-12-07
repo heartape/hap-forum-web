@@ -1,11 +1,10 @@
-# photo
+# heartape-forum-web
 
 #### 介绍
-瀑布流图片浏览
+heartape-forum的前端部分
 参考网站：
 https://panjiachen.github.io/vue-admin-template/#/dashboard
 https://surmon.me/category/code
-http://jinzhe.github.io/vue-calendar/
 
 #### 软件架构
 软件架构说明
