@@ -1,0 +1,21 @@
+// sidebar文字
+$menuText:#5a5e66;
+$menuHoverText:#263445;
+$menuActiveText:#409EFF;
+
+// 组件背景
+$menuBg: #dfdfdf;
+$menuHover: #cfcfcf;
+
+$sideBarWidth: 150px;
+
+// the :export directive is the magic sauce for webpack
+// https://www.bluematador.com/blog/how-to-share-variables-between-js-and-sass
+:export {
+  menuText: $menuText;
+  menuHoverText: $menuHoverText;
+  menuActiveText: $menuActiveText;
+  menuBg: $menuBg;
+  menuHover: $menuHover;
+  sideBarWidth: $sideBarWidth;
+}
