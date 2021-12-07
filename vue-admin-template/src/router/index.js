@@ -44,6 +44,18 @@ export const constantRoutes = [
   },
 
   {
+    path: '/article/publish',
+    component: () => import('@/views/article/publish'),
+    hidden: true
+  },
+
+  {
+    path: '/article/:aid',
+    component: () => import('@/views/article/detail'),
+    hidden: true
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/article',
@@ -58,38 +70,10 @@ export const constantRoutes = [
   },
 
   {
-    path: '/article',
-    component: Layout,
-    children: [
-      {
-        path: 'detail',
-        name: 'ArticleDetail',
-        component: () => import('@/views/article/detail'),
-        meta: { title: '详情', icon: 'article-detail' },
-        hidden: true
-      }
-    ]
-  },
-
-  {
-    path: '/article',
-    component: Layout,
-    children: [
-      {
-        path: 'publish',
-        name: 'ArticlePublish',
-        component: () => import('@/views/article/publish'),
-        meta: { title: '文章发布', icon: 'article-publish' },
-        hidden: true
-      }
-    ]
-  },
-
-  {
     path: '/knowledge',
     component: Layout,
     children: [{
-      path: 'index',
+      path: '',
       name: 'Knowledge',
       component: () => import('@/views/knowledge/index'),
       meta: { title: '知识分享', icon: 'knowledge' }
@@ -101,7 +85,7 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'index',
+        path: '',
         name: 'Topic',
         component: () => import('@/views/topic/index'),
         meta: { title: '话题讨论', icon: 'topic' }
@@ -114,7 +98,7 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'index',
+        path: '',
         name: 'News',
         component: () => import('@/views/news/index'),
         meta: { title: '站内热点', icon: 'news' }
@@ -123,23 +107,11 @@ export const constantRoutes = [
   },
 
   {
-    path: '/news',
-    component: Layout,
-    hidden: true,
-    children: [{
-      path: 'detail',
-      name: 'NewsDetail',
-      component: () => import('@/views/news/detail'),
-      meta: { title: '热点详情', icon: 'news-detail' }
-    }]
-  },
-
-  {
     path: '/picture',
     component: Layout,
     children: [
       {
-        path: 'index',
+        path: '',
         name: 'Picture',
         component: () => import('@/views/picture/index'),
         meta: { title: '精彩瞬间', icon: 'picture' }
@@ -163,7 +135,7 @@ export const constantRoutes = [
 ]
 
 const createRouter = () => new Router({
-  // mode: 'history', // require service support
+  mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
   routes: constantRoutes
 })

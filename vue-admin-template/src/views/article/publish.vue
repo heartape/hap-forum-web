@@ -1,15 +1,12 @@
 <template>
   <!-- 富文本 -->
-  <div class="article-publish-container">
-    <div>
+  <div>
+    <div class="head-container">
+      <navbar />
+    </div>
+    <div class="article-publish-container">
       <tinymce v-model="article.content" :height="600" @imagesUpload="imagesUpload(arguments)" />
     </div>
-    <el-button
-      class="publish-button"
-      type="info"
-      icon="el-icon-finished"
-      @click="contentUpload"
-    >发布</el-button>
   </div>
 </template>
 
@@ -17,12 +14,12 @@
 import Tinymce from '@/components/Tinymce'
 import { getFileUrl, getOssToken } from '@/api/upload'
 import axios from 'axios'
-import { publishArticle } from '@/api/article'
+import Navbar from '@/layout/components/Navbar'
 const UUID = require('uuid')
 
 export default {
   name: 'ArticleDetail',
-  components: { Tinymce },
+  components: { Navbar, Tinymce },
   data() {
     return {
       article: {
@@ -85,15 +82,6 @@ export default {
       }).catch(() => {
         failure('出现未知问题，请刷新页面')
       })
-    },
-    contentUpload: function() {
-      const body = this.article
-      // todo:丢失请求体
-      publishArticle(body).then(() => {
-        alert('发布成功')
-      }).catch(() => {
-        alert('发布失败')
-      })
     }
   }
 }
@@ -104,17 +92,5 @@ export default {
   width: 770px;
   margin: 20px auto;
   /*border: #2b2f3a solid 1px;*/
-}
-.publish-button {
-  position: absolute;
-  right: 4px;
-  top: 21px;
-  height: 34px;
-  border-color: transparent;
-  border-radius: 0;
-  padding: 10px;
-}
-.editor-content {
-  margin-top: 20px;
 }
 </style>

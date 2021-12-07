@@ -6,11 +6,3 @@ export function articleDetail(id) {
     method: 'get'
   })
 }
-
-export function publishArticle(body) {
-  return request({
-    url: '/front/article/',
-    method: 'post',
-    body
-  })
-}

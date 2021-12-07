@@ -1,6 +1,13 @@
 <template>
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
+    <el-button
+      v-loading.fullscreen.lock="fullscreenLoading"
+      class="publish-button"
+      type="info"
+      icon="el-icon-finished"
+      @click="contentUpload"
+    >发布</el-button>
   </div>
 </template>
 
@@ -12,9 +19,11 @@
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
+import { publish } from '@/api/upload'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
-const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
+// const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
+const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce@5.10.2/tinymce.min.js'
 
 export default {
   name: 'Tinymce',
@@ -63,10 +72,10 @@ export default {
       fullscreen: false,
       languageTypeList: {
         'en': 'en',
-        'zh': 'zh_CN',
-        'es': 'es_MX',
-        'ja': 'ja'
-      }
+        'zh': 'zh_CN'
+      },
+      // 发布后加载动画
+      fullscreenLoading: false
     }
   },
   computed: {
@@ -116,6 +125,9 @@ export default {
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
         language: this.languageTypeList['zh'],
+        // language_url: '/Tinymce/languages/zh_CN.js',
+        language_url: require('./plugins/languages/zh_CN.js'),
+        indent2em_url: require('./plugins/indent2em/plugin.js'),
         fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
         height: this.height,
         body_class: 'panel-body ',
@@ -161,6 +173,17 @@ export default {
         images_upload_handler: (blobInfo, success, failure, progress) => {
           this.$emit('imagesUpload', blobInfo, success, failure, progress)
         }
+      })
+    },
+    contentUpload: function(body, url) {
+      this.fullscreenLoading = true
+      // todo:丢失请求体
+      publish(body, url).then(() => {
+        this.fullscreenLoading = false
+        alert('发布成功')
+      }).catch(() => {
+        this.fullscreenLoading = false
+        alert('发布失败')
       })
     },
     destroyTinymce() {
@@ -216,6 +239,17 @@ export default {
 
 .editor-upload-btn {
   display: inline-block;
+}
+
+.publish-button {
+  position: absolute;
+  right: 0;
+  top: 0;
+  height: 34px;
+  border-color: transparent;
+  border-radius: 0;
+  padding: 10px;
+  z-index: 1000;
 }
 
 </style>
