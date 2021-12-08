@@ -1,5 +1,6 @@
 <template>
   <div class="rightSidebar">
+    <produce-center />
     <el-table :data="hot" style="width: 100%" :cell-class-name="hotStyle" @row-click="rowClick">
       <el-table-column
         prop="title"
@@ -16,9 +17,10 @@
 <script>
 import CalendarApp from '@/layout/components/RightSidebar/CalendarApp'
 import { getHot } from '@/api/hot'
+import ProduceCenter from '@/layout/components/RightSidebar/ProduceCenter'
 
 export default {
-  components: { CalendarApp },
+  components: { ProduceCenter, CalendarApp },
   data() {
     return {
       hot: []
