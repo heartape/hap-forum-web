@@ -3,19 +3,19 @@
     <i class="el-icon-office-building produce-center-title">创作中心</i>
     <div class="produce-center-list">
       <el-button class="produce-center-item" @click="createEdit(url.article)">
-        <p class="el-icon-edit produce-center-item-icon" />
+        <p class="el-icon-edit produce-center-item-icon" style="background-color: darkkhaki" />
         <p>写文章</p>
       </el-button>
       <el-button class="produce-center-item" @click="createEdit(url.topic)">
-        <p class="el-icon-chat-dot-round produce-center-item-icon" />
+        <p class="el-icon-chat-dot-round produce-center-item-icon" style="background-color: #e17272" />
         <p>聊人生</p>
       </el-button>
-      <el-button class="produce-center-item" @click="createEdit(url.discuss)">
-        <p class="el-icon-notebook-1 produce-center-item-icon" />
+      <el-button class="produce-center-item" @click="createEdit(url.knowledge)">
+        <p class="el-icon-notebook-1 produce-center-item-icon" style="background-color: cadetblue" />
         <p>授知识</p>
       </el-button>
       <el-button class="produce-center-item" @click="createEdit(url.news)">
-        <p class="el-icon-news produce-center-item-icon" />
+        <p class="el-icon-news produce-center-item-icon" style="background-color: darkseagreen" />
         <p>谈新闻</p>
       </el-button>
     </div>
@@ -30,7 +30,7 @@ export default {
       url: {
         'article': '/article/publish',
         'topic': '/topic/publish',
-        'discuss': '/discuss/publish',
+        'knowledge': '/knowledge/publish',
         'news': '/news/publish'
       }
     }
@@ -77,7 +77,6 @@ p {
 .produce-center-item-icon {
   height: 40px;
   border-radius: 20px;
-  background-color: darkkhaki;
   font-size: 30px;
   line-height: 40px;
   margin-bottom: 10px;

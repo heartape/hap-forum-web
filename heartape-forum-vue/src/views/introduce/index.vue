@@ -1,10 +1,10 @@
 <template>
-  <div>Detail</div>
+  <div>臣本布衣,躬耕于南阳</div>
 </template>
 
 <script>
 export default {
-  name: 'Detail'
+  name: 'Introduce'
 }
 </script>
 

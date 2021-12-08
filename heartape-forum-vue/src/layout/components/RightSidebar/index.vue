@@ -1,7 +1,7 @@
 <template>
   <div class="rightSidebar">
     <produce-center />
-    <el-table :data="hot" style="width: 100%" :cell-class-name="hotStyle" @row-click="rowClick">
+    <el-table class="right-sidebar-hot-container" :data="hot" style="width: 100%" :cell-class-name="hotStyle" @row-click="rowClick">
       <el-table-column
         prop="title"
         label="热点"

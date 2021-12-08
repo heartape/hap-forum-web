@@ -4,9 +4,9 @@
     <div class="head-container">
       <navbar />
     </div>
-    <div class="article-publish-container">
+    <div class="travel-publish-container">
       <el-input
-        v-model="article.title"
+        v-model="travel.title"
         clearable="true"
         maxlength="30"
         show-word-limit
@@ -14,7 +14,7 @@
       >
         <template slot="prepend">标题</template>
       </el-input>
-      <tinymce v-model="article.content" :width="1000" @imagesUpload="imagesUpload(arguments)" />
+      <tinymce v-model="travel.content" :width="1000" @imagesUpload="imagesUpload(arguments)" />
     </div>
   </div>
 </template>
@@ -31,7 +31,7 @@ export default {
   components: { Navbar, Tinymce },
   data() {
     return {
-      article: {
+      travel: {
         title: `无敌`,
         content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
       }
@@ -97,12 +97,12 @@ export default {
 </script>
 
 <style scoped>
-.article-publish-container {
+.travel-publish-container {
   width: 1000px;
   margin: 20px auto;
   /*border: #2b2f3a solid 1px;*/
 }
-.article-publish-container >>> .el-input > input{
+.travel-publish-container >>> .el-input > input{
   height: 60px;
   font-size: 25px;
 }

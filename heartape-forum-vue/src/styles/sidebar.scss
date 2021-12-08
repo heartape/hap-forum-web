@@ -94,7 +94,13 @@
   .right-sidebar-container {
     position: relative;
     margin-top: 10px;
-    background-color: $menuBg;
+
+    .produce-center-container,
+    .right-sidebar-hot-container,
+    .calendar-container{
+      margin-bottom: 10px;
+      background-color: $menuBg !important;
+    }
   }
 
   .footer-container {

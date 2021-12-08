@@ -1,13 +1,16 @@
 <template>
-
+  <div class="app-container">
+    旅行
+  </div>
 </template>
 
 <script>
 export default {
-  name: "detail"
+
 }
 </script>
 
 <style scoped>
 
 </style>
+

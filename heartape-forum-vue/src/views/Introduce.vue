@@ -1,16 +1,13 @@
 <template>
-  <div class="app-container">
-    图片
-  </div>
+  <div>Introduce</div>
 </template>
 
 <script>
 export default {
-
+  name: 'Introduce'
 }
 </script>
 
 <style scoped>
 
 </style>
-

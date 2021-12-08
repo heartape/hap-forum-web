@@ -16,15 +16,16 @@ export default {
   },
   created() {
     this.aid = this.$route.params.aid
-    articleDetail(this.aid).then(res => {
-      alert('发布成功')
-    }).catch(() => {
-      alert('发布失败')
-    })
+    this.articleDetailLoad()
   },
   methods: {
     articleDetailLoad() {
-
+      articleDetail(this.aid).then(res => {
+        const data = res.data.data
+        console.log(data)
+      }).catch(() => {
+        alert('获取失败')
+      })
     }
   }
 }

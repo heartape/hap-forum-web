@@ -56,6 +56,36 @@ export const constantRoutes = [
   },
 
   {
+    path: '/topic/publish',
+    component: () => import('@/views/topic/publish'),
+    hidden: true
+  },
+
+  {
+    path: '/topic/:tid',
+    component: () => import('@/views/topic/detail'),
+    hidden: true
+  },
+
+  {
+    path: '/topic/:tid/discuss/:did',
+    component: () => import('@/views/topic/discuss'),
+    hidden: true
+  },
+
+  {
+    path: '/knowledge/publish',
+    component: () => import('@/views/knowledge/publish'),
+    hidden: true
+  },
+
+  {
+    path: '/news/publish',
+    component: () => import('@/views/news/publish'),
+    hidden: true
+  },
+
+  {
     path: '/',
     component: Layout,
     redirect: '/article',
@@ -64,7 +94,20 @@ export const constantRoutes = [
         path: 'article',
         name: 'Article',
         component: () => import('@/views/article/index'),
-        meta: { title: '文章阅读', icon: 'article' }
+        meta: { title: '读万卷书', icon: 'article' }
+      }
+    ]
+  },
+
+  {
+    path: '/topic',
+    component: Layout,
+    children: [
+      {
+        path: '',
+        name: 'Topic',
+        component: () => import('@/views/topic/index'),
+        meta: { title: '人生漫谈', icon: 'topic' }
       }
     ]
   },
@@ -76,21 +119,8 @@ export const constantRoutes = [
       path: '',
       name: 'Knowledge',
       component: () => import('@/views/knowledge/index'),
-      meta: { title: '知识分享', icon: 'knowledge' }
+      meta: { title: '授人以渔', icon: 'knowledge' }
     }]
-  },
-
-  {
-    path: '/topic',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        name: 'Topic',
-        component: () => import('@/views/topic/index'),
-        meta: { title: '话题讨论', icon: 'topic' }
-      }
-    ]
   },
 
   {
@@ -101,31 +131,33 @@ export const constantRoutes = [
         path: '',
         name: 'News',
         component: () => import('@/views/news/index'),
-        meta: { title: '站内热点', icon: 'news' }
+        meta: { title: '古今中外', icon: 'news' }
       }
     ]
   },
 
   {
-    path: '/picture',
+    path: '/travel',
     component: Layout,
     children: [
       {
         path: '',
-        name: 'Picture',
-        component: () => import('@/views/picture/index'),
-        meta: { title: '精彩瞬间', icon: 'picture' }
+        name: 'Travel',
+        component: () => import('@/views/travel/index'),
+        meta: { title: '行万里路', icon: 'travel' }
       }
     ]
   },
 
   {
-    path: 'external-link',
+    path: '/introduce',
     component: Layout,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: '我的链接', icon: 'link' }
+        path: '',
+        name: 'Introduce',
+        component: () => import('@/views/Introduce'),
+        meta: { title: '南阳布衣', icon: 'introduce' }
       }
     ]
   },
