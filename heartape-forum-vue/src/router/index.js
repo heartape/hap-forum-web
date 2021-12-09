@@ -50,20 +50,8 @@ export const constantRoutes = [
   },
 
   {
-    path: '/article/:aid',
-    component: () => import('@/views/article/detail'),
-    hidden: true
-  },
-
-  {
     path: '/topic/publish',
     component: () => import('@/views/topic/publish'),
-    hidden: true
-  },
-
-  {
-    path: '/topic/:tid',
-    component: () => import('@/views/topic/detail'),
     hidden: true
   },
 
@@ -87,14 +75,35 @@ export const constantRoutes = [
 
   {
     path: '/',
-    component: Layout,
     redirect: '/article',
+    hidden: true
+  },
+
+  {
+    path: '/article',
+    component: Layout,
+    meta: { title: '读万卷书', icon: 'article' },
+    alwaysShow: true,
     children: [
       {
-        path: 'article',
-        name: 'Article',
+        path: '',
+        name: 'Article-Sort',
         component: () => import('@/views/article/index'),
         meta: { title: '读万卷书', icon: 'article' }
+      },
+      {
+        path: 'sort/:sid',
+        name: 'Article-List',
+        component: () => import('@/views/article/list'),
+        meta: { title: '读万卷书', icon: 'article' },
+        hidden: true
+      },
+      {
+        path: ':aid',
+        name: 'Article-Detail',
+        component: () => import('@/views/article/detail'),
+        meta: { title: '读万卷书', icon: 'article' },
+        hidden: true
       }
     ]
   },

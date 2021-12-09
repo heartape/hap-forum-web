@@ -1,6 +1,6 @@
 <template>
   <div class="produce-center-container">
-    <i class="el-icon-office-building produce-center-title">创作中心</i>
+    <i class="el-icon-s-custom produce-center-title" style="color: cornflowerblue">创作中心</i>
     <div class="produce-center-list">
       <el-button class="produce-center-item" @click="createEdit(url.article)">
         <p class="el-icon-edit produce-center-item-icon" style="background-color: darkkhaki" />

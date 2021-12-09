@@ -1,5 +1,8 @@
 <template>
-  <div class="editor-content" v-html="content" />
+  <div class="article-detail-container">
+    <div class="editor-content" v-html="article.title" />
+    <div class="editor-content" v-html="article.content" />
+  </div>
 </template>
 
 <script>
@@ -9,18 +12,20 @@ export default {
   name: 'ArticleDetail',
   data() {
     return {
-      aid: 0,
-      content:
-        `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
+      article: {
+        title: `<h1 style="text-align: center;">this is title!</h1>`,
+        content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
+      }
+
     }
   },
   created() {
-    this.aid = this.$route.params.aid
-    this.articleDetailLoad()
+    // const aid = this.$route.params.aid
+    // this.articleDetailLoad(aid)
   },
   methods: {
-    articleDetailLoad() {
-      articleDetail(this.aid).then(res => {
+    articleDetailLoad(aid) {
+      articleDetail(aid).then(res => {
         const data = res.data.data
         console.log(data)
       }).catch(() => {
