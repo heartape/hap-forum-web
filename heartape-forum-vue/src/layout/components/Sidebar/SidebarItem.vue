@@ -55,13 +55,11 @@ export default {
     // TODO: refactor with render function
     // this.onlyOneChild = null
     return {
-      onlyOneChild: null
+      onlyOneChild: {}
     }
   },
   methods: {
     hasOneShowingChild(children = [], parent) {
-      console.log(children)
-      console.log(parent)
       const showingChildren = children.filter(item => {
         if (item.hidden) {
           return true

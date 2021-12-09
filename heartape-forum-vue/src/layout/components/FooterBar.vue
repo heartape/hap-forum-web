@@ -11,7 +11,7 @@ export default {
 
 <style lang="scss" scoped>
 .footer-all {
-  height: 80px;
+  height: 100%;
   line-height: 80px;
   text-align: center;
   width: 100%;

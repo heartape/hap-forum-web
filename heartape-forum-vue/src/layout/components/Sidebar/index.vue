@@ -11,7 +11,7 @@
         :collapse-transition="true"
         mode="vertical"
       >
-        <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
+        <sidebar-item v-for="route in routes" :key="route.name" :item="route" :base-path="route.path" />
       </el-menu>
     </el-scrollbar>
   </div>

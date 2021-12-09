@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <!--轮播图-->
+    <!--todo:轮播图改sort简略-->
     <el-carousel trigger="click" height="250px">
       <el-carousel-item v-for="(item, index) in articleRecommend" :key="index">
         <el-image

@@ -33,48 +33,49 @@ import Layout from '@/layout'
 export const constantRoutes = [
   {
     path: '/login',
+    name: 'login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
 
   {
     path: '/404',
+    name: '404',
     component: () => import('@/views/404'),
     hidden: true
   },
 
   {
     path: '/article/publish',
+    name: 'article-publish',
     component: () => import('@/views/article/publish'),
     hidden: true
   },
 
   {
     path: '/topic/publish',
+    name: 'topic-publish',
     component: () => import('@/views/topic/publish'),
     hidden: true
   },
 
   {
-    path: '/topic/:tid/discuss/:did',
-    component: () => import('@/views/topic/discuss'),
-    hidden: true
-  },
-
-  {
     path: '/knowledge/publish',
+    name: 'knowledge-publish',
     component: () => import('@/views/knowledge/publish'),
     hidden: true
   },
 
   {
     path: '/news/publish',
+    name: 'news-publish',
     component: () => import('@/views/news/publish'),
     hidden: true
   },
 
   {
     path: '/',
+    name: 'index',
     redirect: '/article',
     hidden: true
   },
@@ -82,28 +83,49 @@ export const constantRoutes = [
   {
     path: '/article',
     component: Layout,
-    meta: { title: '读万卷书', icon: 'article' },
-    alwaysShow: true,
     children: [
       {
         path: '',
-        name: 'Article-Sort',
+        name: 'article-sort',
         component: () => import('@/views/article/index'),
         meta: { title: '读万卷书', icon: 'article' }
-      },
+      }
+    ]
+  },
+
+  {
+    path: '/article',
+    component: Layout,
+    children: [{
+      path: 'sort/:sid',
+      name: 'article-list',
+      component: () => import('@/views/article/sort'),
+      meta: { title: '读万卷书', icon: 'article' },
+      hidden: true
+    }]
+  },
+
+  {
+    path: '/article',
+    component: Layout,
+    children: [{
+      path: ':aid',
+      name: 'article-detail',
+      component: () => import('@/views/article/detail'),
+      meta: { title: '读万卷书', icon: 'article' },
+      hidden: true
+    }]
+  },
+
+  {
+    path: '/topic',
+    component: Layout,
+    children: [
       {
-        path: 'sort/:sid',
-        name: 'Article-List',
-        component: () => import('@/views/article/list'),
-        meta: { title: '读万卷书', icon: 'article' },
-        hidden: true
-      },
-      {
-        path: ':aid',
-        name: 'Article-Detail',
-        component: () => import('@/views/article/detail'),
-        meta: { title: '读万卷书', icon: 'article' },
-        hidden: true
+        path: '',
+        name: 'topic',
+        component: () => import('@/views/topic/index'),
+        meta: { title: '人生漫谈', icon: 'topic' }
       }
     ]
   },
@@ -113,10 +135,24 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: '',
-        name: 'Topic',
-        component: () => import('@/views/topic/index'),
-        meta: { title: '人生漫谈', icon: 'topic' }
+        path: ':tid',
+        name: 'topic-detail',
+        component: () => import('@/views/topic/detail'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
+      }
+    ]
+  },
+  {
+    path: '/topic/:tid/discuss',
+    component: Layout,
+    children: [
+      {
+        path: ':did',
+        name: 'topic-discuss',
+        component: () => import('@/views/topic/discuss'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
       }
     ]
   },
