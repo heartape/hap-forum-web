@@ -75,18 +75,12 @@ export const constantRoutes = [
 
   {
     path: '/',
-    name: 'index',
-    redirect: '/article',
-    hidden: true
-  },
-
-  {
-    path: '/article',
     component: Layout,
+    redirect: '/article/hot',
     children: [
       {
-        path: '',
-        name: 'article-sort',
+        path: 'article/hot',
+        name: 'article-hot',
         component: () => import('@/views/article/index'),
         meta: { title: '读万卷书', icon: 'article' }
       }
@@ -94,27 +88,32 @@ export const constantRoutes = [
   },
 
   {
-    path: '/article',
+    path: '/sort',
     component: Layout,
-    children: [{
-      path: 'sort/:sid',
-      name: 'article-list',
-      component: () => import('@/views/article/sort'),
-      meta: { title: '读万卷书', icon: 'article' },
-      hidden: true
-    }]
-  },
-
-  {
-    path: '/article',
-    component: Layout,
-    children: [{
-      path: ':aid',
-      name: 'article-detail',
-      component: () => import('@/views/article/detail'),
-      meta: { title: '读万卷书', icon: 'article' },
-      hidden: true
-    }]
+    hidden: true,
+    children: [
+      {
+        path: '',
+        name: 'article-sort',
+        component: () => import('@/views/article/sort'),
+        meta: { title: '读万卷书', icon: 'article' },
+        hidden: true
+      },
+      {
+        path: ':sortId/hot',
+        name: 'article-sort',
+        component: () => import('@/views/article/articleInSort'),
+        meta: { title: '读万卷书', icon: 'article' },
+        hidden: true
+      },
+      {
+        path: ':sortId/article/:aid',
+        name: 'article-detail',
+        component: () => import('@/views/article/detail'),
+        meta: { title: '读万卷书', icon: 'article' },
+        hidden: true
+      }
+    ]
   },
 
   {
@@ -125,7 +124,8 @@ export const constantRoutes = [
         path: '',
         name: 'topic',
         component: () => import('@/views/topic/index'),
-        meta: { title: '人生漫谈', icon: 'topic' }
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
       }
     ]
   },
@@ -143,6 +143,7 @@ export const constantRoutes = [
       }
     ]
   },
+
   {
     path: '/topic/:tid/discuss',
     component: Layout,

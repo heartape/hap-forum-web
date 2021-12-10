@@ -1,43 +1,46 @@
 <template>
   <div class="app-container">
-    <!--todo:轮播图改sort简略-->
-    <el-carousel trigger="click" height="250px">
-      <el-carousel-item v-for="(item, index) in articleRecommend" :key="index">
-        <el-image
-          style="width: 100%; height: 250px"
-          :src="item"
-          :fit="'cover'"
-        />
-      </el-carousel-item>
-    </el-carousel>
+    <!--sort简略菜单-->
+    <div class="sort-simple-container">
+      <div class="left-sort-simple-container">
+        <el-button type="text" size="small" @click="switchSortAll"> 我全都要 </el-button>
+        <el-button v-for="item in sortSimpleHot" :key="item.sortId" type="text" size="small" @click="switchSort(item.sortId)">{{ item.name }}</el-button>
+      </div>
+      <el-button class="all-sort-button" type="text" @click="toSortPage">
+        <p>更多</p>
+        <i class="el-icon-menu" style="font-size: 22px" />
+      </el-button>
+    </div>
     <!--文章列表-->
-    <el-row v-for="item in article" :key="item.aid" @click.native="articleDetail(item.aid)">
-      <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ccc' }">
-        <el-image
-          style="width: 200px; height: 140px; margin: 10px"
-          :src="item.url"
-          :fit="'cover'"
-        />
-        <div class="introduce">
-          <span class="title">{{ item.title }}</span>
-          <span class="content">{{ item.content }}</span>
-          <div class="bottom clearfix">
-            <time class="time">{{ item.publishTime }}</time>
-            <el-button type="text" class="button">点赞</el-button>
+    <div class="article-container">
+      <el-row v-for="item in article" :key="item.aid" @click.native="articleDetail(item.aid)">
+        <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ccc' }">
+          <el-image
+            style="width: 200px; height: 140px; margin: 10px"
+            :src="item.url"
+            :fit="'cover'"
+          />
+          <div class="introduce">
+            <span class="title">{{ item.title }}</span>
+            <span class="content">{{ item.content }}</span>
+            <div class="bottom clearfix">
+              <time class="time">{{ item.publishTime }}</time>
+              <el-button type="text" class="button">点赞</el-button>
+            </div>
           </div>
-        </div>
-      </el-card>
-      <el-card v-else class="box-card" :body-style="{ padding: '0px' }">
-        <div class="introduce" style="width: 700px">
-          <span class="title">{{ item.title }}</span>
-          <span class="content">{{ item.content }}</span>
-          <div class="bottom clearfix" style="width: 680px">
-            <time class="time">{{ item.publishTime }}</time>
-            <el-button type="text" class="button">点赞</el-button>
+        </el-card>
+        <el-card v-else class="box-card" :body-style="{ padding: '0px' }">
+          <div class="introduce" style="width: 700px">
+            <span class="title">{{ item.title }}</span>
+            <span class="content">{{ item.content }}</span>
+            <div class="bottom clearfix" style="width: 680px">
+              <time class="time">{{ item.publishTime }}</time>
+              <el-button type="text" class="button">点赞</el-button>
+            </div>
           </div>
-        </div>
-      </el-card>
-    </el-row>
+        </el-card>
+      </el-row>
+    </div>
   </div>
 </template>
 
@@ -46,11 +49,20 @@
 export default {
   data() {
     return {
-      articleRecommend: [
-        'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-        require('../article/cartoon.jpg'),
-        'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png',
-        require('../article/cartoon.jpg')
+      // name不要大于6个字，否则会溢出按钮
+      // 最多11个sort，多的会被隐藏
+      sortSimpleHot: [
+        { sortId: 1, name: '编程' },
+        { sortId: 2, name: '编程' },
+        { sortId: 3, name: '编程' },
+        { sortId: 4, name: '编程' },
+        { sortId: 5, name: '编程' },
+        { sortId: 6, name: '编程' },
+        { sortId: 7, name: '编程' },
+        { sortId: 8, name: '编程' },
+        { sortId: 9, name: '编程' },
+        { sortId: 10, name: '编程' },
+        { sortId: 11, name: '编程' }
       ],
       article: [
         { aid: 1, title: '好吃的汉堡', content: '好吃的汉堡啊', publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
@@ -75,12 +87,56 @@ export default {
   methods: {
     articleDetail(aid) {
       this.$router.push('/article/' + aid)
+    },
+    switchSortAll() {
+
+    },
+    switchSort(id) {
+
+    },
+    toSortPage() {
+      this.$router.push('/sort')
     }
   }
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
+.sort-simple-container {
+  position: relative;
+  height: 117px;
+  width: 100%;
+  padding: 20px 30px 10px 30px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  border: #ececec solid 1px;
+
+  .left-sort-simple-container {
+    //width: 600px;
+    height: 100%;
+
+    .el-button {
+      width: 80px;
+      margin: 0 20px 20px 0;
+      background-color: cadetblue;
+      color: #454545;
+    }
+  }
+
+  .all-sort-button {
+    position: absolute;
+    right: 30px;
+    top: 20px;
+    height: 85px;
+    width: 60px;
+    background-color: cadetblue;
+    color: #454545;
+  }
+
+  .el-button:hover {
+    background-color: #999999;
+  }
+}
 .box-card {
   width: 740px;
   max-height: 160px;
