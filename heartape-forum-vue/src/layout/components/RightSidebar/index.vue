@@ -4,7 +4,7 @@
     <el-table class="right-sidebar-guide-container" :data="guide" style="width: 100%" :cell-class-name="guideCell" @row-click="rowClick">
       <el-table-column
         prop="title"
-        label="热点"
+        label="导航"
         width="270"
         highlight-current-row="true"
       />

@@ -1,16 +1,13 @@
 <template>
-  <div class="app-container">
-    话题
-  </div>
+  <div>hot</div>
 </template>
 
 <script>
 export default {
-
+  name: 'Hot'
 }
 </script>
 
 <style scoped>
 
 </style>
-

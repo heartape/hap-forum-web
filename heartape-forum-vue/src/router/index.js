@@ -79,38 +79,40 @@ export const constantRoutes = [
     redirect: '/article/hot',
     children: [
       {
+        // todo:设计一个主页代替'/article/hot'
         path: 'article/hot',
         name: 'article-hot',
         component: () => import('@/views/article/index'),
-        meta: { title: '读万卷书', icon: 'article' }
+        meta: { title: '读书万卷', icon: 'article' }
       }
     ]
   },
 
   {
-    path: '/sort',
+    path: '/article',
     component: Layout,
+    redirect: '/article/hot',
     hidden: true,
     children: [
       {
-        path: '',
+        path: 'sort',
         name: 'article-sort',
         component: () => import('@/views/article/sort'),
-        meta: { title: '读万卷书', icon: 'article' },
+        meta: { title: '读书万卷', icon: 'article' },
         hidden: true
       },
       {
-        path: ':sortId/hot',
+        path: 'sort/:sortId/hot',
         name: 'article-sort',
         component: () => import('@/views/article/articleInSort'),
-        meta: { title: '读万卷书', icon: 'article' },
+        meta: { title: '读书万卷', icon: 'article' },
         hidden: true
       },
       {
-        path: ':sortId/article/:aid',
+        path: ':aid',
         name: 'article-detail',
         component: () => import('@/views/article/detail'),
-        meta: { title: '读万卷书', icon: 'article' },
+        meta: { title: '读书万卷', icon: 'article' },
         hidden: true
       }
     ]
@@ -121,11 +123,10 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: '',
+        path: 'hot',
         name: 'topic',
         component: () => import('@/views/topic/index'),
-        meta: { title: '人生漫谈', icon: 'topic' },
-        hidden: true
+        meta: { title: '人生漫谈', icon: 'topic' }
       }
     ]
   },
