@@ -16,7 +16,7 @@
         <div class="only-discuss-container">
           <div class="discuss-creator-container">
             <img src="#">
-            <p>username</p>
+            <span>username</span>
             <p>introduce</p>
           </div>
           <p>{{ discussItem.content }}</p>
@@ -27,32 +27,36 @@
           </div>
         </div>
         <div v-show="parentShow[discussItem.did]" class="comment-container">
-          <div v-for="commentItem in discussItem.comment.list" :key="commentItem.cid">
+          <div v-for="commentItem in discussItem.comment.list" :key="commentItem.cid" class="comment-container-item">
             <img src="#">
-            <p>username</p>
+            <span>username</span>
             <p>{{ commentItem.content }}</p>
             <el-button @click="likeComment(commentItem.cid)">赞同 {{ commentItem.like }}</el-button>
             <el-button @click="disLikeComment(commentItem.cid)">踩</el-button>
             <el-button class="discuss-comment-count" @click="handleChildrenShow(commentItem.cid)">{{ commentItem.children.total }} 个评论</el-button>
             <div v-show="childrenShow[commentItem.cid]" class="comment-children-container">
-              <div v-for="childrenItem in commentItem.children.list" :key="childrenItem.cid">
+              <div v-for="childrenItem in commentItem.children.list" :key="childrenItem.cid" class="children-item-container">
                 <img src="#">
-                <p>username</p>
+                <span>username</span>
                 <p>{{ childrenItem.content }}</p>
                 <el-button @click="likeComment(childrenItem.cid)">赞同 {{ childrenItem.like }}</el-button>
                 <el-button @click="disLikeComment(childrenItem.cid)">踩</el-button>
               </div>
+              <el-button
+                v-if="commentItem.children.page * commentItem.children.size < commentItem.children.total"
+                @click="loadChildren(commentItem.cid)"
+              >加载更多</el-button>
             </div>
           </div>
+          <el-pagination
+            background
+            layout="prev, pager, next"
+            :total="discussItem.comment.totalParent"
+            :page-size="discussItem.comment.size"
+            :current-page="discussItem.comment.page"
+            @current-change="handlePageChange"
+          />
         </div>
-        <el-pagination
-          background
-          layout="prev, pager, next"
-          :total="discussItem.comment.totalParent"
-          :page-size="discussItem.comment.size"
-          :current-page="discussItem.comment.page"
-          @current-change="handlePageChange"
-        />
       </div>
     </div>
   </div>
@@ -93,6 +97,16 @@ export default {
                         { cid: 2, uid: 1, content: 'comment', like: 100, publishTime: '2021-12-11 19:10' }
                       ]
                     }
+                  },
+                  { cid: 3, uid: 1, content: 'comment', like: 100, publishTime: '2021-12-11 19:10',
+                    children: {
+                      total: 32,
+                      page: 1,
+                      size: 10,
+                      list: [
+                        { cid: 4, uid: 1, content: 'comment', like: 100, publishTime: '2021-12-11 19:10' }
+                      ]
+                    }
                   }
                 ]
               }
@@ -100,19 +114,25 @@ export default {
           ]
         }
       },
-      discussShow: {
-        1: false
-      },
-      parentShow: {
-        1: false
-      },
-      childrenShow: {
-        1: false
-      }
+      discussShow: { 1: false },
+      parentShow: {},
+      childrenShow: {}
     }
   },
   created() {
-    // 1
+    // 获取topic数据
+    // 创建父评论与子评论的展示状态对象
+    const discussList = this.topic.discuss.list
+    discussList.forEach(item => {
+      const did = item.did
+      // 动态新增
+      this.$set(this.parentShow, did, false)
+      const commentList = item.comment.list
+      commentList.forEach(item => {
+        const cid = item.cid
+        this.$set(this.childrenShow, cid, false)
+      })
+    })
   },
   methods: {
     toSortTopic(sortId) {
@@ -143,8 +163,11 @@ export default {
       // 跳转页码
       alert('跳转到第' + page + '页')
     },
+    loadChildren(cid) {
+      alert('加载更多')
+    },
     handleDiscussShow(did) {
-      this.discussShow[did] = !this.discussShow[did]
+      // 展开discuss
     },
     handleParentShow(did) {
       this.parentShow[did] = !this.parentShow[did]
@@ -166,14 +189,15 @@ export default {
   }
 
   .comment-container {
-    position: relative;
-    left: 10px;
+    margin: 10px;
     width: 90%;
-    border: #5a5e66 solid 2px;
 
-    .comment-children-container {
-      position: relative;
-      left: 10px;
+    .comment-container-item {
+      margin-bottom: 10px;
+      border: #5a5e66 solid 2px;
+    }
+
+    .children-item-container {
       margin: 10px;
       width: 90%;
       border: #5a5e66 solid 2px;
