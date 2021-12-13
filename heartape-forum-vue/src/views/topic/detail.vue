@@ -10,8 +10,8 @@
         <el-button class="button" @click="likeTopic(topic.tid)">点赞:{{ topic.like }}</el-button>
       </el-card>
     </div>
+    <h2>{{ topic.discuss.total }} 个回答</h2>
     <div class="topic-discuss-container">
-      <h2>{{ topic.discuss.total }} 个回答</h2>
       <div v-for="discussItem in topic.discuss.list" :key="discussItem.did">
         <div class="only-discuss-container">
           <div class="discuss-creator-container">
@@ -23,22 +23,26 @@
           <div class="discuss-menu">
             <el-button @click="likeDiscuss(discussItem.did)">赞同 {{ discussItem.like }}</el-button>
             <el-button @click="disLikeDiscuss(discussItem.did)">踩</el-button>
-            <el-button class="discuss-comment-count">{{ discussItem.comment.total }} 个评论</el-button>
+            <el-button class="discuss-comment-count" @click="handleParentShow(discussItem.did)">{{ discussItem.comment.total }} 个评论</el-button>
           </div>
         </div>
-        <div v-for="commentItem in discussItem.comment.list" :key="commentItem.cid" class="comment-container">
-          <img src="#">
-          <p>username</p>
-          <p>{{ commentItem.content }}</p>
-          <el-button @click="likeComment(commentItem.cid)">赞同 {{ commentItem.like }}</el-button>
-          <el-button @click="disLikeComment(commentItem.cid)">踩</el-button>
-          <el-button class="discuss-comment-count">{{ commentItem.children.total }} 个评论</el-button>
-          <div v-for="childrenItem in commentItem.children.list" :key="childrenItem.cid" class="comment-children-container">
+        <div v-show="parentShow[discussItem.did]" class="comment-container">
+          <div v-for="commentItem in discussItem.comment.list" :key="commentItem.cid">
             <img src="#">
             <p>username</p>
-            <p>{{ childrenItem.content }}</p>
-            <el-button @click="likeComment(childrenItem.cid)">赞同 {{ childrenItem.like }}</el-button>
-            <el-button @click="disLikeComment(childrenItem.cid)">踩</el-button>
+            <p>{{ commentItem.content }}</p>
+            <el-button @click="likeComment(commentItem.cid)">赞同 {{ commentItem.like }}</el-button>
+            <el-button @click="disLikeComment(commentItem.cid)">踩</el-button>
+            <el-button class="discuss-comment-count" @click="handleChildrenShow(commentItem.cid)">{{ commentItem.children.total }} 个评论</el-button>
+            <div v-show="childrenShow[commentItem.cid]" class="comment-children-container">
+              <div v-for="childrenItem in commentItem.children.list" :key="childrenItem.cid">
+                <img src="#">
+                <p>username</p>
+                <p>{{ childrenItem.content }}</p>
+                <el-button @click="likeComment(childrenItem.cid)">赞同 {{ childrenItem.like }}</el-button>
+                <el-button @click="disLikeComment(childrenItem.cid)">踩</el-button>
+              </div>
+            </div>
           </div>
         </div>
         <el-pagination
@@ -68,7 +72,6 @@ export default {
         ],
         publishTime: '2021-12-11 19:10',
         like: 100,
-        discussCount: 200,
         discuss: {
           total: 14,
           page: 1,
@@ -87,7 +90,7 @@ export default {
                       page: 1,
                       size: 10,
                       list: [
-                        { cid: 1, uid: 1, content: 'comment', like: 100, publishTime: '2021-12-11 19:10' }
+                        { cid: 2, uid: 1, content: 'comment', like: 100, publishTime: '2021-12-11 19:10' }
                       ]
                     }
                   }
@@ -97,14 +100,19 @@ export default {
           ]
         }
       },
-      flag: [
-        { did: 1, show: false,
-          comment: [
-            { cid: 1, show: false }
-          ]
-        }
-      ]
+      discussShow: {
+        1: false
+      },
+      parentShow: {
+        1: false
+      },
+      childrenShow: {
+        1: false
+      }
     }
+  },
+  created() {
+    // 1
   },
   methods: {
     toSortTopic(sortId) {
@@ -114,10 +122,6 @@ export default {
     likeTopic(tid) {
       // 当前话题点赞加一,后台对比是否有点赞记录
       alert('点赞Topic:' + tid)
-    },
-    disLikeTopic(tid) {
-      // 当前话题踩加一,后台对比是否有踩记录
-      alert('踩Topic:' + tid)
     },
     likeDiscuss(cid) {
       // 讨论点赞加一,后台对比是否有点赞记录
@@ -138,6 +142,15 @@ export default {
     handlePageChange(page) {
       // 跳转页码
       alert('跳转到第' + page + '页')
+    },
+    handleDiscussShow(did) {
+      this.discussShow[did] = !this.discussShow[did]
+    },
+    handleParentShow(did) {
+      this.parentShow[did] = !this.parentShow[did]
+    },
+    handleChildrenShow(cid) {
+      this.childrenShow[cid] = !this.childrenShow[cid]
     }
   }
 }
