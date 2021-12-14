@@ -97,7 +97,7 @@ export const constantRoutes = [
       {
         path: 'sort',
         name: 'article-sort',
-        component: () => import('@/views/article/sort'),
+        component: () => import('@/views/sort'),
         meta: { title: '读书万卷', icon: 'article' },
         hidden: true
       },
