@@ -7,13 +7,14 @@
     <div class="article-publish-container">
       <el-input
         v-model="article.title"
-        clearable="true"
+        :clearable="true"
         maxlength="30"
         show-word-limit
         size="30px"
       >
         <template slot="prepend">标题</template>
       </el-input>
+      <h3>标签</h3>
       <tinymce v-model="article.content" :width="1000" @imagesUpload="imagesUpload(arguments)" />
     </div>
   </div>
@@ -34,7 +35,9 @@ export default {
       article: {
         title: `无敌`,
         content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
-      }
+      },
+      // todo:标签选择
+      sort: []
     }
   },
   methods: {

@@ -8,7 +8,6 @@ import Layout from '@/layout'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
  * hidden: true                   if set true, item will not show in the sidebar(default is false)
  * alwaysShow: true               if set true, will always show the root menu
@@ -103,7 +102,7 @@ export const constantRoutes = [
       },
       {
         path: 'sort/:sortId/hot',
-        name: 'article-sort',
+        name: 'article-sort-hot',
         component: () => import('@/views/article/articleInSort'),
         meta: { title: '读书万卷', icon: 'article' },
         hidden: true
@@ -134,6 +133,7 @@ export const constantRoutes = [
   {
     path: '/topic',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: ':tid',
@@ -141,18 +141,18 @@ export const constantRoutes = [
         component: () => import('@/views/topic/detail'),
         meta: { title: '人生漫谈', icon: 'topic' },
         hidden: true
-      }
-    ]
-  },
-
-  {
-    path: '/topic/:tid/discuss',
-    component: Layout,
-    children: [
+      },
       {
-        path: ':did',
-        name: 'topic-discuss',
-        component: () => import('@/views/topic/discuss'),
+        path: 'sort',
+        name: 'topic-sort',
+        component: () => import('@/views/sort'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
+      },
+      {
+        path: 'sort/:sortId/hot',
+        name: 'topic-sort-hot',
+        component: () => import('@/views/topic/topicInSort'),
         meta: { title: '人生漫谈', icon: 'topic' },
         hidden: true
       }

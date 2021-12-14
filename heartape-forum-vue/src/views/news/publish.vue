@@ -7,7 +7,7 @@
     <div class="news-publish-container">
       <el-input
         v-model="news.title"
-        clearable="true"
+        :clearable="true"
         maxlength="30"
         show-word-limit
         size="30px"

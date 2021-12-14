@@ -7,7 +7,7 @@
     <div class="knowledge-publish-container">
       <el-input
         v-model="knowledge.title"
-        clearable="true"
+        :clearable="true"
         maxlength="30"
         show-word-limit
         size="30px"

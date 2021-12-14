@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="topic-container">
     <!--sort简略菜单-->
     <div class="sort-simple-container">
       <div class="left-sort-simple-container">
@@ -11,8 +11,8 @@
       </el-button>
     </div>
     <!--话题列表-->
-    <div class="topic-container">
-      <el-row v-for="item in topicHot" :key="item.aid" @click.native="topicDetail(item.tid)">
+    <div class="topic-container-body">
+      <el-row v-for="item in topicHot" :key="item.tid" @click.native="topicDetail(item.tid)">
         <el-card class="box-card" :body-style="{ padding: '0px' }">
           <div class="introduce" style="width: 700px">
             <span class="title">{{ item.title }}</span>
@@ -50,10 +50,10 @@ export default {
       ],
       topicHot: [
         { tid: 1, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' },
-        { tid: 1, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' },
-        { tid: 1, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' },
-        { tid: 1, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' },
-        { tid: 1, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' }
+        { tid: 2, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' },
+        { tid: 3, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' },
+        { tid: 4, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' },
+        { tid: 5, title: 'title', description: 'description', like: 256, publishTime: '2021-11-22' }
       ]
     }
   },
