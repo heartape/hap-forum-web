@@ -24,7 +24,7 @@
             <span class="content">{{ item.content }}</span>
             <div class="bottom clearfix">
               <time class="time">{{ item.publishTime }}</time>
-              <span class="button">热度:{{ item.like }}</span>
+              <span class="article-hot">热度:{{ item.like }}</span>
             </div>
           </div>
         </el-card>
@@ -34,7 +34,7 @@
             <span class="content">{{ item.content }}</span>
             <div class="bottom clearfix" style="width: 680px">
               <time class="time">{{ item.publishTime }}</time>
-              <span class="button">热度:{{ item.like }}</span>
+              <span class="article-hot">热度:{{ item.like }}</span>
             </div>
           </div>
         </el-card>
@@ -184,6 +184,7 @@ export default {
         right: 50px;
         height: 30px;
         width: 100px;
+        padding-left: 10px;
         background-color: cadetblue;
         color: #454545;
       }

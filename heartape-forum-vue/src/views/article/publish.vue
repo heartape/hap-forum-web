@@ -15,13 +15,12 @@
         <template slot="prepend">标题</template>
       </el-input>
       <div class="sort-container">
-        <span class="sort-title">标签</span>
         <el-tag
           v-for="item in sortChoose"
           :key="item.sortId"
           closable
           @close="handleClose(item)"
-        >{{ item.name }}</el-tag>
+        >{{ item.value }}</el-tag>
         <div v-if="sortChoose.length < maxSortNumber" class="sort-add-container">
           <el-autocomplete
             v-if="inputVisible"
@@ -31,10 +30,8 @@
             size="small"
             :fetch-suggestions="querySearch"
             @select="handleSelect"
-            @keyup.enter.native="handleInputConfirm"
+            @blur="handInputClose"
           />
-          <el-button v-if="inputVisible" class="button-add-sort" size="small" @click="handleInputConfirm">添加</el-button>
-          <el-button v-if="inputVisible" class="button-leave-sort" size="small" @click="leaveInputConfirm">取消</el-button>
           <el-button v-else class="button-new-sort" size="small" @click="showInput">+ 标签</el-button>
         </div>
       </div>
@@ -59,13 +56,11 @@ export default {
         title: `无敌`,
         content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
       },
-      // todo:标签选择
       inputVisible: false,
       sortInput: {},
       sort: [],
-      sortChoose: [
-        { sortId: 1, name: '计算机' }
-      ],
+      sortChoose: [],
+      sortUpload: [],
       maxSortNumber: 5
     }
   },
@@ -96,22 +91,18 @@ export default {
     },
     // 选择
     handleSelect(item) {
-      this.sortInput = item
-    },
-    // 执行添加
-    handleInputConfirm() {
-      const sortId = this.sortInput.sortId
-      if (sortId) {
-        // 存入sort
-        this.sortInput.name = this.sortInput.value
-        this.sortChoose.push(this.sortInput)
-      }
+      // todo:判断重复
+      const sortId = item.sortId
+      this.sortChoose.push(item)
+      this.sortUpload.push(sortId)
       this.inputVisible = false
       this.sortInput = {}
     },
-    leaveInputConfirm() {
-      this.inputVisible = false
-      this.sortInput = {}
+    handInputClose() {
+      setTimeout(() => {
+        this.inputVisible = false
+        this.sortInput = {}
+      }, 300)
     },
     // 整合oss上传
     imagesUpload: function(params) {
@@ -188,14 +179,6 @@ export default {
 .sort-container {
   margin-bottom: 10px;
   background-color: #ffffff;
-  .sort-title {
-    padding: 8px 20px;
-    background-color: #F5F7FA;
-    color: #909399;
-    font-size: 14px;
-    margin-right: 10px;
-    border: #DCDFE6 solid 1px;
-  }
   .el-tag {
     margin-right: 10px;
   }

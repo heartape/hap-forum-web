@@ -1,7 +1,7 @@
 <template>
   <div class="navbar">
-    <div class="head-title">Savour Hub</div>
-    <div class="head-content">heart like a capering monkey, mind like a galloping horse</div>
+    <div class="head-title">Hap</div>
+    <div class="head-content">heart like a ape, mind like a horse</div>
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
         <div class="avatar-wrapper">

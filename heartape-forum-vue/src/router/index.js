@@ -186,6 +186,7 @@ export const constantRoutes = [
   {
     path: '/travel',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: '',
@@ -199,6 +200,7 @@ export const constantRoutes = [
   {
     path: '/introduce',
     component: Layout,
+    hidden: true,
     children: [
       {
         path: '',
