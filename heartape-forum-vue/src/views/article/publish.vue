@@ -18,6 +18,7 @@
         <el-tag
           v-for="item in sortChoose"
           :key="item.sortId"
+          class="sort-choose-tag"
           closable
           @close="handleClose(item)"
         >{{ item.value }}</el-tag>
@@ -28,10 +29,12 @@
             v-model="sortInput.value"
             class="input-new-sort"
             size="small"
+            :highlight-first-item="true"
+            popper-class="el-autocomplete-suggestion"
             :fetch-suggestions="querySearch"
             @select="handleSelect"
             @blur="handInputClose"
-          />
+          ></el-autocomplete>
           <el-button v-else class="button-new-sort" size="small" @click="showInput">+ 标签</el-button>
         </div>
       </div>
@@ -69,7 +72,7 @@ export default {
       { sortId: 1, value: '计算机' },
       { sortId: 2, value: '数学' },
       { sortId: 3, value: '云计算' },
-      { sortId: 4, value: '微服务' }
+      { sortId: 4, value: '人工智能' }
     ]
   },
   methods: {
@@ -177,25 +180,33 @@ export default {
 }
 
 .sort-container {
+  height: 32px;
   margin-bottom: 10px;
   background-color: #ffffff;
-  .el-tag {
+  .sort-choose-tag {
+    float: left;
     margin-right: 10px;
+    line-height: 33px;
   }
   .sort-add-container {
-    display: inline-block;
+    float: left;
     .button-new-sort {
       margin-left: 10px;
       height: 32px;
       width: 74px;
-      line-height: 30px;
+      line-height: 32px;
       padding-top: 0;
       padding-bottom: 0;
     }
     .input-new-sort {
-      width: 90px;
-      margin-left: 10px;
+      width: 74px;
       vertical-align: bottom;
+      .el-autocomplete-suggestion {
+        width: 300px !important;
+        div {
+          width: 300px !important;
+        }
+      }
     }
     .el-button {
       margin: 0;
