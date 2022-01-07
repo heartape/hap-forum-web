@@ -14,38 +14,38 @@
       >
         <template slot="prepend">标题</template>
       </el-input>
-      <div class="sort-container">
+      <div class="label-container">
         <el-tag
-          v-for="item in sortChoose"
-          :key="item.sortId"
-          class="sort-choose-tag"
+          v-for="item in labelChoose"
+          :key="item.labelId"
+          class="label-choose-tag"
           closable
           @close="handleClose(item)"
         >{{ item.value }}</el-tag>
-        <div v-if="sortChoose.length < maxSortNumber" class="sort-add-container">
+        <div class="label-add-container">
           <el-autocomplete
             v-if="inputVisible"
             ref="saveTagInput"
-            v-model="sortInput.value"
-            class="input-new-sort"
+            v-model="labelInput.value"
+            class="input-new-label"
             size="small"
             :highlight-first-item="true"
             popper-class="el-autocomplete-suggestion"
             :fetch-suggestions="querySearch"
             @select="handleSelect"
             @blur="handInputClose"
-          ></el-autocomplete>
-          <el-button v-else class="button-new-sort" size="small" @click="showInput">+ 标签</el-button>
+          />
+          <el-button v-else class="button-new-label" size="small" :disabled="!(labelChoose.length < maxLabelNumber)" @click="showInput">+ 标签</el-button>
         </div>
       </div>
-      <tinymce v-model="article.content" :width="1000" @imagesUpload="imagesUpload(arguments)" />
+      <tinymce v-model="article.content" :width="1000" @imagesUpload="imagesUpload(arguments)" @contentUpload="contentUpload" />
     </div>
   </div>
 </template>
 
 <script>
 import Tinymce from '@/components/Tinymce'
-import { getFileUrl, getOssToken } from '@/api/upload'
+import { getFileUrl, getOssToken, publishArticle } from '@/api/upload'
 import axios from 'axios'
 import Navbar from '@/layout/components/Navbar'
 const UUID = require('uuid')
@@ -56,28 +56,38 @@ export default {
   data() {
     return {
       article: {
-        title: `无敌`,
+        title: ``,
+        label: [],
         content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
       },
       inputVisible: false,
-      sortInput: {},
-      sort: [],
-      sortChoose: [],
-      sortUpload: [],
-      maxSortNumber: 5
+      labelInput: {},
+      label: [],
+      labelChoose: [],
+      maxLabelNumber: 5
     }
   },
   created() {
-    this.sort = [
-      { sortId: 1, value: '计算机' },
-      { sortId: 2, value: '数学' },
-      { sortId: 3, value: '云计算' },
-      { sortId: 4, value: '人工智能' }
+    this.label = [
+      { labelId: 1, value: '计算机' },
+      { labelId: 2, value: '数学' },
+      { labelId: 3, value: '云计算' },
+      { labelId: 4, value: '人工智能' },
+      { labelId: 5, value: '微服务' }
     ]
   },
   methods: {
-    handleClose(sort) {
-      this.sortChoose.splice(this.sortChoose.indexOf(sort), 1)
+    error(message) {
+      this.$notify.error({
+        title: '请求失败',
+        message: message,
+        position: 'top-left'
+      })
+    },
+    handleClose(label) {
+      const labelId = label.labelId
+      this.labelChoose.splice(this.labelChoose.indexOf(label), 1)
+      this.article.label.splice(this.article.label.indexOf(labelId), 1)
     },
     showInput() {
       this.inputVisible = true
@@ -85,26 +95,30 @@ export default {
         this.$refs.saveTagInput.$refs.input.focus()
       })
     },
-    // sort模糊搜索
+    // label模糊搜索
     querySearch(queryString, cb) {
-      const sort = this.sort
-      const result = queryString ? sort.filter(item => item.value.match(queryString)) : sort
-      // const result = queryString ? sort.filter(item => item.value.match('/^.*' + queryString + '.*$/')) : sort
+      const label = this.label
+      const result = queryString ? label.filter(item => item.value.match(queryString)) : label
+      // const result = queryString ? label.filter(item => item.value.match('/^.*' + queryString + '.*$/')) : label
       cb(result)
     },
     // 选择
     handleSelect(item) {
-      // todo:判断重复
-      const sortId = item.sortId
-      this.sortChoose.push(item)
-      this.sortUpload.push(sortId)
+      // 判断重复
+      const labelId = item.labelId
+      if (this.article.label.includes(labelId)) {
+        this.error('标签已存在，请勿重复添加')
+        return
+      }
+      this.labelChoose.push(item)
+      this.article.label.push(labelId)
       this.inputVisible = false
-      this.sortInput = {}
+      this.labelInput = {}
     },
     handInputClose() {
       setTimeout(() => {
         this.inputVisible = false
-        this.sortInput = {}
+        this.labelInput = {}
       }, 300)
     },
     // 整合oss上传
@@ -160,6 +174,16 @@ export default {
       }).catch(() => {
         failure('出现未知问题，请刷新页面')
       })
+    },
+    contentUpload() {
+      this.fullscreenLoading = true
+      publishArticle(this.article).then(() => {
+        this.fullscreenLoading = false
+        alert('发布成功')
+      }).catch(() => {
+        this.fullscreenLoading = false
+        alert('发布失败')
+      })
     }
   }
 }
@@ -179,27 +203,29 @@ export default {
   margin-bottom: 10px;
 }
 
-.sort-container {
+.label-container {
   height: 32px;
   margin-bottom: 10px;
   background-color: #ffffff;
-  .sort-choose-tag {
+  .label-choose-tag {
+    min-width: 100px;
     float: left;
     margin-right: 10px;
     line-height: 33px;
+    text-align: center;
   }
-  .sort-add-container {
+  .label-add-container {
     float: left;
-    .button-new-sort {
+    .button-new-label {
       margin-left: 10px;
       height: 32px;
-      width: 74px;
+      width: 100px;
       line-height: 32px;
       padding-top: 0;
       padding-bottom: 0;
     }
-    .input-new-sort {
-      width: 74px;
+    .input-new-label {
+      width: 100px;
       vertical-align: bottom;
       .el-autocomplete-suggestion {
         width: 300px !important;
@@ -213,5 +239,4 @@ export default {
     }
   }
 }
-
 </style>

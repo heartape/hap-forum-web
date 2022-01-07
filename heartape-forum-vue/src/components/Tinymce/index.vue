@@ -19,7 +19,6 @@
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
-import { publish } from '@/api/upload'
 
 // why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 // const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
@@ -60,6 +59,10 @@ export default {
       default: 'auto'
     },
     imagesUpload: {
+      type: Function,
+      default: function() {}
+    },
+    contentUpload: {
       type: Function,
       default: function() {}
     }
@@ -172,17 +175,6 @@ export default {
         images_upload_handler: (blobInfo, success, failure, progress) => {
           this.$emit('imagesUpload', blobInfo, success, failure, progress)
         }
-      })
-    },
-    contentUpload: function(body, url) {
-      this.fullscreenLoading = true
-      // todo:丢失请求体
-      publish(body, url).then(() => {
-        this.fullscreenLoading = false
-        alert('发布成功')
-      }).catch(() => {
-        this.fullscreenLoading = false
-        alert('发布失败')
       })
     },
     destroyTinymce() {

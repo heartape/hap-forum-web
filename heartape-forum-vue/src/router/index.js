@@ -96,7 +96,7 @@ export const constantRoutes = [
       {
         path: 'sort',
         name: 'article-sort',
-        component: () => import('@/views/sort'),
+        component: () => import('@/views/Label'),
         meta: { title: '读书万卷', icon: 'article' },
         hidden: true
       },
@@ -145,7 +145,7 @@ export const constantRoutes = [
       {
         path: 'sort',
         name: 'topic-sort',
-        component: () => import('@/views/sort'),
+        component: () => import('@/views/Label'),
         meta: { title: '人生漫谈', icon: 'topic' },
         hidden: true
       },

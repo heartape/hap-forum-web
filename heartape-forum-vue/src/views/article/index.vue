@@ -1,11 +1,11 @@
 <template>
   <div class="app-container">
-    <!--sort简略菜单-->
-    <div class="sort-simple-container">
-      <div class="left-sort-simple-container">
-        <el-button v-for="item in articleSortHot" :key="item.sortId" type="text" size="small" disabled @click="switchSort(item.sortId)">{{ item.name }}</el-button>
+    <!--label简略菜单-->
+    <div class="label-simple-container">
+      <div class="left-label-simple-container">
+        <el-button v-for="item in articleLabelHot" :key="item.labelId" type="text" size="small" disabled @click="switchLabel(item.labelId)">{{ item.name }}</el-button>
       </div>
-      <el-button class="all-sort-button" type="text" disabled @click="toSortPage">
+      <el-button class="all-label-button" type="text" disabled @click="toLabelPage">
         <p>更多</p>
         <i class="el-icon-menu" style="font-size: 22px" />
       </el-button>
@@ -49,19 +49,19 @@ export default {
   data() {
     return {
       // name不要大于6个字，否则会溢出按钮
-      // 最多11个sort，多的会被隐藏
-      articleSortHot: [
-        { sortId: 1, name: '编程' },
-        { sortId: 2, name: '编程' },
-        { sortId: 3, name: '编程' },
-        { sortId: 4, name: '编程' },
-        { sortId: 5, name: '编程' },
-        { sortId: 6, name: '编程' },
-        { sortId: 7, name: '编程' },
-        { sortId: 8, name: '编程' },
-        { sortId: 9, name: '编程' },
-        { sortId: 10, name: '编程' },
-        { sortId: 11, name: '编程' }
+      // 最多11个label，多的会被隐藏
+      articleLabelHot: [
+        { labelId: 1, name: '编程' },
+        { labelId: 2, name: '编程' },
+        { labelId: 3, name: '编程' },
+        { labelId: 4, name: '编程' },
+        { labelId: 5, name: '编程' },
+        { labelId: 6, name: '编程' },
+        { labelId: 7, name: '编程' },
+        { labelId: 8, name: '编程' },
+        { labelId: 9, name: '编程' },
+        { labelId: 10, name: '编程' },
+        { labelId: 11, name: '编程' }
       ],
       articleHot: [
         { aid: 1, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
@@ -84,24 +84,24 @@ export default {
     }
   },
   created() {
-    // todo:请求articleSortHot,article-hot
+    // todo:请求articlelabelHot,article-hot
   },
   methods: {
     articleDetail(aid) {
       this.$router.push('/article/' + aid)
     },
-    switchSort(sortId) {
-      this.$router.push('/article/sort/' + sortId + '/hot')
+    switchLabel(labelId) {
+      this.$router.push('/article/label/' + labelId + '/hot')
     },
-    toSortPage() {
-      this.$router.push('/sort')
+    toLabelPage() {
+      this.$router.push('/label')
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-.sort-simple-container {
+.label-simple-container {
   position: relative;
   height: 117px;
   width: 100%;
@@ -110,7 +110,7 @@ export default {
   overflow: hidden;
   border: #ececec solid 1px;
 
-  .left-sort-simple-container {
+  .left-label-simple-container {
     //width: 600px;
     height: 100%;
 
@@ -122,7 +122,7 @@ export default {
     }
   }
 
-  .all-sort-button {
+  .all-label-button {
     position: absolute;
     right: 30px;
     top: 20px;

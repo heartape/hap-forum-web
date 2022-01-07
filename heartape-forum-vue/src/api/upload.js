@@ -18,9 +18,9 @@ export function getFileUrl(fileName) {
 }
 
 // 富文本发布
-export function publish(body, url) {
+export function publishArticle(body) {
   return request({
-    url: url,
+    url: '/article',
     method: 'post',
     body
   })
