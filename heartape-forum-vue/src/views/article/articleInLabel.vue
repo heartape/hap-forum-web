@@ -1,22 +1,28 @@
 <template>
-  <div class="app-container">
+  <div class="article-in-label-container">
     <label-bar type="article" />
+    <label-introduce />
     <article-list :article-hot="articleHot" />
   </div>
 </template>
 
 <script>
 import LabelBar from '@/views/components/LabelBar'
+import LabelIntroduce from '@/views/components/LabelIntroduce'
 import ArticleList from '@/views/article/articleList'
-import store from '@/store'
 
 export default {
+  name: 'ArticleInLabel',
   components: {
-    ArticleList,
-    LabelBar
+    LabelBar,
+    LabelIntroduce,
+    ArticleList
   },
   data() {
     return {
+      // name不要大于6个字，否则会溢出按钮
+      // 最多11个label，多的会被隐藏
+      articleLabelChoose: [],
       articleHot: [
         { aid: 1, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
         { aid: 2, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
@@ -36,24 +42,10 @@ export default {
         { aid: 16, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null }
       ]
     }
-  },
-  created() {
-    // articleLabelHot,articleHot
-    // name不要大于6个字，否则会溢出按钮
-    const labels = [
-      { labelId: 1, name: '编程' },
-      { labelId: 2, name: '编程' },
-      { labelId: 3, name: '编程' },
-      { labelId: 4, name: '编程' },
-      { labelId: 5, name: '编程' },
-      { labelId: 6, name: '编程' }
-    ]
-    store.dispatch('label/saveArticleLabel', labels.slice(0, 6))
   }
 }
 </script>
 
-<style lang="scss" scoped>
+<style scoped>
 
 </style>
-

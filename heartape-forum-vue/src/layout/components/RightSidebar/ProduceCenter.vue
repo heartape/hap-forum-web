@@ -10,7 +10,7 @@
         <p class="el-icon-chat-dot-round produce-center-item-icon" style="background-color: #e17272" />
         <p>聊人生</p>
       </el-button>
-      <el-button class="produce-center-item" @click="createEdit(url.knowledge)">
+      <el-button class="produce-center-item" disabled @click="createEdit(url.knowledge)">
         <p class="el-icon-notebook-1 produce-center-item-icon" style="background-color: cadetblue" />
         <p>授知识</p>
       </el-button>

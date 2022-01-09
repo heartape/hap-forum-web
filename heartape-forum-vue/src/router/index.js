@@ -94,16 +94,9 @@ export const constantRoutes = [
     hidden: true,
     children: [
       {
-        path: 'sort',
-        name: 'article-sort',
-        component: () => import('@/views/Label'),
-        meta: { title: '读书万卷', icon: 'article' },
-        hidden: true
-      },
-      {
-        path: 'sort/:sortId/hot',
-        name: 'article-sort-hot',
-        component: () => import('@/views/article/articleInSort'),
+        path: 'label/:labelId/hot',
+        name: 'article-label-hot',
+        component: () => import('@/views/article/articleInLabel'),
         meta: { title: '读书万卷', icon: 'article' },
         hidden: true
       },
@@ -143,16 +136,9 @@ export const constantRoutes = [
         hidden: true
       },
       {
-        path: 'sort',
-        name: 'topic-sort',
-        component: () => import('@/views/Label'),
-        meta: { title: '人生漫谈', icon: 'topic' },
-        hidden: true
-      },
-      {
-        path: 'sort/:sortId/hot',
-        name: 'topic-sort-hot',
-        component: () => import('@/views/topic/topicInSort'),
+        path: 'label/:labelId/hot',
+        name: 'topic-label-hot',
+        component: () => import('@/views/topic/topicInLabel'),
         meta: { title: '人生漫谈', icon: 'topic' },
         hidden: true
       }
