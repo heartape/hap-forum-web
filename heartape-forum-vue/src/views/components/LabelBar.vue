@@ -128,7 +128,6 @@ export default {
 .label-simple-container {
   position: relative;
   padding: 20px 30px 20px 30px;
-  margin-bottom: 20px;
   overflow: hidden;
   border: #ececec solid 1px;
   .el-button {

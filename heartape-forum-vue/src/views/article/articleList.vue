@@ -57,6 +57,7 @@ export default {
 <style lang="scss" scoped>
 .box-card {
   width: 740px;
+  margin: 0 auto;
   max-height: 160px;
   background-color: #ccc;
 
