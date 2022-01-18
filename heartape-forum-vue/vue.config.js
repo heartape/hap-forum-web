@@ -41,7 +41,7 @@ module.exports = {
       [process.env.VUE_APP_BASE_API]: {
         target: 'http://localhost',
         changeOrigin: true, // 是否跨域
-        pathRewrite: { ['^' + process.env.VUE_APP_BASE_API] : ''}
+        pathRewrite: { ['^' + process.env.VUE_APP_BASE_API]: '' }
       }
     }
   },
