@@ -1,20 +1,17 @@
 <template>
   <div class="article-in-label-container">
-    <label-bar type="article" />
     <label-introduce />
     <article-list :article-hot="articleHot" />
   </div>
 </template>
 
 <script>
-import LabelBar from '@/views/components/LabelBar'
 import LabelIntroduce from '@/views/components/LabelIntroduce'
 import ArticleList from '@/views/article/articleList'
 
 export default {
   name: 'ArticleInLabel',
   components: {
-    LabelBar,
     LabelIntroduce,
     ArticleList
   },

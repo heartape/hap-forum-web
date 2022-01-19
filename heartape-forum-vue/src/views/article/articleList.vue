@@ -2,7 +2,7 @@
   <!--文章列表-->
   <div class="article-container">
     <el-row v-for="item in articleHot" :key="item.aid" @click.native="articleDetail(item.aid)">
-      <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ccc' }">
+      <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#e2e0e0' }">
         <el-image
           style="width: 200px; height: 140px; margin: 10px"
           :src="item.url"
@@ -59,7 +59,7 @@ export default {
   width: 740px;
   margin: 0 auto;
   max-height: 160px;
-  background-color: #ccc;
+  background-color: #e2e0e0;
 
   .introduce {
     float: right;

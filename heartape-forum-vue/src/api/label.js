@@ -6,3 +6,17 @@ export function showLabel(labelId) {
     method: 'get'
   })
 }
+
+export function showHotLabel() {
+  return request({
+    url: '/label/hot',
+    method: 'get'
+  })
+}
+
+export function showAllLabel() {
+  return request({
+    url: '/label',
+    method: 'get'
+  })
+}
