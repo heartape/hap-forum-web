@@ -14,7 +14,7 @@
       <el-cascader-panel
         v-model="labelSearch"
         v-loading="labelLoading"
-        style="width: 362px; float: left; margin-left: 20px"
+        style="width: 362px; margin-left: 20px"
         :options="labels"
         :props="panelSetting"
       />
@@ -27,7 +27,6 @@
 </template>
 
 <script>
-import store from '@/store'
 import { showAllLabel, showHotLabel } from '@/api/label'
 
 export default {
@@ -52,7 +51,7 @@ export default {
       fullscreenLoading: false,
       labels: [],
       labelShow: [],
-      labelSearch: []
+      labelSearch: ''
     }
   },
   mounted() {
@@ -110,14 +109,12 @@ export default {
     },
     handleClose() {
       this.showAllLabel = false
-      this.labelSearch = []
+      this.labelSearch = ''
     },
     handleSubmit() {
       this.showAllLabel = false
-      store.dispatch('label/saveArticleLabel', this.labelChoose.slice(0, 6))
-      this.labelShow = this.labelChoose.slice(0, 6)
-      this.labelChoose = []
-      this.labelSearch = []
+      const labelId = this.labelSearch
+      this.$router.push({ path: '/' + this.type + '/label/' + labelId + '/hot' })
     }
   }
 }
