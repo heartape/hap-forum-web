@@ -1,13 +1,33 @@
 <template>
   <div class="topic-container-body">
     <el-row v-for="item in topicHot" :key="item.tid" @click.native="topicDetail(item.tid)">
-      <el-card class="box-card" :body-style="{ padding: '0px' }">
-        <div class="introduce" style="width: 700px">
+      <el-card v-if="item.cover === false" class="box-card" :body-style="{ padding: '0px' }">
+        <div class="introduce">
           <span class="title">{{ item.title }}</span>
+          <span class="author">{{ item.nickname }}<i style="font-size: 14px; margin-left: 20px">{{ item.profile }}</i></span>
           <span class="content">{{ item.description }}</span>
           <div class="bottom clearfix" style="width: 680px">
+            <span class="hot">热度:{{ item.hot }}</span>
             <time class="time">{{ item.publishTime }}</time>
-            <span class="button">热度:{{ item.like }}</span>
+          </div>
+        </div>
+      </el-card>
+      <el-card v-else class="box-card image-box-card" :body-style="{ padding: '0px' }">
+        <div class="introduce image-introduce">
+          <span class="title">{{ item.title }}</span>
+          <span class="author">{{ item.nickname }}<i style="font-size: 14px; margin-left: 20px">{{ item.profile }}</i></span>
+          <span class="content">
+            <el-image
+              :src="item.url"
+              :alt="item.title + '的封面'"
+              style="float: left;width: 160px; height: 120px; margin-right: 10px"
+              fit="cover"
+            />
+            {{ item.description }}
+          </span>
+          <div class="bottom clearfix" style="width: 680px">
+            <span class="hot">热度:{{ item.hot }}</span>
+            <time class="time">{{ item.publishTime }}</time>
           </div>
         </div>
       </el-card>
@@ -37,12 +57,12 @@ export default {
 <style lang="scss" scoped>
 .box-card {
   width: 740px;
-  height: 120px;
+  height: 140px;
   background-color: #ccc;
 
   .introduce {
     float: right;
-    height: 100%;
+    height: 100px;
     width: 100%!important;
     padding: 10px;
 
@@ -57,6 +77,7 @@ export default {
 
     .content {
       display: block;
+      padding-top: 5px;
       width: 100%;
       height: 50px;
       font-size: 18px;
@@ -78,15 +99,27 @@ export default {
         line-height: 15px;
       }
 
-      span {
-        position: absolute;
-        right: 0;
-        padding-left: 10px;
+      .hot {
+        float: left;
+        margin-right: 30px;
         height: 30px;
         width: 100px;
         background-color: cadetblue;
+        text-align: center;
         color: #454545;
       }
+    }
+  }
+}
+
+.image-box-card {
+  width: 740px;
+  height: 220px;
+  background-color: #ccc;
+  .image-introduce {
+    height: 180px;
+    .content {
+      height: 130px;
     }
   }
 }

@@ -1,6 +1,8 @@
 <template>
   <div class="footer-all">
-    <div class="footer-content">从六中全会公报看世界第一大党</div>
+    <div class="footer-content">
+      <el-link href="https://beian.miit.gov.cn" target="_blank">苏ICP备2021053897号</el-link>
+    </div>
   </div>
 </template>
 
@@ -12,19 +14,16 @@ export default {
 <style lang="scss" scoped>
 .footer-all {
   height: 100%;
-  line-height: 80px;
-  text-align: center;
+  text-align: left;
   width: 100%;
   overflow: hidden;
   position: relative;
   margin: 0 auto;
   font-family: jetBrains Mono, Helvetica Neue, Helvetica;
 
-  .head-content {
-    height: 100%;
-    margin: 0 auto;
-    width: 500px;
-    line-height: 100%;
+  .footer-content {
+    margin: 20px auto;
+    width: 800px;
   }
 }
 </style>

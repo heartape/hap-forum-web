@@ -21,7 +21,6 @@ export default {
 .app-main {
   /*50 = navbar  */
   float: left;
-  min-height: calc(100vh - 50px);
   width: 760px;
   position: relative;
   overflow: hidden;
