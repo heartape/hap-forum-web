@@ -51,8 +51,8 @@ export default {
     const labelId = this.$route.params.labelId
     showLabel(labelId).then(res => {
       this.label = res.data
-    }).catch(() => {
-      this.error()
+    }).catch(error => {
+      this.error(error)
       // todo:对接后端时打开注解
       // this.labelIsEmpty = true
       this.label = {
@@ -66,10 +66,10 @@ export default {
     })
   },
   methods: {
-    error() {
+    error(message) {
       this.$notify.error({
         title: '请求失败',
-        message: '请检查网络或联系管理员'
+        message: message
       })
     },
     showAll() {
@@ -84,7 +84,7 @@ export default {
   height: 230px;
   width: 740px;
   margin: 10px;
-  background-color: #d5d5d5;
+  background-color: #e0e0e0;
   overflow: hidden;
   .right-info-container {
     float: left;

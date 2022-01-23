@@ -25,11 +25,11 @@ export default {
       this.topicHot = res.data
     }).catch(() => {
       this.topicHot = [
-        { tid: 1, title: 'title', nickname: '灰太狼', profile: '羊村死敌', cover: false, url: '', description: 'description description description description description description description description description description description', hot: 256, publishTime: '2021-11-22' },
-        { tid: 2, title: 'title', nickname: '灰太狼', profile: '羊村死敌', cover: true, url: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', description: 'description', hot: 256, publishTime: '2021-11-22' },
-        { tid: 3, title: 'title', nickname: '灰太狼', profile: '羊村死敌', cover: false, url: '', description: 'description', hot: 256, publishTime: '2021-11-22' },
-        { tid: 4, title: 'title', nickname: '灰太狼', profile: '羊村死敌', cover: false, url: '', description: 'description', hot: 256, publishTime: '2021-11-22' },
-        { tid: 5, title: 'title', nickname: '灰太狼', profile: '羊村死敌', cover: false, url: '', description: 'description', hot: 256, publishTime: '2021-11-22' }
+        { tid: 1, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description description description description description description description description description description description', hot: 256, publishTime: '2021-11-22' },
+        { tid: 2, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: true, coverUrl: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', description: 'description', hot: 256, publishTime: '2021-11-22' },
+        { tid: 3, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' },
+        { tid: 4, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' },
+        { tid: 5, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' }
       ]
     })
   }

@@ -6,15 +6,22 @@
         <p class="el-icon-edit produce-center-item-icon" style="background-color: darkkhaki" />
         <p>写文章</p>
       </el-button>
-      <el-button class="produce-center-item" @click="createEdit(url.topic)">
+      <el-button class="produce-center-item" @click="createTopicVisible = !createTopicVisible">
         <p class="el-icon-chat-dot-round produce-center-item-icon" style="background-color: #e17272" />
         <p>聊人生</p>
       </el-button>
+      <el-dialog
+        title="发布话题"
+        :visible.sync="createTopicVisible"
+        :close-on-click-modal="false"
+        width="600">
+        <publish />
+      </el-dialog>
       <el-button class="produce-center-item" disabled @click="createEdit(url.knowledge)">
         <p class="el-icon-notebook-1 produce-center-item-icon" style="background-color: cadetblue" />
         <p>授知识</p>
       </el-button>
-      <el-button class="produce-center-item" @click="createEdit(url.news)">
+      <el-button class="produce-center-item" disabled @click="createEdit(url.news)">
         <p class="el-icon-news produce-center-item-icon" style="background-color: darkseagreen" />
         <p>谈新闻</p>
       </el-button>
@@ -23,16 +30,18 @@
 </template>
 
 <script>
+import Publish from '@/views/topic/publish'
 export default {
   name: 'ProduceCenter',
+  components: { Publish },
   data() {
     return {
       url: {
         'article': '/article/publish',
-        'topic': '/topic/publish',
         'knowledge': '/knowledge/publish',
         'news': '/news/publish'
-      }
+      },
+      createTopicVisible: false
     }
   },
   methods: {
@@ -43,7 +52,7 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .produce-center-container {
   height: 180px;
   width: 100%;
@@ -59,6 +68,9 @@ export default {
 .produce-center-list {
   height: 80px;
   width: 100%;
+  .el-button {
+    padding: 0;
+  }
 }
 .produce-center-item {
   height: 70px;

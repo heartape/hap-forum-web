@@ -1,112 +1,177 @@
 <template>
-  <!-- 富文本 -->
-  <div>
-    <div class="head-container">
-      <navbar />
+  <div class="topic-publish-container">
+    <el-input
+      v-model="topic.title"
+      class="title-container"
+      placeholder="请输入话题"
+    />
+    <div class="label-container">
+      <el-tag
+        v-for="item in labelChoose"
+        :key="item.labelId"
+        class="label-choose-tag"
+        closable
+        @close="handleClose(item)"
+      >{{ item.value }}</el-tag>
+      <div class="label-add-container">
+        <el-autocomplete
+          v-if="inputVisible"
+          ref="saveTagInput"
+          v-model="labelInput.value"
+          class="input-new-label"
+          size="small"
+          :highlight-first-item="true"
+          popper-class="el-autocomplete-suggestion"
+          :fetch-suggestions="querySearch"
+          @select="handleSelect"
+          @blur="handInputClose"
+        />
+        <el-button v-else class="button-new-label" type="text" size="small" :disabled="!(labelChoose.length < maxLabelNumber)" @click="showInput">+ 标签</el-button>
+      </div>
     </div>
-    <div class="topic-publish-container">
-      <el-input
-        v-model="topic.title"
-        :clearable="true"
-        maxlength="30"
-        show-word-limit
-        size="30px"
-      >
-        <template slot="prepend">标题</template>
-      </el-input>
-      <tinymce v-model="topic.content" :width="1000" @imagesUpload="imagesUpload(arguments)" />
+    <el-input
+      v-model="topic.describe"
+      class="describe-container"
+      type="textarea"
+      resize="none"
+      :autosize="{ minRows: 4, maxRows: 8}"
+      placeholder="请输入话题描述 ( 选填 )"
+    />
+    <div class="foot-container">
+      <el-upload
+        v-if="fileList.length === 0"
+        class="cover-upload"
+        action="https://jsonplaceholder.typicode.com/posts/"
+        :on-change="handleChange"
+        :file-list="fileList">
+        <el-button type="primary">添加封面</el-button>
+      </el-upload>
+      <el-button v-else class="cover-upload-preview-btn" type="primary" @click="dialogVisible = false">预 览</el-button>
+      <el-button class="topic-publish-btn" type="primary" @click="publishTopic">发 布</el-button>
     </div>
   </div>
 </template>
 
 <script>
-import Tinymce from '@/components/Tinymce'
-import { getFileUrl, getOssToken } from '@/api/upload'
-import axios from 'axios'
-import Navbar from '@/layout/components/Navbar'
-const UUID = require('uuid')
+import { publish } from '@/api/topic'
 
 export default {
   name: 'Publish',
-  components: { Navbar, Tinymce },
   data() {
     return {
       topic: {
-        title: `无敌`,
-        content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`
-      }
+        title: `如何看待「流调中最辛苦的中国人」？`,
+        describe: `1月19日，在北京市召开的第269场新冠疫情防控新闻发布会上`,
+        cover: '',
+        label: []
+      },
+      inputVisible: false,
+      labelInput: {},
+      labelChoose: [],
+      labelSearch: [],
+      maxLabelNumber: 5,
+      fileList: []
     }
   },
+  created() {
+    // todo:改为接口获取
+    this.labelSearch = [
+      { labelId: 1, value: '计算机' },
+      { labelId: 2, value: '数学' },
+      { labelId: 3, value: '云计算' },
+      { labelId: 4, value: '人工智能' },
+      { labelId: 5, value: '微服务' }
+    ]
+  },
   methods: {
-    // 整合oss上传
-    imagesUpload: function(params) {
-      const blobInfo = params[0]
-      const success = params[1]
-      const failure = params[2]
-      const progress = params[3]
-      progress(0)
-      // 获取oss签名
-      getOssToken().then((response) => {
-        if (response.code === 20000) {
-          const policyData = response.data
-          /**
-           ossUrl 换成自己的Bucket的外网地址，
-           例如 https://heartape-test.oss-cn-shenzhen.aliyuncs.com
-           */
-          const ossUrl = policyData.host
-          const uuid = UUID.v4().toString().replace(/-/g, '')
-          // 设置上传的访问路径
-          const fileName = uuid + blobInfo.filename()
-          console.log(fileName)
-          /**
-           * 在oos内部路径
-           * 例如 front/article/dog.png
-           */
-          const accessUrl = policyData.dir + fileName
-          // 上传文件的data参数
-          const sendData = new FormData()
-          sendData.append('OSSAccessKeyId', policyData.accessid)
-          sendData.append('policy', policyData.policy)
-          sendData.append('Signature', policyData.signature)
-          // sendData.append('callback', policyData.callback)
-          sendData.append('keys', policyData.dir)
-          sendData.append('key', accessUrl) // 上传的文件路径
-          sendData.append('success_action_status', 200) // 指定返回的状态码
-          sendData.append('type', 'image/jpeg')
-          sendData.append('file', blobInfo.blob(), fileName)
-          axios.post(
-            ossUrl,
-            sendData
-          ).then(() => {
-            getFileUrl(accessUrl).then(res => {
-              const temporaryUrl = res.data.url
-              success(temporaryUrl)
-              progress(100)
-              const pictureUrl = ossUrl + '/' + accessUrl
-              console.log(temporaryUrl)
-              console.log('上传到阿里云的图片地址:' + pictureUrl)
-            })
-          })
-        }
-      }).catch(() => {
-        failure('出现未知问题，请刷新页面')
+    error(message) {
+      this.$notify.error({
+        title: '请求失败',
+        message: message
       })
+    },
+    // todo:将label选择抽离出一个组件
+    handleClose(label) {
+      const labelId = label.labelId
+      this.labelChoose.splice(this.labelChoose.indexOf(label), 1)
+      this.topic.label.splice(this.topic.label.indexOf(labelId), 1)
+    },
+    showInput() {
+      this.inputVisible = true
+      this.$nextTick(_ => {
+        this.$refs.saveTagInput.$refs.input.focus()
+      })
+    },
+    // label模糊搜索
+    querySearch(queryString, cb) {
+      const label = this.labelSearch
+      const result = queryString ? label.filter(item => item.value.match(queryString)) : label
+      // const result = queryString ? label.filter(item => item.value.match('/^.*' + queryString + '.*$/')) : label
+      cb(result)
+    },
+    // 选择
+    handleSelect(item) {
+      // 判断重复
+      const labelId = item.labelId
+      if (this.topic.label.includes(labelId)) {
+        this.error('标签已存在，请勿重复添加')
+        return
+      }
+      this.labelChoose.push(item)
+      this.topic.label.push(labelId)
+      this.inputVisible = false
+      this.labelInput = {}
+    },
+    handInputClose() {
+      setTimeout(() => {
+        this.inputVisible = false
+        this.labelInput = {}
+      }, 300)
+    },
+    handleChange(file, fileList) {
+      // todo:图片上传整合,结果样式修改
+      console.log(file)
+      console.log(fileList)
+    },
+    publishTopic() {
+      // todo:loading
+      publish().then(res => {
+        const topicId = res.data
+        this.$router.push('/topic/' + topicId)
+      }).catch(error => this.error(error))
     }
   }
 }
 </script>
 
-<style scoped>
-.topic-publish-container {
-  width: 1000px;
-  margin: 20px auto;
-  /*border: #2b2f3a solid 1px;*/
+<style lang="scss" scoped>
+.title-container {
+  margin-bottom: 10px;
 }
-.topic-publish-container >>> .el-input > input{
-  height: 60px;
-  font-size: 25px;
+.label-container {
+  .label-choose-tag {
+    float: left;
+    margin-right: 10px;
+  }
+  .label-add-container {
+    float: left;
+    margin: 0 !important;
+  }
 }
-.el-input {
-  margin-bottom: 40px;
+.describe-container {
+  margin-top: 10px;
+}
+.foot-container {
+  height: 40px;
+  margin-top: 20px;
+  .cover-upload {
+    float: left;
+  }
+  .cover-upload-preview-btn {
+    float: left;
+  }
+  .topic-publish-btn {
+    float: right;
+  }
 }
 </style>

@@ -71,3 +71,11 @@ export function showChildren(commentId, page) {
     params: { page }
   })
 }
+
+export function publish(data) {
+  return request({
+    url: '/topic',
+    method: 'post',
+    data
+  })
+}

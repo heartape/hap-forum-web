@@ -3,8 +3,19 @@
     <el-row v-for="item in topicHot" :key="item.tid" @click.native="topicDetail(item.tid)">
       <el-card v-if="item.cover === false" class="box-card" :body-style="{ padding: '0px' }">
         <div class="introduce">
-          <span class="title">{{ item.title }}</span>
-          <span class="author">{{ item.nickname }}<i style="font-size: 14px; margin-left: 20px">{{ item.profile }}</i></span>
+          <span class="author-container">
+            <el-image
+              :src="item.avatar"
+              :alt="item.nickname"
+              style="float: left;width: 30px; height: 30px; margin-right: 10px"
+              fit="cover"
+            />
+            <span class="author-info-container">
+              <span>{{ item.nickname }}</span>
+              <i style="font-size: 14px; margin-left: 20px">{{ item.profile }}</i>
+            </span>
+          </span>
+          <h3 class="title">{{ item.title }}</h3>
           <span class="content">{{ item.description }}</span>
           <div class="bottom clearfix" style="width: 680px">
             <span class="hot">热度:{{ item.hot }}</span>
@@ -14,11 +25,22 @@
       </el-card>
       <el-card v-else class="box-card image-box-card" :body-style="{ padding: '0px' }">
         <div class="introduce image-introduce">
-          <span class="title">{{ item.title }}</span>
-          <span class="author">{{ item.nickname }}<i style="font-size: 14px; margin-left: 20px">{{ item.profile }}</i></span>
+          <span class="author-container">
+            <el-image
+              :src="item.avatar"
+              :alt="item.nickname"
+              style="float: left;width: 30px; height: 30px; margin-right: 10px"
+              fit="cover"
+            />
+            <span class="author-info-container">
+              <span>{{ item.nickname }}</span>
+              <i style="font-size: 14px; margin-left: 20px">{{ item.profile }}</i>
+            </span>
+          </span>
+          <h3 class="title">{{ item.title }}</h3>
           <span class="content">
             <el-image
-              :src="item.url"
+              :src="item.coverUrl"
               :alt="item.title + '的封面'"
               style="float: left;width: 160px; height: 120px; margin-right: 10px"
               fit="cover"
@@ -47,8 +69,8 @@ export default {
     }
   },
   methods: {
-    topicDetail(aid) {
-      this.$router.push('/topic/' + aid)
+    topicDetail(topicId) {
+      this.$router.push('/topic/' + topicId)
     }
   }
 }
@@ -57,7 +79,7 @@ export default {
 <style lang="scss" scoped>
 .box-card {
   width: 740px;
-  height: 140px;
+  height: 160px;
   background-color: #ccc;
 
   .introduce {
@@ -65,6 +87,10 @@ export default {
     height: 100px;
     width: 100%!important;
     padding: 10px;
+    .author-info-container {
+      position: relative;
+      top: 5px;
+    }
 
     .title {
       display: block;
@@ -114,7 +140,7 @@ export default {
 
 .image-box-card {
   width: 740px;
-  height: 220px;
+  height: 240px;
   background-color: #ccc;
   .image-introduce {
     height: 180px;

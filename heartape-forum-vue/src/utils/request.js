@@ -50,13 +50,8 @@ service.interceptors.response.use(
     } else {
       return res
     }
-  },
-  error => {
-    Notification.error({
-      title: '请求失败',
-      message: '请检查网络或联系管理员'
-    })
-    return Promise.reject(error)
+  }, error => {
+    return Promise.reject(error.message)
   }
 )
 
