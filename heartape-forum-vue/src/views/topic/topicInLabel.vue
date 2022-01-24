@@ -1,6 +1,6 @@
 <template>
   <div class="topic-in-label-container">
-    <label-introduce />
+    <label-introduce type="topic" />
     <topic-list :topic-hot="topicHot" />
   </div>
 </template>

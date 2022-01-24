@@ -1,9 +1,9 @@
 <template>
   <div class="topic-container">
     <div class="topic-header-container">
-      <el-card class="topic-description-container" :body-style="{ 'background-color': '#ececec' }">
+      <el-card class="topic-description-container" :body-style="{ 'background-color': '#ffffff' }">
         <el-row class="topic-label-container">
-          <el-button v-for="labelItem in topic.label" :key="labelItem.labelId" class="topic-label-item" type="primary" plain round size="small" @click="toLabelTopic(labelItem.labelId)">{{ labelItem.name }}</el-button>
+          <el-button v-for="labelItem in topic.label" :key="labelItem.labelId" class="topic-label-item" type="primary" plain round size="mini" @click="toLabelTopic(labelItem.labelId)">{{ labelItem.name }}</el-button>
         </el-row>
         <h2>{{ topic.title }}</h2>
         <p>{{ topic.simpleDescription }}
@@ -266,7 +266,7 @@ export default {
   }
 }
 .topic-discuss-container {
-  background-color: #ececec;
+  background-color: #ffffff;
 
   .only-discuss-container {
     width: 740px;

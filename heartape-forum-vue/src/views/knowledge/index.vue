@@ -1,6 +1,5 @@
 <template>
   <div class="dashboard-container">
-    <!--    <div class="dashboard-text">name: {{ name }}</div>-->
     <div class="dashboard-text">知识,敬请期待</div>
   </div>
 </template>

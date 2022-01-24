@@ -10,13 +10,6 @@
         <p class="el-icon-chat-dot-round produce-center-item-icon" style="background-color: #e17272" />
         <p>聊人生</p>
       </el-button>
-      <el-dialog
-        title="发布话题"
-        :visible.sync="createTopicVisible"
-        :close-on-click-modal="false"
-        width="600">
-        <publish />
-      </el-dialog>
       <el-button class="produce-center-item" disabled @click="createEdit(url.knowledge)">
         <p class="el-icon-notebook-1 produce-center-item-icon" style="background-color: cadetblue" />
         <p>授知识</p>
@@ -26,6 +19,15 @@
         <p>谈新闻</p>
       </el-button>
     </div>
+    <el-dialog
+      class="topic-dialog"
+      title="发布话题"
+      :visible.sync="createTopicVisible"
+      :close-on-click-modal="false"
+      width="545px"
+    >
+      <publish />
+    </el-dialog>
   </div>
 </template>
 
@@ -92,5 +94,10 @@ p {
   font-size: 30px;
   line-height: 40px;
   margin-bottom: 10px;
+}
+</style>
+<style scoped>
+.topic-dialog /deep/ .el-dialog__body {
+  padding-bottom: 32px;
 }
 </style>

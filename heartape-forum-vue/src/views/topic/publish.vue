@@ -7,12 +7,12 @@
     />
     <div class="label-container">
       <el-tag
-        v-for="item in labelChoose"
-        :key="item.labelId"
+        v-for="label in labelChoose"
+        :key="label.labelId"
         class="label-choose-tag"
         closable
-        @close="handleClose(item)"
-      >{{ item.value }}</el-tag>
+        @close="handleClose(label)"
+      >{{ label.value }}</el-tag>
       <div class="label-add-container">
         <el-autocomplete
           v-if="inputVisible"
@@ -42,8 +42,13 @@
         v-if="fileList.length === 0"
         class="cover-upload"
         action="https://jsonplaceholder.typicode.com/posts/"
-        :on-change="handleChange"
-        :file-list="fileList">
+        :limit="1"
+        :on-success="handleSuccess"
+        :on-error="handleError"
+        :on-preview="handlePreview"
+        :on-remove="handleRemove"
+        :file-list="fileList"
+      >
         <el-button type="primary">添加封面</el-button>
       </el-upload>
       <el-button v-else class="cover-upload-preview-btn" type="primary" @click="dialogVisible = false">预 览</el-button>
@@ -62,7 +67,7 @@ export default {
       topic: {
         title: `如何看待「流调中最辛苦的中国人」？`,
         describe: `1月19日，在北京市召开的第269场新冠疫情防控新闻发布会上`,
-        cover: '',
+        cover: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
         label: []
       },
       inputVisible: false,
@@ -128,14 +133,31 @@ export default {
         this.labelInput = {}
       }, 300)
     },
-    handleChange(file, fileList) {
+    handleSuccess(file, fileList) {
       // todo:图片上传整合,结果样式修改
+      console.log('handleSuccess')
       console.log(file)
       console.log(fileList)
     },
+    handleError(file, fileList) {
+      // todo:图片上传整合,结果样式修改
+      console.log('handleError')
+      console.log(file)
+      console.log(fileList)
+    },
+    handleRemove(file, fileList) {
+      console.log('handleRemove')
+      console.log(file)
+      console.log(fileList)
+    },
+    handlePreview(file) {
+      console.log('handlePreview')
+      console.log(file)
+    },
     publishTopic() {
-      // todo:loading
-      publish().then(res => {
+      const topic = this.topic
+      console.log(topic)
+      publish(topic).then(res => {
         const topicId = res.data
         this.$router.push('/topic/' + topicId)
       }).catch(error => this.error(error))
@@ -145,6 +167,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.topic-publish-container {
+  width: 500px;
+}
 .title-container {
   margin-bottom: 10px;
 }
@@ -173,5 +198,10 @@ export default {
   .topic-publish-btn {
     float: right;
   }
+}
+</style>
+<style scoped>
+.cover-upload /deep/ .el-upload-list__item {
+  margin-top: 0;
 }
 </style>

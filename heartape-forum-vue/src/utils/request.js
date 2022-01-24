@@ -1,7 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-import { Notification } from 'element-ui'
 
 // create an axios instance
 const service = axios.create({

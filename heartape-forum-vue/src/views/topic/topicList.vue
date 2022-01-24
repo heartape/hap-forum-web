@@ -77,10 +77,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.topic-container-body {
+  padding: 10px;
+}
 .box-card {
   width: 740px;
   height: 160px;
-  background-color: #ccc;
+  background-color: #ffffff;
 
   .introduce {
     float: right;
@@ -141,7 +144,7 @@ export default {
 .image-box-card {
   width: 740px;
   height: 240px;
-  background-color: #ccc;
+  background-color: #ffffff;
   .image-introduce {
     height: 180px;
     .content {

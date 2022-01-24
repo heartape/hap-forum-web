@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div class="article-container">
     <label-bar type="article" />
     <article-list :article-hot="articleHot" />
   </div>

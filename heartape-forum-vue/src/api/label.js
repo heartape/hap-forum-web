@@ -14,9 +14,47 @@ export function showHotLabel() {
   })
 }
 
-export function showAllLabel() {
+export function showOneLevelLabel(page) {
   return request({
-    url: '/label',
+    url: '/label/level/1',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function showTwoLevelLabel(page) {
+  return request({
+    url: '/label/level/2',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function showThreeLevelLabel(page) {
+  return request({
+    url: '/label/level/3',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function showLabelOperateLog(labelId) {
+  return request({
+    url: '/label/' + labelId,
     method: 'get'
+  })
+}
+
+export function showLabelRelation(labelId) {
+  return request({
+    url: '/label/' + labelId + '/relation',
+    method: 'get'
+  })
+}
+
+export function followLabel(labelId) {
+  return request({
+    url: '/label/' + labelId + '/follow',
+    method: 'post'
   })
 }

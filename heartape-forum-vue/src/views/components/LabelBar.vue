@@ -1,23 +1,25 @@
 <template>
   <!--label简略菜单-->
-  <el-row v-loading="fullscreenLoading" element-loading-background="#dfdfdf" class="label-simple-container">
+  <el-row v-loading="fullscreenLoading" element-loading-background="#ffffff" class="label-simple-container">
     <el-button v-for="item in labelShow.slice(0,6)" :key="item.labelId" type="text" size="small" @click="switchLabel(item.labelId)">{{ item.name }}</el-button>
-    <el-button v-if="showMore" class="label-menu" type="text" size="small" @click="showLabels">
+    <el-button v-if="showMore" class="label-menu" type="text" size="small" @click="showAllLabel = true">
       <i class="el-icon-menu" />
       <span>更多</span>
     </el-button>
     <el-dialog
       title="选择标签"
       :visible.sync="showAllLabel"
-      width="600"
+      width="720px"
     >
-      <el-cascader-panel
-        v-model="labelSearch"
-        v-loading="labelLoading"
-        style="width: 362px; margin-left: 20px"
-        :options="labels"
-        :props="panelSetting"
-      />
+      <el-select v-model="labels.one.levelValue" class="label-select one-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="oneLevelMethod" :loading="labels.one.levelLoading">
+        <el-option v-for="label in labels.one.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
+      </el-select>
+      <el-select v-model="labels.two.levelValue" class="label-select two-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="twoLevelMethod" :loading="labels.two.levelLoading">
+        <el-option v-for="label in labels.two.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
+      </el-select>
+      <el-select v-model="labels.three.levelValue" class="label-select three-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="threeLevelMethod" :loading="labels.three.levelLoading">
+        <el-option v-for="label in labels.three.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
+      </el-select>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
@@ -27,7 +29,7 @@
 </template>
 
 <script>
-import { showAllLabel, showHotLabel } from '@/api/label'
+import { showHotLabel, showOneLevelLabel, showTwoLevelLabel, showThreeLevelLabel } from '@/api/label'
 
 export default {
   name: 'LabelBar',
@@ -39,19 +41,32 @@ export default {
   },
   data() {
     return {
-      panelSetting: {
-        expandTrigger: 'hover',
-        emitPath: false,
-        label: 'name',
-        value: 'labelId'
-      },
       showAllLabel: false,
       showMore: false,
       labelLoading: false,
       fullscreenLoading: false,
-      labels: [],
       labelShow: [],
-      labelSearch: ''
+      labelSearch: '',
+      labels: {
+        one: {
+          levelValue: '',
+          levelPage: '',
+          levelLabels: [],
+          levelLoading: false
+        },
+        two: {
+          levelValue: '',
+          levelPage: '',
+          levelLabels: [],
+          levelLoading: false
+        },
+        three: {
+          levelValue: '',
+          levelPage: '',
+          levelLabels: [],
+          levelLoading: false
+        }
+      }
     }
   },
   mounted() {
@@ -85,27 +100,29 @@ export default {
       // 根据label筛选
       this.$router.push({ path: '/' + this.type + '/label/' + labelId + '/hot' })
     },
-    showLabels() {
-      this.showAllLabel = true
-      this.labelLoading = true
-      // 获取所有label
-      showAllLabel().then(res => {
-        this.labels = res.data
-        this.labelLoading = false
-      }).catch(() => {
-        this.error()
-        this.labels = [
-          {
-            labelId: 1,
-            name: '军事',
-            children: [
-              { labelId: 11, name: '一战' },
-              { labelId: 12, name: '二战' }
-            ]
-          }
-        ]
-        this.labelLoading = false
-      })
+    oneLevelMethod() {
+      const page = this.labels.one.levelPage + 1
+      showOneLevelLabel(page).then(res => {
+        const data = res.data
+        this.labels.one.levelPage = data.current
+        this.labels.one.levelLabels = data.list
+      }).catch(error => this.error(error))
+    },
+    twoLevelMethod() {
+      const page = this.labels.two.levelPage + 1
+      showTwoLevelLabel(page).then(res => {
+        const data = res.data
+        this.labels.two.levelPage = data.current
+        this.labels.two.levelLabels = data.list
+      }).catch(error => this.error(error))
+    },
+    threeLevelMethod() {
+      const page = this.labels.three.levelPage + 1
+      showThreeLevelLabel(page).then(res => {
+        const data = res.data
+        this.labels.three.levelPage = data.current
+        this.labels.three.levelLabels = data.list
+      }).catch(error => this.error(error))
     },
     handleClose() {
       this.showAllLabel = false
@@ -139,6 +156,9 @@ export default {
   }
   .el-button:hover {
     background-color: #999999;
+  }
+  .label-select {
+    margin-right: 30px;
   }
 }
 </style>
