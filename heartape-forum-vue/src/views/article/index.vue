@@ -1,19 +1,16 @@
 <template>
   <div class="article-container">
-    <label-bar type="article" />
     <article-list :article-hot="articleHot" />
   </div>
 </template>
 
 <script>
-import LabelBar from '@/views/components/LabelBar'
 import ArticleList from '@/views/article/articleList'
 import { articleHot } from '@/api/article'
 
 export default {
   components: {
-    ArticleList,
-    LabelBar
+    ArticleList
   },
   data() {
     return {

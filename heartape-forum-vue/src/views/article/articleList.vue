@@ -1,6 +1,18 @@
 <template>
   <!--文章列表-->
   <div class="article-container">
+    <el-menu
+      default-active="1"
+      class="article-menu-container"
+      mode="horizontal"
+      text-color="#121212"
+      active-text-color="#06f"
+      @select="handleSelect"
+    >
+      <el-menu-item index="1">推荐</el-menu-item>
+      <el-menu-item index="2">热点</el-menu-item>
+      <el-menu-item index="3">关注</el-menu-item>
+    </el-menu>
     <el-row v-for="item in articleHot" :key="item.aid" @click.native="articleDetail(item.aid)">
       <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ffffff' }">
         <el-image
@@ -49,6 +61,10 @@ export default {
   methods: {
     articleDetail(aid) {
       this.$router.push('/article/' + aid)
+    },
+    handleSelect(key) {
+      // todo:根据key获取文章列表,将文章列表和菜单选项抽取出来,方便添加不同样式
+      console.log(key)
     }
   }
 }
@@ -57,6 +73,14 @@ export default {
 <style lang="scss" scoped>
 .article-container {
   padding: 10px;
+  .article-menu-container {
+    border: #eeeeee 1px solid;
+    .el-menu-item {
+      width: 100px;
+      text-align: center;
+      font-size: 18px;
+    }
+  }
   .box-card {
     width: 740px;
     margin: 0 auto;

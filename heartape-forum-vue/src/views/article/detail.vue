@@ -28,7 +28,6 @@
         <el-button @click="handPublishParent">发布</el-button>
       </template>
     </el-input>
-    <comment-menu />
     <comment :comment="article.comment" :show="showComment" @commentPage="commentPage" />
   </div>
 </template>
@@ -36,12 +35,11 @@
 <script>
 import { articleDetail, dislikeArticle, likeArticle, showComment, publishParent } from '@/api/article'
 import Comment from '@/views/components/Comment'
-import CommentMenu from '@/views/components/CommentMenu'
 import ArticleMenu from '@/views/article/ArticleMenu'
 
 export default {
   name: 'ArticleDetail',
-  components: { ArticleMenu, CommentMenu, Comment },
+  components: { ArticleMenu, Comment },
   data() {
     return {
       showComment: false,
@@ -139,7 +137,7 @@ export default {
 }
 .publish-parent {
   width: 740px;
-  margin-left: 10px;
+  margin: 10px;
 }
 .publish-parent input {
   background-color: #20a0ff;

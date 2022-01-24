@@ -1,18 +1,15 @@
 <template>
   <div class="topic-container">
-    <label-bar type="topic" />
     <topic-list :topic-hot="topicHot" />
   </div>
 </template>
 
 <script>
-import LabelBar from '@/views/components/LabelBar'
 import TopicList from '@/views/topic/topicList'
 import { topicHot } from '@/api/topic'
 
 export default {
   components: {
-    LabelBar,
     TopicList
   },
   data() {

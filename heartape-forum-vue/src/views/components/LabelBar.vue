@@ -9,17 +9,24 @@
     <el-dialog
       title="选择标签"
       :visible.sync="showAllLabel"
-      width="720px"
+      width="740px"
     >
-      <el-select v-model="labels.one.levelValue" class="label-select one-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="oneLevelMethod" :loading="labels.one.levelLoading">
-        <el-option v-for="label in labels.one.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
-      </el-select>
-      <el-select v-model="labels.two.levelValue" class="label-select two-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="twoLevelMethod" :loading="labels.two.levelLoading">
-        <el-option v-for="label in labels.two.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
-      </el-select>
-      <el-select v-model="labels.three.levelValue" class="label-select three-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="threeLevelMethod" :loading="labels.three.levelLoading">
-        <el-option v-for="label in labels.three.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
-      </el-select>
+      <el-row class="label-level-container">
+        <span>一级标签</span>
+        <span>二级标签</span>
+        <span>三级标签</span>
+      </el-row>
+      <el-row class="label-input-container">
+        <el-select v-model="labels.one.levelValue" class="label-select one-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="oneLevelMethod" :loading="labels.one.levelLoading">
+          <el-option v-for="label in labels.one.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
+        </el-select>
+        <el-select v-model="labels.two.levelValue" class="label-select two-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="twoLevelMethod" :loading="labels.two.levelLoading">
+          <el-option v-for="label in labels.two.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
+        </el-select>
+        <el-select v-model="labels.three.levelValue" class="label-select three-level-select" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="threeLevelMethod" :loading="labels.three.levelLoading">
+          <el-option v-for="label in labels.three.levelLabels" :key="label.labelId" :label="label.name" :value="label.labelId" />
+        </el-select>
+      </el-row>
       <span slot="footer" class="dialog-footer">
         <el-button @click="handleClose">取 消</el-button>
         <el-button type="primary" @click="handleSubmit">确 定</el-button>
@@ -159,6 +166,12 @@ export default {
   }
   .label-select {
     margin-right: 30px;
+  }
+  .label-level-container {
+    margin-bottom: 10px;
+    span {
+      margin-right: 176px;
+    }
   }
 }
 </style>
