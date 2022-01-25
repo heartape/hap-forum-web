@@ -45,11 +45,9 @@ export default {
 <style lang="scss" scoped>
 .navbar {
   height: 100%;
-  width: 1200px;
+  width: 100%;
   overflow: hidden;
   position: relative;
-  left:50%;
-  margin-left: -600px;
   padding-left: 60px;
   font-family: jetBrains Mono;
 

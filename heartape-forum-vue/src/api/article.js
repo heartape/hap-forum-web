@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function articleHot() {
+export function article(path) {
   return request({
-    url: '/article/hot',
+    url: '/article/' + path,
     method: 'get'
   })
 }

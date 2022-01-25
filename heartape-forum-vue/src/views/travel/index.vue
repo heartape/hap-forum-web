@@ -1,5 +1,5 @@
 <template>
-  <div class="app-container">
+  <div>
     旅行
   </div>
 </template>

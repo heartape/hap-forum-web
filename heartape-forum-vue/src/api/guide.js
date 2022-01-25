@@ -1,8 +1,8 @@
 import request from '@/utils/request'
 
-export function getHot() {
+export function guide() {
   return request({
-    url: '/vue-admin-template/host',
+    url: '/guide',
     method: 'get'
   })
 }

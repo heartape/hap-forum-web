@@ -62,3 +62,11 @@
     color: #2b2f3a;
   }
 }
+// loading滚动条消失导致元素位置变化
+.request-loading {
+  overflow: hidden;
+}
+
+.el-loading-parent--hidden {
+  overflow: auto !important;
+}

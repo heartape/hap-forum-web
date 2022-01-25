@@ -23,7 +23,7 @@
       @likeArticle="likeArticle"
       @disLikeArticle="disLikeArticle"
     />
-    <el-input v-model="publishParent" class="publish-parent" placeholder="请输入内容">
+    <el-input v-model="publishParent" class="publish-parent" placeholder="请输入评论">
       <template slot="append">
         <el-button @click="handPublishParent">发布</el-button>
       </template>
@@ -126,7 +126,6 @@ export default {
 
 <style scoped>
 .article-detail-container {
-  min-height: 625px;
 }
 .editor-content{
   margin-top: 20px;
