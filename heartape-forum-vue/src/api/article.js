@@ -1,9 +1,10 @@
 import request from '@/utils/request'
 
-export function article(path) {
+export function article(path, page) {
   return request({
     url: '/article/' + path,
-    method: 'get'
+    method: 'get',
+    params: { page }
   })
 }
 

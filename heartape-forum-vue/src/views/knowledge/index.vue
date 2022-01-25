@@ -1,6 +1,6 @@
 <template>
-  <div class="dashboard-container">
-    <div class="dashboard-text">知识,敬请期待</div>
+  <div class="knowledge-container">
+    <div class="knowledge-text">知识,敬请期待</div>
   </div>
 </template>
 
@@ -18,13 +18,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dashboard {
-  &-container {
-    margin: 30px;
-  }
-  &-text {
-    font-size: 30px;
-    line-height: 46px;
-  }
-}
+
 </style>

@@ -1,8 +1,6 @@
 import axios from 'axios'
 import store from '@/store'
 import { getToken } from '@/utils/auth'
-import { Loading } from 'element-ui'
-import Vue from 'vue'
 
 // create an axios instance
 const service = axios.create({
@@ -10,26 +8,11 @@ const service = axios.create({
   // withCredentials: true, // send cookies when cross-domain requests
   timeout: 5000 // request timeout
 })
-const options = {
-  customClass: 'request-loading',
-  lock: true,
-  text: 'Loading . . .'
-}
-
-let loadingInstance
-
-const close = function() {
-  // 关闭加载图标
-  Vue.nextTick(() => {
-    loadingInstance.close()
-  })
-}
 
 // request interceptor
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-    loadingInstance = Loading.service(options)
 
     if (store.getters.token) {
       // let each request carry token
@@ -41,7 +24,6 @@ service.interceptors.request.use(
   },
   error => {
     // do something with request error
-    console.log(error) // for debug
     return Promise.reject(error)
   }
 )
@@ -58,7 +40,6 @@ service.interceptors.response.use(
    * You can also judge the status by HTTP Status Code
    */
   response => {
-    close()
     const res = response.data
 
     // if the custom code is not 20000, it is judged as an error.
@@ -68,7 +49,6 @@ service.interceptors.response.use(
       return res
     }
   }, error => {
-    close()
     return Promise.reject(error.message)
   }
 )

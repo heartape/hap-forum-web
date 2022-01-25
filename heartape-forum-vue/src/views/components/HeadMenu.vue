@@ -1,8 +1,8 @@
 <template>
   <div class="head-menu-container">
     <div class="resource-info-container">
-      <span>文库 . 发现</span>
-      <span>随心写作，自由表达</span>
+      <span style="font-size: 24px;line-height: 50px">文库 . 发现</span>
+      <span style="font-size: 18px;margin-left: 30px">随心写作，自由表达</span>
     </div>
     <el-input v-model="keyword" class="search-input" :placeholder="'请输入' + type.name + '搜索关键词'">
       <template slot="append">
@@ -45,13 +45,13 @@ export default {
   .resource-info-container {
     float: left;
     height: 80px;
-    width: 298px;
+    width: 348px;
     padding: 15px;
     overflow: hidden;
   }
   .search-input {
     float: right;
-    width: 400px;
+    width: 350px;
     margin: 20px;
   }
 }
