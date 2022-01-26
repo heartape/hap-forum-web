@@ -52,7 +52,7 @@ export function searchArticle(keyword, page) {
   return request({
     url: '/article/search',
     method: 'get',
-    params: { keyword, page }
+    params: { keyword: keyword, page }
   })
 }
 

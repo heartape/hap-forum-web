@@ -28,12 +28,19 @@ export default {
     slogan: {
       type: String,
       default: ''
+    },
+    beforeKeyword: {
+      type: String,
+      default: ''
     }
   },
   data() {
     return {
       keyword: ''
     }
+  },
+  created() {
+    this.keyword = this.beforeKeyword
   },
   methods: {
     handSearchResource() {

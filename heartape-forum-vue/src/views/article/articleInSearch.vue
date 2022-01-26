@@ -1,8 +1,8 @@
 <template>
   <!-- todo:后期删除该模块，创建综合搜索模块 -->
   <div class="article-in-search">
-    <head-menu resource-name="文章" title="文库 . 发现" slogan="随心写作，自由表达" @searchResource="searchArticle" />
-    <article-list @getArticle="searchArticle" />
+    <head-menu resource-name="文章" title="文库 . 发现" slogan="随心写作，自由表达" :before-keyword="keyword" @searchResource="goSearch" />
+    <article-list ref="SearchArticle" @getArticle="searchArticle" />
   </div>
 </template>
 
@@ -24,21 +24,24 @@ export default {
         name: '文章',
         path: 'article'
       },
-      keyword: '',
-      menu: [
-        { index: '1', path: '/article/label/' + this.getLabelId() + '/recommend', name: '推荐' },
-        { index: '2', path: '/article/label/' + this.getLabelId() + '/hot', name: '热点' },
-        { index: '3', path: '/article/label/' + this.getLabelId() + '/follow', name: '关注' }
-      ]
+      keyword: ''
     }
   },
   created() {
     this.keyword = this.$route.query.keyword
-    this.searchArticle()
   },
   methods: {
     getLabelId() {
       return this.$route.params.labelId
+    },
+    goSearch(keyword) {
+      const path = this.$route.path
+      if (path !== '/article/search') {
+        this.$router.push({ path: '/article/search', query: { keyword }})
+      } else {
+        // 解决只改变query参数时,不触发生命周期钩子的问题,直接调用子组件初始化方法
+        this.$refs.SearchArticle.init()
+      }
     },
     searchArticle(path, page, callback) {
       const keyword = this.keyword
@@ -47,7 +50,7 @@ export default {
       }).catch(res => {
         error(res)
         // todo:对接后删除
-        return {
+        callback({
           current: 1,
           list: [
             { articleId: 1, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
@@ -62,7 +65,7 @@ export default {
             { articleId: 10, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
             { articleId: 11, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null }
           ]
-        }
+        })
       })
     }
   }

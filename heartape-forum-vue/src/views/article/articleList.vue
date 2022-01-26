@@ -37,23 +37,34 @@ export default {
   name: 'ArticleList',
   data() {
     return {
-      article: {}
+      article: {
+        list: []
+      }
     }
   },
-  created() {
-    this.article.current = 0
-    this.getArticle()
+  mounted() {
+    this.init()
   },
   methods: {
+    init() {
+      this.article.current = 0
+      this.getArticle()
+    },
     getArticle() {
+      // todo:上拉加载
       const path = this.$route.path
       const page = this.article.current + 1
+      console.log('page:' + page)
+      const beforeList = this.article.list
       this.$emit('getArticle', path, page, val => {
-        this.$set(this.article, 'list', val)
+        if (val.current > 1) {
+          val.list = [...beforeList, ...val.list]
+        }
+        this.$set(this, 'article', val)
       })
     },
     articleDetail(aid) {
-      this.article = this.$router.push('/article/' + aid)
+      this.$router.push('/article/' + aid)
     }
   }
 }

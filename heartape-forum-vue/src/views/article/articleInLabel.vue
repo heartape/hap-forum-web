@@ -25,28 +25,23 @@ export default {
   },
   data() {
     return {
-      labelId: 0,
       menu: [
-        { index: '1', path: '/article/label/' + this.labelId + '/recommend', name: '推荐' },
-        { index: '2', path: '/article/label/' + this.labelId + '/hot', name: '热点' },
-        { index: '3', path: '/article/label/' + this.labelId + '/follow', name: '关注' }
+        { index: '1', path: '/article/label/' + this.getLabelId() + '/recommend', name: '推荐' },
+        { index: '2', path: '/article/label/' + this.getLabelId() + '/hot', name: '热点' },
+        { index: '3', path: '/article/label/' + this.getLabelId() + '/follow', name: '关注' }
       ],
       article: {}
     }
   },
-  created() {
-    this.getLabelId()
-    this.article.current = 0
-  },
   methods: {
     getLabelId() {
-      this.labelId = this.$route.params.labelId
+      return this.$route.params.labelId
     },
     searchArticle(keyword) {
       this.$router.push({ path: '/article/search', query: { keyword }})
     },
     chooseArticleType(path, page) {
-      const labelId = this.labelId
+      const labelId = this.getLabelId()
       if (path.endsWith('recommend')) {
         return articleInLabelRecommend(labelId, page)
       } else if (path.endsWith('hot')) {
@@ -55,13 +50,13 @@ export default {
         return articleInLabelFollow(labelId, page)
       }
     },
-    getArticle(path, page) {
+    getArticle(path, page, callback) {
       this.chooseArticleType(path, page).then(res => {
-        return res.data
+        callback(res.data)
       }).catch(res => {
         error(res)
         // todo:对接后删除
-        const articles = {
+        callback({
           current: 1,
           list: [
             { articleId: 1, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
@@ -76,14 +71,7 @@ export default {
             { articleId: 10, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
             { articleId: 11, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null }
           ]
-        }
-        if (path.endsWith('recommend')) {
-          return articles.list.slice(0, 9)
-        } else if (path.endsWith('hot')) {
-          return articles.list.slice(5, 11)
-        } else if (path.endsWith('follow')) {
-          return articles.list.slice(2, 7)
-        }
+        })
       })
     }
   }
