@@ -1,8 +1,8 @@
 <template>
   <div class="article-menu-container">
-    <el-button type="primary" plain @click="likeArticle">赞同 {{ like }}</el-button>
-    <el-button type="primary" plain @click="disLikeArticle">踩 {{ dislike }}</el-button>
-    <el-button class="discuss-comment-count" type="primary" plain @click="showComment">{{ commentNumber }} 个评论</el-button>
+    <el-button type="primary" plain size="small" @click="likeArticle">赞同 {{ like }}</el-button>
+    <el-button type="primary" plain size="small" @click="disLikeArticle">踩 {{ dislike }}</el-button>
+    <el-button class="discuss-comment-count" type="primary" plain size="small" @click="showComment">{{ commentNumber }} 个评论</el-button>
   </div>
 </template>
 
@@ -38,7 +38,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.article-menu-container {
-  margin: 10px;
-}
+
 </style>

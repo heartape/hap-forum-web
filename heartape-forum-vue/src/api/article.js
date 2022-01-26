@@ -1,17 +1,58 @@
 import request from '@/utils/request'
 
-export function article(path, page) {
+export function articleRecommend(page) {
   return request({
-    url: '/article/' + path,
+    url: '/article/recommend',
     method: 'get',
     params: { page }
   })
 }
 
-export function articleLabelHot(labelId) {
+export function articleHot(page) {
+  return request({
+    url: '/article/hot',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function articleFollow(page) {
+  return request({
+    url: '/article/follow',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function articleInLabelRecommend(labelId, page) {
+  return request({
+    url: '/article/label/' + labelId + '/recommend',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function articleInLabelHot(labelId, page) {
   return request({
     url: '/article/label/' + labelId + '/hot',
-    method: 'get'
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function articleInLabelFollow(labelId, page) {
+  return request({
+    url: '/article/label/' + labelId + '/follow',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function searchArticle(keyword, page) {
+  return request({
+    url: '/article/search',
+    method: 'get',
+    params: { keyword, page }
   })
 }
 

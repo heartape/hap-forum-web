@@ -48,7 +48,7 @@ export default {
   width: 100%;
   overflow: hidden;
   position: relative;
-  padding-left: 60px;
+  padding-left: 80px;
   font-family: jetBrains Mono;
 
   .head-title, .head-content {
@@ -60,8 +60,7 @@ export default {
   }
 
   .head-content {
-    margin-left: 50px;
-    width: 500px;
+    width: 400px;
   }
 
   .right-menu {

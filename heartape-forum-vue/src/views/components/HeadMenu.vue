@@ -1,10 +1,10 @@
 <template>
   <div class="head-menu-container">
     <div class="resource-info-container">
-      <span style="font-size: 24px;line-height: 50px">文库 . 发现</span>
-      <span style="font-size: 18px;margin-left: 30px">随心写作，自由表达</span>
+      <span style="font-size: 24px;line-height: 50px;margin-left: 10px">{{ title }}</span>
+      <span style="font-size: 18px;margin-left: 30px">{{ slogan }}</span>
     </div>
-    <el-input v-model="keyword" class="search-input" :placeholder="'请输入' + type.name + '搜索关键词'">
+    <el-input v-model="keyword" class="search-input" :placeholder="'请输入' + resourceName + '搜索关键词'">
       <template slot="append">
         <el-button icon="el-icon-search" @click="handSearchResource" />
       </template>
@@ -13,14 +13,21 @@
 </template>
 
 <script>
+
 export default {
   name: 'HeadMenu',
   props: {
-    type: {
-      type: Object,
-      default() {
-        return {}
-      }
+    resourceName: {
+      type: String,
+      default: ''
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    slogan: {
+      type: String,
+      default: ''
     }
   },
   data() {
@@ -30,8 +37,7 @@ export default {
   },
   methods: {
     handSearchResource() {
-      console.log(this.keyword)
-      console.log(this.type.path)
+      this.$emit('searchResource', this.keyword)
     }
   }
 }

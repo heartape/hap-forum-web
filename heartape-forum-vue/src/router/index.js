@@ -75,12 +75,11 @@ export const constantRoutes = [
   {
     path: '/',
     component: Layout,
-    redirect: '/article/hot',
+    redirect: '/article/recommend',
     children: [
       {
-        // todo:设计一个主页代替'/article/hot'
-        path: 'article/hot',
-        name: 'article-hot',
+        path: 'article/recommend',
+        name: 'article-recommend',
         component: () => import('@/views/article/index'),
         meta: { title: '读书万卷', icon: 'article' }
       }
@@ -90,15 +89,47 @@ export const constantRoutes = [
   {
     path: '/article',
     component: Layout,
-    redirect: '/article/hot',
+    redirect: '/article/recommend',
     hidden: true,
     children: [
+      {
+        path: 'hot',
+        name: 'article-hot',
+        component: () => import('@/views/article/index'),
+        meta: { title: '读书万卷', icon: 'article' }
+      },
+      {
+        path: 'follow',
+        name: 'article-follow',
+        component: () => import('@/views/article/index'),
+        meta: { title: '读书万卷', icon: 'article' }
+      },
+      {
+        path: 'label/:labelId/recommend',
+        name: 'article-label-recommend',
+        component: () => import('@/views/article/articleInLabel'),
+        meta: { title: '读书万卷', icon: 'article' },
+        hidden: true
+      },
       {
         path: 'label/:labelId/hot',
         name: 'article-label-hot',
         component: () => import('@/views/article/articleInLabel'),
         meta: { title: '读书万卷', icon: 'article' },
         hidden: true
+      },
+      {
+        path: 'label/:labelId/follow',
+        name: 'article-label-follow',
+        component: () => import('@/views/article/articleInLabel'),
+        meta: { title: '读书万卷', icon: 'article' },
+        hidden: true
+      },
+      {
+        path: 'search',
+        name: 'article-search',
+        component: () => import('@/views/article/articleInSearch'),
+        meta: { title: '读书万卷', icon: 'article' }
       },
       {
         path: ':aid',

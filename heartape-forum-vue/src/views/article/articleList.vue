@@ -1,7 +1,7 @@
 <template>
   <!--文章列表-->
   <div class="article-list-container">
-    <el-row v-for="item in article" :key="item.aid" @click.native="articleDetail(item.aid)">
+    <el-row v-for="item in article.list" :key="item.articleId" @click.native="articleDetail(item.articleId)">
       <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ffffff' }">
         <el-image
           style="width: 200px; height: 140px; margin: 10px"
@@ -32,23 +32,28 @@
 </template>
 
 <script>
+
 export default {
   name: 'ArticleList',
-  props: {
-    article: {
-      type: Array,
-      default() {
-        return []
-      }
-    }
-  },
   data() {
     return {
+      article: {}
     }
   },
+  created() {
+    this.article.current = 0
+    this.getArticle()
+  },
   methods: {
+    getArticle() {
+      const path = this.$route.path
+      const page = this.article.current + 1
+      this.$emit('getArticle', path, page, val => {
+        this.$set(this.article, 'list', val)
+      })
+    },
     articleDetail(aid) {
-      this.$router.push('/article/' + aid)
+      this.article = this.$router.push('/article/' + aid)
     }
   }
 }

@@ -166,7 +166,6 @@ export default {
   position: relative;
   height: 232px;
   width: 740px;
-  margin: 10px;
   border: #c9cdd9 1px solid;
   background-color: #ffffff;
   overflow: hidden;

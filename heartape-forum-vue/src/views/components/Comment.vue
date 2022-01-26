@@ -12,9 +12,10 @@
         <span class="comment-username">{{ commentItem.nickname }}</span>
         <p>{{ commentItem.content }}</p>
         <div class="parent-btn">
-          <el-button type="primary" plain @click="likeComment(commentItem.commentId, commentItem)">赞同 {{ commentItem.like }}</el-button>
-          <el-button type="primary" plain @click="disLikeComment(commentItem.commentId, commentItem)">踩 {{ commentItem.dislike }}</el-button>
-          <el-button class="discuss-comment-count" type="primary" plain @click="handleChildrenShow(commentItem.commentId)">{{ commentItem.children.total }} 个评论</el-button>
+          <el-button type="primary" plain size="small" @click="likeComment(commentItem.commentId, commentItem)">赞同 {{ commentItem.like }}</el-button>
+          <el-button type="primary" plain size="small" @click="disLikeComment(commentItem.commentId, commentItem)">踩 {{ commentItem.dislike }}</el-button>
+          <el-button class="discuss-comment-count" type="primary" plain size="small" @click="handleChildrenShow(commentItem.commentId)">{{ commentItem.children.total }} 个评论</el-button>
+          <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="handleComment(commentItem.commentId)">回复</el-button>
         </div>
         <div v-show="childrenShow[commentItem.commentId]" class="comment-children-container">
           <div v-for="childrenItem in commentItem.children.list" :key="childrenItem.commentId" class="children-item-container">
@@ -26,15 +27,17 @@
             />
             <span class="children-username">{{ childrenItem.nickname }}</span>
             <p>{{ childrenItem.content }}</p>
-            <el-button type="primary" plain @click="likeComment(childrenItem.commentId)">赞同 {{ childrenItem.like }}</el-button>
-            <el-button type="primary" plain @click="disLikeComment(childrenItem.commentId)">踩 {{ childrenItem.dislike }}</el-button>
+            <el-button type="primary" plain size="small" @click="likeComment(childrenItem.commentId)">赞同 {{ childrenItem.like }}</el-button>
+            <el-button type="primary" plain size="small" @click="disLikeComment(childrenItem.commentId)">踩 {{ childrenItem.dislike }}</el-button>
+            <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="handleComment(commentItem.commentId)">回复</el-button>
           </div>
           <el-button
             v-if="commentItem.children.page * commentItem.children.size < commentItem.children.total"
             v-loading="childrenLoading"
             :disabled="childrenLoading"
-            style="margin-left: 30px; padding: 0; font-size: 16px"
+            style="margin-left: 30px; padding: 0; font-size: 14px"
             type="text"
+            size="small"
             @click="loadChildren(commentItem.commentId, commentItem.children.page, commentItem.children)"
           >加载更多</el-button>
         </div>
@@ -121,6 +124,9 @@ export default {
     },
     handleChildrenShow(commentId) {
       this.childrenShow[commentId] = !this.childrenShow[commentId]
+    },
+    handleComment(commentId) {
+      // 对评论进行评论
     }
   }
 }
@@ -129,25 +135,30 @@ export default {
 <style lang="scss" scoped>
 .comment-container {
   border: #b5ccf3 solid 1px;
-  margin: 0 10px;
-  width: 740px;
+  width: 720px;
   .comment-number-container {
     margin: 0;
     padding: 10px;
     border-bottom: #b5ccf3 solid 1px;
   }
   .comment-container-item {
-    padding: 10px;
+    padding: 10px 10px 0 10px;
     border-bottom: #b5ccf3 solid 1px;
+    .parent-btn {
+      margin-bottom: 10px;
+    }
   }
   .children-item-container {
     padding: 10px 10px 10px 30px;
-    margin-top: 10px;
     width: 100%;
     border-top: #b5ccf3 solid 1px;
   }
   .comment-pagination {
     margin: 10px;
   }
+  .el-button {
+    font-size: 14px;
+  }
 }
+
 </style>

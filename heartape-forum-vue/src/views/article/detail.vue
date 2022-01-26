@@ -1,17 +1,20 @@
 <template>
   <div class="article-detail-container">
+    <el-row class="article-label-container">
+      <el-button v-for="labelItem in article.label" :key="labelItem.labelId" class="article-label-item" type="primary" plain round size="mini" @click="toLabelArticle(labelItem.labelId)">{{ labelItem.name }}</el-button>
+    </el-row>
     <div class="editor-content" v-html="article.title" />
     <div class="creator-container">
       <span>
         <el-image
           :src="article.avatar"
           :alt="article.nickname"
-          style="width: 40px; height: 40px; margin: 0 20px;"
+          style="width: 40px; height: 40px;"
           fit="cover"
         />
-        <span style="position: relative; bottom: 15px">{{ article.nickname }}</span>
+        <span style="position: relative; bottom: 15px; left: 10px">{{ article.nickname }}</span>
       </span>
-      <p style="margin: 0 20px">{{ article.profile }}</p>
+      <p style="margin: 0 10px; font-size: 14px">{{ article.profile }}</p>
     </div>
     <div class="editor-content" v-html="article.content" />
     <div class="publish-time">发布于: {{ article.publishTime }}</div>
@@ -49,6 +52,10 @@ export default {
         title: `<h1 style="text-align: center;">this is title!</h1>`,
         content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`,
         uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
+        label: [
+          { labelId: 1, name: '编程' },
+          { labelId: 2, name: '计算机' }
+        ],
         comment: {
           allComment: 5,
           total: 2, page: 1, size: 10,
@@ -85,6 +92,10 @@ export default {
         title: '请求失败',
         message: message
       })
+    },
+    toLabelArticle(labelId) {
+      // 跳转目标label的article列表
+      this.$router.push({ path: '/article/label/' + labelId + '/recommend' })
     },
     success(message) {
       this.$notify.success({
@@ -124,19 +135,23 @@ export default {
 }
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .article-detail-container {
+  padding: 20px;
+  .article-label-container {
+    margin-bottom: 20px;
+  }
 }
 .editor-content{
   margin-top: 20px;
 }
 .publish-time {
-  margin: 20px;
+  margin: 20px 0;
   color: #74787f;
 }
 .publish-parent {
-  width: 740px;
-  margin: 10px;
+  width: 720px;
+  margin: 10px 0;
 }
 .publish-parent input {
   background-color: #20a0ff;
