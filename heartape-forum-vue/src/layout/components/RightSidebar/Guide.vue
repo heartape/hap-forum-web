@@ -1,6 +1,6 @@
 <template>
   <div class="guide-container">
-    <el-table class="right-sidebar-guide-container" :data="guide" style="width: 100%" :cell-class-name="guideCell" @row-click="rowClick">
+    <el-table class="right-sidebar-guide-container" :data="guide" style="width: 100%" cell-class-name="guide" @row-click="rowClick">
       <el-table-column
         prop="title"
         label="导航"
@@ -13,6 +13,7 @@
 
 <script>
 import { guide } from '@/api/guide'
+import { error } from '@/utils'
 
 export default {
   name: 'Guide',
@@ -22,46 +23,28 @@ export default {
     }
   },
   mounted() {
-    this.guideInfo().then(guide => {
-      this.guide = guide
-    })
+    this.guideInfo()
   },
   methods: {
     rowClick(column) {
-      if (column.source === 'in') {
-        const path = column.path
-        this.$router.push({ path: path })
-      } else {
-        window.open(column.path)
-      }
+      window.open(column.path)
     },
     guideInfo() {
       this.loading = true
-      return new Promise((resolve, reject) => {
-        guide().then(response => {
-          const { data } = response.data
-          resolve(data.hot)
-          this.loading = false
-        }).catch(error => {
-          // todo:右边栏目数据,source:来源(out,in)
-          const guide = [{
-            title: '美军入侵阿富汗',
-            source: 'out',
-            path: 'https://www.baidu.com'
-          }, {
-            title: '美军撤离阿富汗',
-            source: 'in',
-            // 此时的url就是文章id
-            path: '/article/1'
-          }]
-          resolve(guide)
-          reject(error)
-          this.loading = false
-        })
+      guide().then(res => {
+        this.guide = res.data
+        this.loading = false
+      }).catch(err => {
+        error(err)
+        this.guide = [{
+          title: 'file',
+          path: 'https://file.heartape.com'
+        }, {
+          title: 'ppt',
+          path: 'https://ppt.heartape.com'
+        }]
+        this.loading = false
       })
-    },
-    guideCell() {
-      return 'guide'
     }
   }
 }

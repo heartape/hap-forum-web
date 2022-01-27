@@ -25,7 +25,8 @@
           <span v-else>{{ label.introduce }}</span>
         </span>
         <div class="foot-menu-container">
-          <el-button class="label-follow-btn" type="primary" size="small" plain disabled @click="followLabel">关注标签</el-button>
+          <el-button v-if="label.follow" class="label-follow-btn" type="primary" size="small" plain style="width: 80px" @click="cancelFollowLabel">已关注</el-button>
+          <el-button v-else class="label-follow-btn" type="primary" size="small" plain @click="followLabel">关注标签</el-button>
           <el-button class="label-log-btn" type="primary" size="small" plain disabled @click="labelOperateLog">标签记录</el-button>
         </div>
       </div>
@@ -63,7 +64,8 @@
 </template>
 
 <script>
-import { showLabel, showLabelOperateLog, showLabelRelation } from '@/api/label'
+import { showLabel, showLabelOperateLog, showLabelRelation, followLabel, cancelFollowLabel } from '@/api/label'
+import { error } from '@/utils'
 
 export default {
   name: 'LabelIntroduce',
@@ -76,12 +78,12 @@ export default {
   data() {
     return {
       label: {
-        labelId: 0,
         type: '',
         name: '',
         introduce: '',
         longIntroduce: '',
         picture: '',
+        follow: false,
         labelParent: [],
         labelChildren: [],
         labelLog: [],
@@ -93,66 +95,83 @@ export default {
     }
   },
   mounted() {
-    const labelId = this.$route.params.labelId
-    this.loadingLabelInfo = true
-    showLabel(labelId).then(res => {
-      this.label = res.data
-      this.loadingLabelInfo = false
-    }).catch(error => {
-      this.error(error)
-      this.loadingLabelInfo = false
-      // todo:对接后端时打开注解
-      // this.labelIsEmpty = true
-      this.label = {
-        labelId: 0,
-        type: 'long',
-        name: 'name',
-        introduce: 'introduce https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
-        longIntroduce: 'longIntroduce',
-        picture: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
-        labelParent: [
-          { labelId: 1, value: '计算机' },
-          { labelId: 3, value: '云计算' },
-          { labelId: 4, value: '人工智能' },
-          { labelId: 2, value: '数学' },
-          { labelId: 5, value: '微服务' }
-        ],
-        labelChildren: [
-          { labelId: 1, value: '计算机' },
-          { labelId: 3, value: '云计算' },
-          { labelId: 4, value: '人工智能' },
-          { labelId: 2, value: '数学' },
-          { labelId: 5, value: '微服务' }
-        ]
-      }
-    })
+    this.showLabelInfo()
   },
   methods: {
-    error(message) {
-      this.$notify.error({
-        title: '请求失败',
-        message: message
+    showLabelInfo() {
+      const labelId = this.$route.params.labelId
+      this.loadingLabelInfo = true
+      showLabel(labelId).then(res => {
+        this.label = res.data
+        this.loadingLabelInfo = false
+      }).catch(err => {
+        error(err)
+        this.loadingLabelInfo = false
+        // todo:对接后端时打开注解
+        // this.labelIsEmpty = true
+        this.label = {
+          labelId: 100,
+          type: 'long',
+          name: 'name',
+          introduce: 'introduce https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
+          longIntroduce: 'longIntroduce',
+          follow: false,
+          picture: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
+          labelParent: [
+            { labelId: 1, value: '计算机' },
+            { labelId: 3, value: '云计算' },
+            { labelId: 4, value: '人工智能' },
+            { labelId: 2, value: '数学' },
+            { labelId: 5, value: '微服务' }
+          ],
+          labelChildren: [
+            { labelId: 6, value: '计算机' },
+            { labelId: 7, value: '云计算' },
+            { labelId: 8, value: '人工智能' },
+            { labelId: 9, value: '数学' },
+            { labelId: 10, value: '微服务' }
+          ]
+        }
       })
     },
     showAll() {
       this.showLong = true
     },
     followLabel() {
-      alert('关注标签')
+      console.log('followLabel')
+      const labelId = this.label.labelId
+      followLabel(labelId).then(() => {
+        this.label.follow = true
+      }).catch(err => {
+        error(err)
+        // todo:后端对接后删除
+        this.label.follow = true
+      })
+    },
+    cancelFollowLabel() {
+      console.log('cancelFollowLabel')
+      const labelId = this.label.labelId
+      cancelFollowLabel(labelId).then(() => {
+        this.label.follow = false
+      }).catch(err => {
+        error(err)
+        // todo:后端对接后删除
+        this.label.follow = false
+      })
     },
     labelOperateLog() {
       const labelId = this.label.labelId
       showLabelOperateLog(labelId).then(res => {
         this.label.labelLog = res.data
         // todo:dialog展示数据
-      }).catch(error => this.error(error))
+      }).catch(err => error(err))
     },
     showLabelRelation() {
       const labelId = this.label.labelId
       showLabelRelation(labelId).then(res => {
         this.label.relation = res.data
         // todo:dialog展示数据
-      }).catch(error => this.error(error))
+      }).catch(err => error(err))
     },
     handleShowLabel(labelId) {
       this.$router.push({ path: '/' + this.type + '/label/' + labelId + '/hot' })

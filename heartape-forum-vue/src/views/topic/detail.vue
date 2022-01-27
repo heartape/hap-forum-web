@@ -16,7 +16,7 @@
             <span>{{ topic.description }}</span>
           </el-dialog>
         </p>
-        <el-button class="button" type="primary" plain @click="likeTopic(topic.topicId, topic)">点赞:{{ topic.like }}</el-button>
+        <el-button class="button" type="primary" plain size="small" @click="likeTopic(topic.topicId, topic)">点赞:{{ topic.like }}</el-button>
       </el-card>
     </div>
     <h2>{{ topic.discuss.total }} 个回答</h2>
@@ -35,9 +35,9 @@
           </div>
           <p>{{ discussItem.content }}</p>
           <div class="discuss-menu">
-            <el-button type="primary" plain @click="likeDiscuss(discussItem.discussId, discussItem)">赞同 {{ discussItem.like }}</el-button>
-            <el-button type="primary" plain @click="disLikeDiscuss(discussItem.discussId, discussItem)">踩 {{ discussItem.dislike }}</el-button>
-            <el-button class="discuss-comment-count" type="primary" plain @click="handleParentShow(discussItem.discussId)">{{ discussItem.comment.allComment }} 个评论</el-button>
+            <el-button type="primary" plain size="small" @click="likeDiscuss(discussItem.discussId, discussItem)">赞同 {{ discussItem.like }}</el-button>
+            <el-button type="primary" plain size="small" @click="disLikeDiscuss(discussItem.discussId, discussItem)">踩 {{ discussItem.dislike }}</el-button>
+            <el-button class="discuss-comment-count" type="primary" plain size="small" @click="handleParentShow(discussItem.discussId)">{{ discussItem.comment.allComment }} 个评论</el-button>
           </div>
         </div>
         <div v-show="parentShow[discussItem.discussId]" class="comment-container">
@@ -50,9 +50,9 @@
             />
             <span class="comment-username">{{ commentItem.nickname }}</span>
             <p>{{ commentItem.content }}</p>
-            <el-button type="primary" plain @click="likeComment(commentItem.commentId, commentItem)">赞同 {{ commentItem.like }}</el-button>
-            <el-button type="primary" plain @click="disLikeComment(commentItem.commentId, commentItem)">踩 {{ commentItem.dislike }}</el-button>
-            <el-button class="discuss-comment-count" type="primary" plain @click="handleChildrenShow(commentItem.commentId)">{{ commentItem.children.total }} 个评论</el-button>
+            <el-button type="primary" plain size="small" @click="likeComment(commentItem.commentId, commentItem)">赞同 {{ commentItem.like }}</el-button>
+            <el-button type="primary" plain size="small" @click="disLikeComment(commentItem.commentId, commentItem)">踩 {{ commentItem.dislike }}</el-button>
+            <el-button class="discuss-comment-count" type="primary" plain size="small" @click="handleChildrenShow(commentItem.commentId)">{{ commentItem.children.total }} 个评论</el-button>
             <div v-show="childrenShow[commentItem.commentId]" class="comment-children-container">
               <div v-for="childrenItem in commentItem.children.list" :key="childrenItem.commentId" class="children-item-container">
                 <el-image
@@ -63,8 +63,8 @@
                 />
                 <span class="children-username">{{ childrenItem.nickname }}</span>
                 <p>{{ childrenItem.content }}</p>
-                <el-button type="primary" plain @click="likeComment(childrenItem.commentId)">赞同 {{ childrenItem.like }}</el-button>
-                <el-button type="primary" plain @click="disLikeComment(childrenItem.commentId)">踩 {{ childrenItem.dislike }}</el-button>
+                <el-button type="primary" plain size="small" @click="likeComment(childrenItem.commentId)">赞同 {{ childrenItem.like }}</el-button>
+                <el-button type="primary" plain size="small" @click="disLikeComment(childrenItem.commentId)">踩 {{ childrenItem.dislike }}</el-button>
               </div>
               <el-button
                 v-if="commentItem.children.page * commentItem.children.size < commentItem.children.total"

@@ -28,6 +28,9 @@
         </div>
       </el-card>
     </el-row>
+    <el-row v-show="showStatus" v-loading="scrollLoading" class="status-container">
+      <el-result v-if="none" icon="info" title="没有更多了" />
+    </el-row>
   </div>
 </template>
 
@@ -39,28 +42,52 @@ export default {
     return {
       article: {
         list: []
-      }
+      },
+      showStatus: false,
+      scrollLoading: false,
+      none: false
     }
   },
   mounted() {
     this.init()
+    window.addEventListener('scroll', this.handleScroll, true)
+  },
+  beforeDestroy() {
+    // 与addEventListener选项一致才可以销毁监听
+    window.removeEventListener('scroll', this.handleScroll, true)
   },
   methods: {
     init() {
       this.article.current = 0
       this.getArticle()
     },
+    // 滚动触发加载时机
+    handleScroll() {
+      if (this.scrollLoading || this.none) {
+        return
+      }
+      const scrollTop = document.documentElement.scrollTop
+      const clientHeight = document.documentElement.clientHeight
+      const scrollHeight = document.documentElement.scrollHeight
+      if (scrollTop + clientHeight >= scrollHeight - 500) {
+        this.getArticle()
+      }
+    },
     getArticle() {
-      // todo:上拉加载
-      const path = this.$route.path
+      this.showStatus = true
+      this.scrollLoading = true
       const page = this.article.current + 1
       console.log('page:' + page)
       const beforeList = this.article.list
-      this.$emit('getArticle', path, page, val => {
+      this.$emit('getArticle', page, val => {
         if (val.current > 1) {
           val.list = [...beforeList, ...val.list]
         }
         this.$set(this, 'article', val)
+        this.scrollLoading = false
+        setTimeout(() => {
+          this.showStatus = false
+        }, 1000)
       })
     },
     articleDetail(aid) {
@@ -129,6 +156,9 @@ export default {
         }
       }
     }
+  }
+  .status-container {
+    height:200px;
   }
 }
 

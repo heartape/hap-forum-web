@@ -26,12 +26,14 @@
       @likeArticle="likeArticle"
       @disLikeArticle="disLikeArticle"
     />
-    <el-input v-model="publishParent" class="publish-parent" placeholder="请输入评论">
-      <template slot="append">
-        <el-button @click="handPublishParent">发布</el-button>
-      </template>
-    </el-input>
-    <comment :comment="article.comment" :show="showComment" @commentPage="commentPage" />
+    <comment
+      :comment="article.comment"
+      :show="showComment"
+      @commentPage="commentPage"
+      @handPublishParent="handPublishParent"
+      @handlePublishChildrenToParent="handlePublishChildrenToParent"
+      @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
+    />
   </div>
 </template>
 
@@ -46,7 +48,6 @@ export default {
   data() {
     return {
       showComment: false,
-      publishParent: '',
       article: {
         articleId: 1, like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
         title: `<h1 style="text-align: center;">this is title!</h1>`,
@@ -108,10 +109,9 @@ export default {
         this.article = res.data
       }).catch(error => this.error(error))
     },
-    handPublishParent() {
+    handPublishParent(publishParentContent) {
       const articleId = this.article.articleId
-      publishParent(articleId).then(() => {
-        this.success('发布成功')
+      publishParent(articleId, publishParentContent).then(() => {
         this.articleDetail(articleId)
       }).catch(error => this.error(error))
     },
@@ -130,6 +130,12 @@ export default {
       dislikeArticle().then(() => {
         this.article.dislike++
       }).catch(error => this.error(error))
+    },
+    handlePublishChildrenToParent(commentId, publishContent) {
+      console.log(publishContent)
+    },
+    handlePublishChildrenToChildren(commentId, publishContent) {
+      console.log(publishContent)
     }
   }
 }
@@ -155,5 +161,10 @@ export default {
 }
 .publish-parent input {
   background-color: #20a0ff;
+}
+</style>
+<style>
+.publish-parent {
+  margin-top: 10px;
 }
 </style>

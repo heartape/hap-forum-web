@@ -58,3 +58,10 @@ export function followLabel(labelId) {
     method: 'post'
   })
 }
+
+export function cancelFollowLabel(labelId) {
+  return request({
+    url: '/label/' + labelId + '/follow',
+    method: 'delete'
+  })
+}
