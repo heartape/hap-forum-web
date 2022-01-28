@@ -37,7 +37,8 @@
                 fit="cover"
               />
               <span class="children-username">{{ childrenItem.nickname }}</span>
-              <p>{{ childrenItem.content }}</p>
+              <p v-html="childrenItem.target" />
+              <p v-text="childrenItem.content" />
               <el-button type="primary" plain size="small" @click="likeComment(childrenItem.commentId)">赞同 {{ childrenItem.like }}</el-button>
               <el-button type="primary" plain size="small" @click="disLikeComment(childrenItem.commentId)">踩 {{ childrenItem.dislike }}</el-button>
               <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="childrenItem.showInput = !childrenItem.showInput">回复</el-button>
@@ -102,16 +103,9 @@ export default {
       this.$set(parent, 'childrenShow', false)
       this.$set(parent, 'showInput', false)
       this.$set(parent, 'publishContent', '')
-      // parent.childrenShow = false
-      // parent.showInput = false
-      // parent.publishContent = ''
-      // const commentId = item.commentId
-      // this.$set(this.childrenShow, commentId, false)
       parent.children.list.map(child => {
         this.$set(child, 'showInput', false)
         this.$set(child, 'publishContent', '')
-        // child.showInput = false
-        // child.publishContent = ''
       })
     })
   },

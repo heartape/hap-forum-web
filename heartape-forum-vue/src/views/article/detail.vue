@@ -74,7 +74,7 @@ export default {
               children: {
                 total: 1, page: 1, size: 10,
                 list: [
-                  { commentId: 4, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
+                  { commentId: 4, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', target: `@<a ref="https://www.baidu.com">百度</a>: `, content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
                 ]
               }
             }
