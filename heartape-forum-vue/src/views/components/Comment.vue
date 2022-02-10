@@ -18,57 +18,65 @@
           <span class="comment-username">{{ commentItem.nickname }}</span>
           <p>{{ commentItem.content }}</p>
           <div class="parent-btn">
-            <el-button type="primary" plain size="small" @click="likeComment(commentItem.commentId, commentItem)">赞同 {{ commentItem.like }}</el-button>
-            <el-button type="primary" plain size="small" @click="disLikeComment(commentItem.commentId, commentItem)">踩 {{ commentItem.dislike }}</el-button>
+            <el-button type="primary" plain size="small" @click="handLikeComment(commentItem)">赞同 {{ commentItem.like }}</el-button>
+            <el-button type="primary" plain size="small" @click="handDisLikeComment(commentItem)">踩 {{ commentItem.dislike }}</el-button>
             <el-button class="discuss-comment-count" type="primary" plain size="small" @click="commentItem.childrenShow = !commentItem.childrenShow">{{ commentItem.children.total }} 个评论</el-button>
             <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="commentItem.showInput = !commentItem.showInput">回复</el-button>
-            <el-input v-show="commentItem.showInput" v-model="commentItem.publishContent" class="publish-children-to-parent" placeholder="请输入评论">
-              <template slot="append">
-                <el-button @click="handlePublishChildrenToParent(commentItem.commentId, commentItem.publishContent)">发布</el-button>
-              </template>
-            </el-input>
-          </div>
-          <div v-show="commentItem.childrenShow" class="comment-children-container">
-            <div v-for="childrenItem in commentItem.children.list.slice(0,2)" :key="childrenItem.commentId" class="children-item-container">
-              <el-image
-                :src="childrenItem.avatar"
-                :alt="childrenItem.nickname"
-                style="float: left;width: 30px; height: 30px; margin-right: 10px"
-                fit="cover"
-              />
-              <span class="children-username">{{ childrenItem.nickname }}</span>
-              <p v-html="childrenItem.target" />
-              <p v-text="childrenItem.content" />
-              <el-button type="primary" plain size="small" @click="likeComment(childrenItem.commentId)">赞同 {{ childrenItem.like }}</el-button>
-              <el-button type="primary" plain size="small" @click="disLikeComment(childrenItem.commentId)">踩 {{ childrenItem.dislike }}</el-button>
-              <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="childrenItem.showInput = !childrenItem.showInput">回复</el-button>
-              <el-input v-show="childrenItem.showInput" v-model="childrenItem.publishContent" class="publish-children-to-children" placeholder="请输入评论">
+            <transition name="el-fade-in-linear">
+              <el-input v-show="commentItem.showInput" v-model="commentItem.publishContent" class="publish-children-to-parent" placeholder="请输入评论">
                 <template slot="append">
-                  <el-button @click="handlePublishChildrenToChildren(childrenItem.commentId, childrenItem.publishContent)">发布</el-button>
+                  <el-button @click="handlePublishChildrenToParent(commentItem.commentId, commentItem.publishContent)">发布</el-button>
                 </template>
               </el-input>
-            </div>
-            <el-button
-              v-if="commentItem.children.current < commentItem.children.pages"
-              style="margin-left: 30px; padding: 0; font-size: 14px"
-              type="text"
-              size="small"
-              @click="handCommentDetailShow(commentItem)"
-            >查看全部</el-button>
-            <el-dialog
-              title="全部评论"
-              :visible="commentChoose === commentItem.commentId"
-              width="600px"
-              @close="handleClose(commentItem)"
-            >
-              <comment-detail
-                :comment="commentItem.detail"
-                @handCommentDetailPage="handCommentDetailPage"
-                @handlePublishChildrenToParent="handlePublishChildrenToParent"
-                @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
-              />
-            </el-dialog>
+            </transition>
           </div>
+          <transition name="el-fade-in-linear">
+            <div v-show="commentItem.childrenShow" class="comment-children-container">
+              <div v-for="childrenItem in commentItem.children.list.slice(0,2)" :key="childrenItem.commentId" class="children-item-container">
+                <el-image
+                  :src="childrenItem.avatar"
+                  :alt="childrenItem.nickname"
+                  style="float: left;width: 30px; height: 30px; margin-right: 10px"
+                  fit="cover"
+                />
+                <span class="children-username">{{ childrenItem.nickname }}</span>
+                <p v-html="childrenItem.target" />
+                <p v-text="childrenItem.content" />
+                <el-button type="primary" plain size="small" @click="handLikeComment(childrenItem)">赞同 {{ childrenItem.like }}</el-button>
+                <el-button type="primary" plain size="small" @click="handDisLikeComment(childrenItem)">踩 {{ childrenItem.dislike }}</el-button>
+                <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="childrenItem.showInput = !childrenItem.showInput">回复</el-button>
+                <transition name="el-fade-in-linear">
+                  <el-input v-show="childrenItem.showInput" v-model="childrenItem.publishContent" class="publish-children-to-children" placeholder="请输入评论">
+                    <template slot="append">
+                      <el-button @click="handlePublishChildrenToChildren(childrenItem.commentId, childrenItem.publishContent)">发布</el-button>
+                    </template>
+                  </el-input>
+                </transition>
+              </div>
+              <el-button
+                v-if="commentItem.children.total > 2"
+                style="margin-left: 30px; padding: 0; font-size: 14px"
+                type="text"
+                size="small"
+                @click="handCommentDetailShow(commentItem)"
+              >查看全部</el-button>
+              <el-dialog
+                title="全部评论"
+                :visible="commentChoose === commentItem.commentId"
+                width="600px"
+                @close="handleClose(commentItem)"
+              >
+                <comment-detail
+                  :comment="commentItem.detail"
+                  @handCommentDetailPage="handCommentDetailPage"
+                  @handlePublishChildrenToParent="handlePublishChildrenToParent"
+                  @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
+                  @handLikeComment="handLikeComment"
+                  @handDisLikeComment="handDisLikeComment"
+                />
+              </el-dialog>
+            </div>
+          </transition>
         </div>
         <el-pagination
           class="comment-pagination"
@@ -85,8 +93,6 @@
 </template>
 
 <script>
-import { disLikeComment, likeComment } from '@/api/topic'
-import { error } from '@/utils'
 import CommentDetail from '@/views/components/CommentDetail'
 
 export default {
@@ -130,17 +136,11 @@ export default {
       // 调用父组件的发布方法，并且更新数据
       this.$emit('handPublishParent', this.publishParentContent)
     },
-    likeComment(commentId, comment) {
-      // 评论点赞加一,后台对比是否有点赞记录
-      likeComment(commentId).then(() => {
-        comment.like++
-      }).catch(err => error(err))
+    handLikeComment(comment) {
+      this.$emit('handLikeComment', comment)
     },
-    disLikeComment(commentId, comment) {
-      // 评论踩加一,后台对比是否有踩记录
-      disLikeComment(commentId).then(() => {
-        comment.dislike++
-      }).catch(err => error(err))
+    handDisLikeComment(comment) {
+      this.$emit('handDisLikeComment', comment)
     },
     handlePageChange(page) {
       // 跳转页码

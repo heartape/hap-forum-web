@@ -1,6 +1,5 @@
 <template>
   <el-col
-    v-loading="commentLoading"
     v-infinite-scroll="loadChildrenPage"
     infinite-scroll-distance="50px"
     class="comment-detail-container"
@@ -16,8 +15,8 @@
       <span class="comment-username">{{ comment.nickname }}</span>
       <div class="comment-content">{{ comment.content }}</div>
       <div class="parent-btn">
-        <el-button type="primary" plain size="small" @click="likeComment(comment.commentId, comment)">赞同 {{ comment.like }}</el-button>
-        <el-button type="primary" plain size="small" @click="disLikeComment(comment.commentId, comment)">踩 {{ comment.dislike }}</el-button>
+        <el-button type="primary" plain size="small" @click="handLikeComment(comment)">赞同 {{ comment.like }}</el-button>
+        <el-button type="primary" plain size="small" @click="handDisLikeComment(comment)">踩 {{ comment.dislike }}</el-button>
         <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="comment.showInput = !comment.showInput">回复</el-button>
         <el-input v-show="comment.showInput" v-model="comment.publishContent" class="publish-commit-input" placeholder="请输入评论">
           <template slot="append">
@@ -37,8 +36,8 @@
         />
         <span class="comment-username">{{ childrenItem.nickname }}</span>
         <div class="comment-content" v-text="childrenItem.content" />
-        <el-button type="primary" plain size="small" @click="likeComment(childrenItem.commentId)">赞同 {{ childrenItem.like }}</el-button>
-        <el-button type="primary" plain size="small" @click="disLikeComment(childrenItem.commentId)">踩 {{ childrenItem.dislike }}</el-button>
+        <el-button type="primary" plain size="small" @click="handLikeComment(childrenItem)">赞同 {{ childrenItem.like }}</el-button>
+        <el-button type="primary" plain size="small" @click="handDisLikeComment(childrenItem)">踩 {{ childrenItem.dislike }}</el-button>
         <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="childrenItem.showInput = !childrenItem.showInput">回复</el-button>
         <el-input v-show="childrenItem.showInput" v-model="childrenItem.publishContent" class="publish-commit-input" placeholder="请输入评论">
           <template slot="append">
@@ -51,9 +50,6 @@
 </template>
 
 <script>
-// todo:将comment api剥离出来
-import { disLikeComment, likeComment } from '@/api/topic'
-import { error } from '@/utils'
 
 export default {
   name: 'CommentDetail',
@@ -65,23 +61,12 @@ export default {
       }
     }
   },
-  data() {
-    return {
-      commentLoading: false
-    }
-  },
   methods: {
-    likeComment(commentId, comment) {
-      // 评论点赞加一,后台对比是否有点赞记录
-      likeComment(commentId).then(() => {
-        comment.like++
-      }).catch(err => error(err))
+    handLikeComment(comment) {
+      this.$emit('handLikeComment', comment)
     },
-    disLikeComment(commentId, comment) {
-      // 评论踩加一,后台对比是否有踩记录
-      disLikeComment(commentId).then(() => {
-        comment.dislike++
-      }).catch(err => error(err))
+    handDisLikeComment(comment) {
+      this.$emit('handDisLikeComment', comment)
     },
     loadChildrenPage() {
       const commentId = this.comment.commentId

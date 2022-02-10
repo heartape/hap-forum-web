@@ -107,3 +107,17 @@ export function loadChildren(commentId, page) {
     params: { page }
   })
 }
+
+export function likeComment(commentId) {
+  return request({
+    url: '/article/comment/' + commentId + '/like',
+    method: 'put'
+  })
+}
+
+export function disLikeComment(commentId) {
+  return request({
+    url: '/article/comment/' + commentId + '/dislike',
+    method: 'put'
+  })
+}

@@ -21,34 +21,26 @@
     <article-menu
       :like="article.like"
       :dislike="article.dislike"
-      :comment-number="article.comment.allComment"
-      @showComment="showComment = !showComment"
       @likeArticle="likeArticle"
       @disLikeArticle="disLikeArticle"
     />
     <comment
       :comment="article.comment"
-      :show="showComment"
+      :show="true"
       @commentDetailInit="commentDetailInit"
       @handCommentDetailPage="handCommentDetailPage"
       @commentPage="commentPage"
       @handPublishParent="handPublishParent"
       @handlePublishChildrenToParent="handlePublishChildrenToParent"
       @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
+      @handLikeComment="handLikeComment"
+      @handDisLikeComment="handDisLikeComment"
     />
   </div>
 </template>
 
 <script>
-import {
-  articleDetail,
-  dislikeArticle,
-  likeArticle,
-  showComment,
-  publishParent,
-  initCommentDetail,
-  loadChildren
-} from '@/api/article'
+import { articleDetail, dislikeArticle, likeArticle, showComment, publishParent, initCommentDetail, loadChildren, disLikeComment, likeComment } from '@/api/article'
 import Comment from '@/views/components/Comment'
 import ArticleMenu from '@/views/article/ArticleMenu'
 import { error } from '@/utils'
@@ -58,7 +50,6 @@ export default {
   components: { ArticleMenu, Comment },
   data() {
     return {
-      showComment: false,
       article: {
         articleId: 1, like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
         title: `<h1 style="text-align: center;">this is title!</h1>`,
@@ -138,6 +129,20 @@ export default {
         this.article.dislike++
       }).catch(err => error(err))
     },
+    handLikeComment(comment) {
+      // 评论点赞加一,后台对比是否有点赞记录
+      console.log(comment.commentId)
+      likeComment(comment.commentId).then(() => {
+        comment.like++
+      }).catch(err => error(err))
+    },
+    handDisLikeComment(comment) {
+      // 评论踩加一,后台对比是否有踩记录
+      console.log(comment.commentId)
+      disLikeComment(comment.commentId).then(() => {
+        comment.dislike++
+      }).catch(err => error(err))
+    },
     handlePublishChildrenToParent(commentId, publishContent) {
       console.log(publishContent)
     },
@@ -146,10 +151,18 @@ export default {
     },
     commentDetailInit(commentId, callback) {
       initCommentDetail(commentId).then(res => {
+        this.$set(res.data, 'childrenShow', false)
+        this.$set(res.data, 'showInput', false)
+        this.$set(res.data, 'publishContent', '')
+        res.data.children.list.map(child => {
+          this.$set(child, 'showInput', false)
+          this.$set(child, 'publishContent', '')
+        })
         callback(res.data)
       }).catch(err => {
         error(err)
-        callback({ commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
+        // todo:前后端对接后删除
+        const data = { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
           children: {
             total: 4, current: 1, size: 2, pages: 2,
             list: [
@@ -157,21 +170,39 @@ export default {
               { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
             ]
           }
+        }
+        this.$set(data, 'childrenShow', false)
+        this.$set(data, 'showInput', false)
+        this.$set(data, 'publishContent', '')
+        data.children.list.map(child => {
+          this.$set(child, 'showInput', false)
+          this.$set(child, 'publishContent', '')
         })
+        callback(data)
       })
     },
     handCommentDetailPage(commentId, page, callback) {
       loadChildren(commentId, page).then(res => {
+        res.data.list.map(child => {
+          this.$set(child, 'showInput', false)
+          this.$set(child, 'publishContent', '')
+        })
         callback(res.data)
       }).catch(err => {
         error(err)
-        callback({
+        // todo:前后端对接后删除
+        const data = {
           total: 4, current: 2, size: 2, pages: 2,
           list: [
             { commentId: 12, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
             { commentId: 15, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
           ]
+        }
+        data.list.map(child => {
+          this.$set(child, 'showInput', false)
+          this.$set(child, 'publishContent', '')
         })
+        callback(data)
       })
     }
   }
