@@ -51,16 +51,13 @@
 </template>
 
 <script>
-import { disLikeComment, likeComment, showChildren } from '@/api/topic'
+// todo:将comment api剥离出来
+import { disLikeComment, likeComment } from '@/api/topic'
 import { error } from '@/utils'
 
 export default {
   name: 'CommentDetail',
   props: {
-    commentId: {
-      type: String,
-      default: ''
-    },
     comment: {
       type: Object,
       default() {
@@ -72,11 +69,6 @@ export default {
     return {
       commentLoading: false
     }
-  },
-  created() {
-    // const mf = Date.now()
-    // console.log('created:' + mf)
-    // console.log(this.comment)
   },
   methods: {
     likeComment(commentId, comment) {
@@ -91,10 +83,6 @@ export default {
         comment.dislike++
       }).catch(err => error(err))
     },
-    loadCommentInit() {
-      // this.commentLoading = true
-      this.$emit('handCommentDetailInit', this.commentId)
-    },
     loadChildrenPage() {
       const commentId = this.comment.commentId
       const current = this.comment.children.current
@@ -102,20 +90,9 @@ export default {
       if (current >= this.comment.children.pages) {
         return
       }
-      showChildren(commentId, current + 1).then(res => {
-        this.comment.children = res.data
-        this.comment.children.list = oldList.concat(this.comment.children.list)
-      }).catch(err => {
-        this.comment.children = {
-          total: 4, current: 2, size: 2, pages: 2,
-          list: [
-            { commentId: 6, uid: 1, nickname: '灰太狼1', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-            { commentId: 7, uid: 1, nickname: '灰太狼1', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-          ]
-        }
-        this.comment.children.list = oldList.concat(this.comment.children.list)
-        // this.$set(children, 'list', childrenOld.concat(children.list))
-        error(err)
+      this.$emit('handCommentDetailPage', commentId, current + 1, value => {
+        this.comment.children.list = oldList.concat(value.list)
+        this.comment.children.current = value.current
       })
     },
     handlePublishChildrenToParent(commentId, publishContent) {

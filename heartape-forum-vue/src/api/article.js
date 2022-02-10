@@ -100,7 +100,7 @@ export function initCommentDetail(commentId) {
   })
 }
 // load方法只需要子评论
-export function loadCommentDetail(commentId, page) {
+export function loadChildren(commentId, page) {
   return request({
     url: '/article/comment/parent/' + commentId + '/load/',
     method: 'get',

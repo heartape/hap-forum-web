@@ -30,6 +30,7 @@
       :comment="article.comment"
       :show="showComment"
       @commentDetailInit="commentDetailInit"
+      @handCommentDetailPage="handCommentDetailPage"
       @commentPage="commentPage"
       @handPublishParent="handPublishParent"
       @handlePublishChildrenToParent="handlePublishChildrenToParent"
@@ -39,7 +40,15 @@
 </template>
 
 <script>
-import { articleDetail, dislikeArticle, likeArticle, showComment, publishParent, initCommentDetail } from '@/api/article'
+import {
+  articleDetail,
+  dislikeArticle,
+  likeArticle,
+  showComment,
+  publishParent,
+  initCommentDetail,
+  loadChildren
+} from '@/api/article'
 import Comment from '@/views/components/Comment'
 import ArticleMenu from '@/views/article/ArticleMenu'
 import { error } from '@/utils'
@@ -137,7 +146,7 @@ export default {
     },
     commentDetailInit(commentId, callback) {
       initCommentDetail(commentId).then(res => {
-        callback(res)
+        callback(res.data)
       }).catch(err => {
         error(err)
         callback({ commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
@@ -148,6 +157,20 @@ export default {
               { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
             ]
           }
+        })
+      })
+    },
+    handCommentDetailPage(commentId, page, callback) {
+      loadChildren(commentId, page).then(res => {
+        callback(res.data)
+      }).catch(err => {
+        error(err)
+        callback({
+          total: 4, current: 2, size: 2, pages: 2,
+          list: [
+            { commentId: 12, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+            { commentId: 15, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
+          ]
         })
       })
     }

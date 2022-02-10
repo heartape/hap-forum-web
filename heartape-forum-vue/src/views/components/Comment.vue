@@ -63,6 +63,7 @@
             >
               <comment-detail
                 :comment="commentItem.detail"
+                @handCommentDetailPage="handCommentDetailPage"
                 @handlePublishChildrenToParent="handlePublishChildrenToParent"
                 @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
               />
@@ -162,6 +163,11 @@ export default {
       } else {
         this.commentChoose = comment.commentId
       }
+    },
+    handCommentDetailPage(commentId, page, callback) {
+      this.$emit('handCommentDetailPage', commentId, page, value => {
+        callback(value)
+      })
     },
     handleClose() {
       this.commentChoose = ''
