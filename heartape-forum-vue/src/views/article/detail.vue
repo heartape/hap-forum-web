@@ -29,6 +29,7 @@
     <comment
       :comment="article.comment"
       :show="showComment"
+      @commentDetailInit="commentDetailInit"
       @commentPage="commentPage"
       @handPublishParent="handPublishParent"
       @handlePublishChildrenToParent="handlePublishChildrenToParent"
@@ -38,9 +39,10 @@
 </template>
 
 <script>
-import { articleDetail, dislikeArticle, likeArticle, showComment, publishParent } from '@/api/article'
+import { articleDetail, dislikeArticle, likeArticle, showComment, publishParent, initCommentDetail } from '@/api/article'
 import Comment from '@/views/components/Comment'
 import ArticleMenu from '@/views/article/ArticleMenu'
+import { error } from '@/utils'
 
 export default {
   name: 'ArticleDetail',
@@ -59,20 +61,22 @@ export default {
         ],
         comment: {
           allComment: 5,
-          total: 2, page: 1, size: 10,
+          total: 2, current: 1, size: 10, pages: 1,
           list: [
             { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
               children: {
-                total: 20, page: 1, size: 10,
+                total: 4, current: 1, size: 2, pages: 2,
                 list: [
                   { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+                  { commentId: 11, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+                  { commentId: 12, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
                   { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
                 ]
               }
             },
             { commentId: 3, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
               children: {
-                total: 1, page: 1, size: 10,
+                total: 1, current: 1, size: 10, pages: 1,
                 list: [
                   { commentId: 4, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', target: `@<a ref="https://www.baidu.com">百度</a>: `, content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
                 ]
@@ -88,12 +92,6 @@ export default {
     this.articleDetail(articleId)
   },
   methods: {
-    error(message) {
-      this.$notify.error({
-        title: '请求失败',
-        message: message
-      })
-    },
     toLabelArticle(labelId) {
       // 跳转目标label的article列表
       this.$router.push({ path: '/article/label/' + labelId + '/recommend' })
@@ -107,35 +105,51 @@ export default {
     articleDetail(articleId) {
       articleDetail(articleId).then(res => {
         this.article = res.data
-      }).catch(error => this.error(error))
+      }).catch(err => error(err))
     },
     handPublishParent(publishParentContent) {
       const articleId = this.article.articleId
       publishParent(articleId, publishParentContent).then(() => {
         this.articleDetail(articleId)
-      }).catch(error => this.error(error))
+      }).catch(err => error(err))
     },
     commentPage(page) {
       const articleId = this.article.articleId
       showComment(articleId, page).then(res => {
         this.article.comment = res.data
-      }).catch(error => this.error(error))
+      }).catch(err => error(err))
     },
     likeArticle() {
       likeArticle().then(() => {
         this.article.like++
-      }).catch(error => this.error(error))
+      }).catch(err => error(err))
     },
     disLikeArticle() {
       dislikeArticle().then(() => {
         this.article.dislike++
-      }).catch(error => this.error(error))
+      }).catch(err => error(err))
     },
     handlePublishChildrenToParent(commentId, publishContent) {
       console.log(publishContent)
     },
     handlePublishChildrenToChildren(commentId, publishContent) {
       console.log(publishContent)
+    },
+    commentDetailInit(commentId, callback) {
+      initCommentDetail(commentId).then(res => {
+        callback(res)
+      }).catch(err => {
+        error(err)
+        callback({ commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
+          children: {
+            total: 4, current: 1, size: 2, pages: 2,
+            list: [
+              { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+              { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
+            ]
+          }
+        })
+      })
     }
   }
 }

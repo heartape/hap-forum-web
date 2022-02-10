@@ -1,5 +1,5 @@
 <template>
-  <el-collapse-transition>
+  <transition name="el-fade-in-linear">
     <div v-show="show" class="comment-container">
       <el-input v-model="publishParentContent" class="publish-parent" placeholder="请输入评论">
         <template slot="append">
@@ -29,7 +29,7 @@
             </el-input>
           </div>
           <div v-show="commentItem.childrenShow" class="comment-children-container">
-            <div v-for="childrenItem in commentItem.children.list" :key="childrenItem.commentId" class="children-item-container">
+            <div v-for="childrenItem in commentItem.children.list.slice(0,2)" :key="childrenItem.commentId" class="children-item-container">
               <el-image
                 :src="childrenItem.avatar"
                 :alt="childrenItem.nickname"
@@ -49,14 +49,24 @@
               </el-input>
             </div>
             <el-button
-              v-if="commentItem.children.page * commentItem.children.size < commentItem.children.total"
-              v-loading="childrenLoading"
-              :disabled="childrenLoading"
+              v-if="commentItem.children.current < commentItem.children.pages"
               style="margin-left: 30px; padding: 0; font-size: 14px"
               type="text"
               size="small"
-              @click="loadChildren(commentItem.commentId, commentItem.children.page, commentItem.children)"
-            >加载更多</el-button>
+              @click="handCommentDetailShow(commentItem)"
+            >查看全部</el-button>
+            <el-dialog
+              title="全部评论"
+              :visible="commentChoose === commentItem.commentId"
+              width="600px"
+              @close="handleClose(commentItem)"
+            >
+              <comment-detail
+                :comment="commentItem.detail"
+                @handlePublishChildrenToParent="handlePublishChildrenToParent"
+                @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
+              />
+            </el-dialog>
           </div>
         </div>
         <el-pagination
@@ -65,20 +75,24 @@
           layout="prev, pager, next"
           :total="comment.total"
           :page-size="comment.size"
-          :current-page="comment.page"
+          :current-page="comment.current"
           @current-change="handlePageChange"
         />
       </div>
     </div>
-  </el-collapse-transition>
+  </transition>
 </template>
 
 <script>
-import { disLikeComment, likeComment, showChildren } from '@/api/topic'
+import { disLikeComment, likeComment } from '@/api/topic'
 import { error } from '@/utils'
+import CommentDetail from '@/views/components/CommentDetail'
 
 export default {
   name: 'Comment',
+  components: {
+    CommentDetail
+  },
   props: {
     comment: {
       type: Object,
@@ -95,7 +109,8 @@ export default {
     return {
       parentShow: {},
       publishParentContent: '',
-      childrenLoading: false
+      childrenLoading: false,
+      commentChoose: ''
     }
   },
   mounted() {
@@ -130,16 +145,6 @@ export default {
       // 跳转页码
       this.$emit('commentPage', page)
     },
-    loadChildren(commentId, page, children) {
-      this.childrenLoading = true
-      showChildren(commentId, page + 1).then(res => {
-        children = res.data
-        this.childrenLoading = false
-      }).catch(err => {
-        error(err)
-        this.childrenLoading = false
-      })
-    },
     handlePublishChildrenToParent(commentId, publishContent) {
       // 对父评论进行评论
       this.$emit('handlePublishChildrenToParent', commentId, publishContent)
@@ -147,6 +152,19 @@ export default {
     handlePublishChildrenToChildren(commentId, publishContent) {
       // 对子评论进行评论
       this.$emit('handlePublishChildrenToChildren', commentId, publishContent)
+    },
+    handCommentDetailShow(comment) {
+      if (comment.detail === undefined) {
+        this.$emit('commentDetailInit', comment.commentId, val => {
+          this.$set(comment, 'detail', val)
+          this.commentChoose = comment.commentId
+        })
+      } else {
+        this.commentChoose = comment.commentId
+      }
+    },
+    handleClose() {
+      this.commentChoose = ''
     }
   }
 }
@@ -189,5 +207,24 @@ export default {
     font-size: 14px;
   }
 }
+</style>
 
+<style scoped>
+.el-dialog__wrapper /deep/ .el-dialog {
+  display: flex;
+  flex-direction: column;
+  margin:0 !important;
+  position:absolute;
+  top:50%;
+  left:50%;
+  transform:translate(-50%,-50%);
+  height:600px;
+}
+.el-dialog__wrapper /deep/ .el-dialog__body {
+  padding: 0;
+  overflow: auto;
+}
+.el-dialog__wrapper /deep/ .el-dialog__header {
+  padding: 10px 20px;
+}
 </style>

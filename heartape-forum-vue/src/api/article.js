@@ -87,8 +87,23 @@ export function showComment(articleId, page) {
 
 export function publishParent(articleId, comment) {
   return request({
-    url: '/article/comment/parent' + articleId,
+    url: '/article/comment/parent/' + articleId,
     method: 'post',
     params: { comment }
+  })
+}
+// init方法需要父评论信息
+export function initCommentDetail(commentId) {
+  return request({
+    url: '/article/comment/parent/' + commentId + '/init/',
+    method: 'get'
+  })
+}
+// load方法只需要子评论
+export function loadCommentDetail(commentId, page) {
+  return request({
+    url: '/article/comment/parent/' + commentId + '/load/',
+    method: 'get',
+    params: { page }
   })
 }
