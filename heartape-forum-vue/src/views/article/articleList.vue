@@ -77,7 +77,9 @@ export default {
       this.showStatus = true
       this.scrollLoading = true
       const page = this.article.current + 1
-      console.log('page:' + page)
+      if (page > this.article.pages) {
+        return
+      }
       const beforeList = this.article.list
       this.$emit('getArticle', page, val => {
         if (val.current > 1) {

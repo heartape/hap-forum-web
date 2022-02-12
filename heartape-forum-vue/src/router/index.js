@@ -146,7 +146,7 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'topic/recommend',
+        path: 'recommend',
         name: 'topic-recommend',
         component: () => import('@/views/topic/index'),
         meta: { title: '人生漫谈', icon: 'topic' }
@@ -185,8 +185,22 @@ export const constantRoutes = [
         hidden: true
       },
       {
+        path: 'label/:labelId/recommend',
+        name: 'topic-label-recommend',
+        component: () => import('@/views/topic/topicInLabel'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
+      },
+      {
         path: 'label/:labelId/hot',
         name: 'topic-label-hot',
+        component: () => import('@/views/topic/topicInLabel'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
+      },
+      {
+        path: 'label/:labelId/follow',
+        name: 'topic-label-follow',
         component: () => import('@/views/topic/topicInLabel'),
         meta: { title: '人生漫谈', icon: 'topic' },
         hidden: true
@@ -194,57 +208,57 @@ export const constantRoutes = [
     ]
   },
 
-  {
-    path: '/knowledge',
-    component: Layout,
-    children: [{
-      path: '',
-      name: 'Knowledge',
-      component: () => import('@/views/knowledge/index'),
-      meta: { title: '授人以渔', icon: 'knowledge' }
-    }]
-  },
-
-  {
-    path: '/news',
-    component: Layout,
-    children: [
-      {
-        path: '',
-        name: 'News',
-        component: () => import('@/views/news/index'),
-        meta: { title: '古今中外', icon: 'news' }
-      }
-    ]
-  },
-
-  {
-    path: '/travel',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '',
-        name: 'Travel',
-        component: () => import('@/views/travel/index'),
-        meta: { title: '行万里路', icon: 'travel' }
-      }
-    ]
-  },
-
-  {
-    path: '/introduce',
-    component: Layout,
-    hidden: true,
-    children: [
-      {
-        path: '',
-        name: 'Introduce',
-        component: () => import('@/views/Introduce'),
-        meta: { title: '南阳布衣', icon: 'introduce' }
-      }
-    ]
-  },
+  // {
+  //   path: '/knowledge',
+  //   component: Layout,
+  //   children: [{
+  //     path: '',
+  //     name: 'Knowledge',
+  //     component: () => import('@/views/knowledge/index'),
+  //     meta: { title: '授人以渔', icon: 'knowledge' }
+  //   }]
+  // },
+  //
+  // {
+  //   path: '/news',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'News',
+  //       component: () => import('@/views/news/index'),
+  //       meta: { title: '古今中外', icon: 'news' }
+  //     }
+  //   ]
+  // },
+  //
+  // {
+  //   path: '/travel',
+  //   component: Layout,
+  //   hidden: true,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'Travel',
+  //       component: () => import('@/views/travel/index'),
+  //       meta: { title: '行万里路', icon: 'travel' }
+  //     }
+  //   ]
+  // },
+  //
+  // {
+  //   path: '/introduce',
+  //   component: Layout,
+  //   hidden: true,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'Introduce',
+  //       component: () => import('@/views/Introduce'),
+  //       meta: { title: '南阳布衣', icon: 'introduce' }
+  //     }
+  //   ]
+  // },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

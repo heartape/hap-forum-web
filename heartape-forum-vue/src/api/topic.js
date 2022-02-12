@@ -1,16 +1,58 @@
 import request from '@/utils/request'
 
-export function topicHot() {
+export function topicRecommend(page) {
   return request({
-    url: '/topic/hot',
-    method: 'get'
+    url: '/topic/recommend',
+    method: 'get',
+    params: { page }
   })
 }
 
-export function topicLabelHot(labelId) {
+export function topicHot(page) {
+  return request({
+    url: '/topic/hot',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function topicFollow(page) {
+  return request({
+    url: '/topic/follow',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function topicInLabelRecommend(labelId, page) {
+  return request({
+    url: '/topic/label/' + labelId + '/recommend',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function topicInLabelHot(labelId, page) {
   return request({
     url: '/topic/label/' + labelId + '/hot',
-    method: 'get'
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function topicInLabelFollow(labelId, page) {
+  return request({
+    url: '/topic/label/' + labelId + '/follow',
+    method: 'get',
+    params: { page }
+  })
+}
+
+export function SearchTopic(keyword, page) {
+  return request({
+    url: '/topic/search',
+    method: 'get',
+    params: { keyword: keyword, page }
   })
 }
 

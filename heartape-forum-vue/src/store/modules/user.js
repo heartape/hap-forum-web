@@ -54,10 +54,11 @@ const actions = {
           return reject('Verification failed, please Login again.')
         }
 
-        const { name, avatar } = data
+        // const { name, avatar } = data
+        const { name } = data
 
         commit('SET_NAME', name)
-        commit('SET_AVATAR', avatar)
+        commit('SET_AVATAR', 'https://gitee.com/heartape/photo-url/raw/master/avatar/73781120_p0.jpg')
         resolve(data)
       }).catch(error => {
         reject(error)

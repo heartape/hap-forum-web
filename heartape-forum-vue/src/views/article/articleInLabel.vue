@@ -29,8 +29,7 @@ export default {
         { index: '1', path: '/article/label/' + this.getLabelId() + '/recommend', name: '推荐' },
         { index: '2', path: '/article/label/' + this.getLabelId() + '/hot', name: '热点' },
         { index: '3', path: '/article/label/' + this.getLabelId() + '/follow', name: '关注' }
-      ],
-      article: {}
+      ]
     }
   },
   methods: {

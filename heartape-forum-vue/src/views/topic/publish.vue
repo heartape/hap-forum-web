@@ -176,7 +176,7 @@ export default {
 .label-container {
   .label-choose-tag {
     float: left;
-    margin-right: 10px;
+    margin: 0 10px 10px 0;
   }
   .label-add-container {
     float: left;

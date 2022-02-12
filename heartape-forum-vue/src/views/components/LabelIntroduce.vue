@@ -26,7 +26,7 @@
         </span>
         <div class="foot-menu-container">
           <el-button v-if="label.follow" class="label-follow-btn" type="primary" size="small" plain style="width: 80px" @click="cancelFollowLabel">已关注</el-button>
-          <el-button v-else class="label-follow-btn" type="primary" size="small" plain @click="followLabel">关注标签</el-button>
+          <el-button v-else class="label-follow-btn" type="primary" size="small" plain disabled @click="followLabel">关注标签</el-button>
           <el-button class="label-log-btn" type="primary" size="small" plain disabled @click="labelOperateLog">标签记录</el-button>
         </div>
       </div>

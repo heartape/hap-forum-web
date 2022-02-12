@@ -10,10 +10,10 @@
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
           <router-link to="/">
-            <el-dropdown-item>个人主页</el-dropdown-item>
+            <el-dropdown-item disabled>个人主页</el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>账号设置</el-dropdown-item>
+          <a target="_blank" href="https://www.heartape.com">
+            <el-dropdown-item disabled>账号设置</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>

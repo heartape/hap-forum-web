@@ -21,30 +21,27 @@ export default {
   },
   data() {
     return {
-      labelId: 0,
       menu: [
         { index: '1', path: '/article/recommend', name: '推荐' },
         { index: '2', path: '/article/hot', name: '热点' },
         { index: '3', path: '/article/follow', name: '关注' }
-      ],
-      article: {}
+      ]
     }
-  },
-  created() {
-    this.article.current = 0
   },
   methods: {
     searchArticle(keyword) {
       this.$router.push({ path: '/article/search', query: { keyword }})
     },
+    /**
+     * 这里不使用menu->path来拼接url请求后端，为了接口请求更清楚，牺牲代码量和灵活性
+     */
     chooseArticleType(path, page) {
-      const labelId = this.labelId
       if (path.endsWith('recommend')) {
-        return articleRecommend(labelId, page)
+        return articleRecommend(page)
       } else if (path.endsWith('hot')) {
-        return articleHot(labelId, page)
+        return articleHot(page)
       } else if (path.endsWith('follow')) {
-        return articleFollow(labelId, page)
+        return articleFollow(page)
       }
     },
     getArticle(page, callback) {

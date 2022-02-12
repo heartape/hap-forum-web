@@ -1,7 +1,7 @@
 <template>
   <div class="topic-container-body">
-    <el-row v-for="item in topicHot" :key="item.tid" @click.native="topicDetail(item.tid)">
-      <el-card v-if="item.cover === false" class="box-card" :body-style="{ padding: '0px' }">
+    <el-row v-for="item in topic.list" :key="item.tid" @click.native="topicDetail(item.tid)">
+      <el-card v-if="item.cover === false" class="box-card" shadow="hover" :body-style="{ padding: '0px' }">
         <div class="introduce">
           <span class="author-container">
             <el-image
@@ -23,7 +23,7 @@
           </div>
         </div>
       </el-card>
-      <el-card v-else class="box-card image-box-card" :body-style="{ padding: '0px' }">
+      <el-card v-else class="box-card image-box-card" shadow="hover" :body-style="{ padding: '0px' }">
         <div class="introduce image-introduce">
           <span class="author-container">
             <el-image
@@ -60,15 +60,60 @@
 <script>
 export default {
   name: 'TopicList',
-  props: {
-    topicHot: {
-      type: Array,
-      default() {
-        return []
-      }
+  data() {
+    return {
+      topic: {
+        list: []
+      },
+      showStatus: false,
+      scrollLoading: false,
+      none: false
     }
   },
+  mounted() {
+    this.init()
+    window.addEventListener('scroll', this.handleScroll, true)
+  },
+  beforeDestroy() {
+    // 与addEventListener选项一致才可以销毁监听
+    window.removeEventListener('scroll', this.handleScroll, true)
+  },
   methods: {
+    init() {
+      this.topic.current = 0
+      this.getTopic()
+    },
+    // 滚动触发加载时机
+    handleScroll() {
+      if (this.scrollLoading || this.none) {
+        return
+      }
+      const scrollTop = document.documentElement.scrollTop
+      const clientHeight = document.documentElement.clientHeight
+      const scrollHeight = document.documentElement.scrollHeight
+      if (scrollTop + clientHeight >= scrollHeight - 500) {
+        this.getTopic()
+      }
+    },
+    getTopic() {
+      this.showStatus = true
+      this.scrollLoading = true
+      const page = this.topic.current + 1
+      // if (page > this.topic.pages) {
+      //   return
+      // }
+      const beforeList = this.topic.list
+      this.$emit('getTopic', page, val => {
+        if (val.current > 1) {
+          val.list = [...beforeList, ...val.list]
+        }
+        this.$set(this, 'topic', val)
+        this.scrollLoading = false
+        setTimeout(() => {
+          this.showStatus = false
+        }, 1000)
+      })
+    },
     topicDetail(topicId) {
       this.$router.push('/topic/' + topicId)
     }

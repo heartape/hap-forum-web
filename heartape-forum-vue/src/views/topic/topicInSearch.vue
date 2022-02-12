@@ -2,14 +2,14 @@
   <!-- todo:后期删除该模块，创建综合搜索模块 -->
   <div class="topic-in-search">
     <head-menu resource-name="话题" title="话题 . 表达" slogan="千万话题，畅所欲言" :before-keyword="keyword" @searchResource="goSearch" />
-    <topic-list :topic-hot="topicHot" />
+    <topic-list ref="SearchTopic" @getTopic="SearchTopic" />
   </div>
 </template>
 
 <script>
 import HeadMenu from '@/views/components/HeadMenu'
 import TopicList from '@/views/topic/topicList'
-import { searchArticle } from '@/api/article'
+import { SearchTopic } from '@/api/topic'
 import { error } from '@/utils'
 
 export default {
@@ -40,9 +40,9 @@ export default {
         this.$refs.SearchArticle.init()
       }
     },
-    searchArticle(page, callback) {
+    SearchTopic(page, callback) {
       const keyword = this.keyword
-      searchArticle(keyword, page).then(res => {
+      SearchTopic(keyword, page).then(res => {
         callback(res.data)
       }).catch(res => {
         error(res)
@@ -50,17 +50,11 @@ export default {
         callback({
           current: 2,
           list: [
-            { articleId: 1, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
-            { articleId: 2, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
-            { articleId: 3, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
-            { articleId: 4, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 5, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 6, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 7, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 8, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 9, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 10, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 11, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null }
+            { tid: 1, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description description description description description description description description description description description', hot: 256, publishTime: '2021-11-22' },
+            { tid: 2, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: true, coverUrl: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', description: 'description', hot: 256, publishTime: '2021-11-22' },
+            { tid: 3, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' },
+            { tid: 4, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' },
+            { tid: 5, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' }
           ]
         })
       })
@@ -70,7 +64,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.article-in-search {
+.topic-in-search {
   padding: 10px;
 }
 </style>
