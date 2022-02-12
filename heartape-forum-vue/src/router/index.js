@@ -146,8 +146,8 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: 'hot',
-        name: 'topic',
+        path: 'topic/recommend',
+        name: 'topic-recommend',
         component: () => import('@/views/topic/index'),
         meta: { title: '人生漫谈', icon: 'topic' }
       }
@@ -159,6 +159,24 @@ export const constantRoutes = [
     component: Layout,
     hidden: true,
     children: [
+      {
+        path: 'hot',
+        name: 'topic-hot',
+        component: () => import('@/views/topic/index'),
+        meta: { title: '人生漫谈', icon: 'topic' }
+      },
+      {
+        path: 'follow',
+        name: 'topic-follow',
+        component: () => import('@/views/topic/index'),
+        meta: { title: '人生漫谈', icon: 'topic' }
+      },
+      {
+        path: 'search',
+        name: 'topic-search',
+        component: () => import('@/views/topic/topicInSearch'),
+        meta: { title: '人生漫谈', icon: 'topic' }
+      },
       {
         path: ':tid',
         name: 'topic-detail',

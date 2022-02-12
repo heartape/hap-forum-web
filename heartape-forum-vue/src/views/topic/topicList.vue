@@ -77,9 +77,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.topic-container-body {
-  padding: 10px;
-}
 .box-card {
   width: 740px;
   height: 160px;

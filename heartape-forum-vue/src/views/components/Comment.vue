@@ -144,7 +144,7 @@ export default {
     },
     handlePageChange(page) {
       // 跳转页码
-      this.$emit('commentPage', page)
+      this.$emit('handCommentPage', page)
     },
     handlePublishChildrenToParent(commentId, publishContent) {
       // 对父评论进行评论
@@ -156,7 +156,7 @@ export default {
     },
     handCommentDetailShow(comment) {
       if (comment.detail === undefined) {
-        this.$emit('commentDetailInit', comment.commentId, val => {
+        this.$emit('handCommentDetailInit', comment.commentId, val => {
           this.$set(comment, 'detail', val)
           this.commentChoose = comment.commentId
         })
@@ -177,40 +177,43 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.publish-parent {
-  margin-bottom: 10px;
-}
-.comment-show-container {
-  border: #b5ccf3 solid 1px;
-  width: 720px;
-  .comment-number-container {
-    margin: 0;
-    padding: 10px;
-    border-bottom: #b5ccf3 solid 1px;
+.comment-container {
+  padding-top: 10px;
+  .publish-parent {
+    margin-bottom: 10px;
   }
-  .comment-container-item {
-    padding: 10px 10px 0 10px;
-    border-bottom: #b5ccf3 solid 1px;
-    .parent-btn {
-      margin-bottom: 10px;
-      .publish-children-to-parent {
+  .comment-show-container {
+    border: #b5ccf3 solid 1px;
+    width: 720px;
+    .comment-number-container {
+      margin: 0;
+      padding: 10px;
+      border-bottom: #b5ccf3 solid 1px;
+    }
+    .comment-container-item {
+      padding: 10px 10px 0 10px;
+      border-bottom: #b5ccf3 solid 1px;
+      .parent-btn {
+        margin-bottom: 10px;
+        .publish-children-to-parent {
+          margin-top: 10px;
+        }
+      }
+    }
+    .children-item-container {
+      padding: 10px 10px 10px 30px;
+      width: 100%;
+      border-top: #b5ccf3 solid 1px;
+      .publish-children-to-children {
         margin-top: 10px;
       }
     }
-  }
-  .children-item-container {
-    padding: 10px 10px 10px 30px;
-    width: 100%;
-    border-top: #b5ccf3 solid 1px;
-    .publish-children-to-children {
-      margin-top: 10px;
+    .comment-pagination {
+      margin: 10px;
     }
-  }
-  .comment-pagination {
-    margin: 10px;
-  }
-  .el-button {
-    font-size: 14px;
+    .el-button {
+      font-size: 14px;
+    }
   }
 }
 </style>

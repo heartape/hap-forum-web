@@ -27,9 +27,9 @@
     <comment
       :comment="article.comment"
       :show="true"
-      @commentDetailInit="commentDetailInit"
+      @handCommentDetailInit="handCommentDetailInit"
       @handCommentDetailPage="handCommentDetailPage"
-      @commentPage="commentPage"
+      @handCommentPage="handCommentPage"
       @handPublishParent="handPublishParent"
       @handlePublishChildrenToParent="handlePublishChildrenToParent"
       @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
@@ -113,7 +113,7 @@ export default {
         this.articleDetail(articleId)
       }).catch(err => error(err))
     },
-    commentPage(page) {
+    handCommentPage(page) {
       const articleId = this.article.articleId
       showComment(articleId, page).then(res => {
         this.article.comment = res.data
@@ -131,14 +131,12 @@ export default {
     },
     handLikeComment(comment) {
       // 评论点赞加一,后台对比是否有点赞记录
-      console.log(comment.commentId)
       likeComment(comment.commentId).then(() => {
         comment.like++
       }).catch(err => error(err))
     },
     handDisLikeComment(comment) {
       // 评论踩加一,后台对比是否有踩记录
-      console.log(comment.commentId)
       disLikeComment(comment.commentId).then(() => {
         comment.dislike++
       }).catch(err => error(err))
@@ -149,7 +147,7 @@ export default {
     handlePublishChildrenToChildren(commentId, publishContent) {
       console.log(publishContent)
     },
-    commentDetailInit(commentId, callback) {
+    handCommentDetailInit(commentId, callback) {
       initCommentDetail(commentId).then(res => {
         this.$set(res.data, 'childrenShow', false)
         this.$set(res.data, 'showInput', false)
@@ -222,17 +220,5 @@ export default {
 .publish-time {
   margin: 20px 0;
   color: #74787f;
-}
-.publish-parent {
-  width: 720px;
-  margin: 10px 0;
-}
-.publish-parent input {
-  background-color: #20a0ff;
-}
-</style>
-<style>
-.publish-parent {
-  margin-top: 10px;
 }
 </style>

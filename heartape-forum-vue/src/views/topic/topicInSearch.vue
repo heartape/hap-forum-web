@@ -1,14 +1,14 @@
 <template>
   <!-- todo:后期删除该模块，创建综合搜索模块 -->
-  <div class="article-in-search">
-    <head-menu resource-name="文章" title="文库 . 发现" slogan="随心写作，自由表达" :before-keyword="keyword" @searchResource="goSearch" />
-    <article-list ref="SearchArticle" @getArticle="searchArticle" />
+  <div class="topic-in-search">
+    <head-menu resource-name="话题" title="话题 . 表达" slogan="千万话题，畅所欲言" :before-keyword="keyword" @searchResource="goSearch" />
+    <topic-list :topic-hot="topicHot" />
   </div>
 </template>
 
 <script>
-import ArticleList from '@/views/article/articleList'
 import HeadMenu from '@/views/components/HeadMenu'
+import TopicList from '@/views/topic/topicList'
 import { searchArticle } from '@/api/article'
 import { error } from '@/utils'
 
@@ -16,13 +16,13 @@ export default {
   name: 'ArticleInLabel',
   components: {
     HeadMenu,
-    ArticleList
+    TopicList
   },
   data() {
     return {
       type: {
-        name: '文章',
-        path: 'article'
+        name: '话题 ',
+        path: 'topic'
       },
       keyword: ''
     }
@@ -33,8 +33,8 @@ export default {
   methods: {
     goSearch(keyword) {
       const path = this.$route.path
-      if (path !== '/article/search') {
-        this.$router.push({ path: '/article/search', query: { keyword }})
+      if (path !== '/topic/search') {
+        this.$router.push({ path: '/topic/search', query: { keyword }})
       } else {
         // 解决只改变query参数时,不触发生命周期钩子的问题,直接调用子组件初始化方法
         this.$refs.SearchArticle.init()
