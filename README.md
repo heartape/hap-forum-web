@@ -2,23 +2,13 @@
 
 #### 介绍
 heartape-forum的前端部分
-参考网站：
-https://panjiachen.github.io/vue-admin-template/#/dashboard
-https://surmon.me/category/code
 
 #### 软件架构
-软件架构说明
-
-
-#### 安装教程
-
-1.  xxxx
-2.  xxxx
-3.  xxxx
+vue2.x
+element ui
 
 #### 使用说明
 
-1.  xxxx
-2.  xxxx
-3.  xxxx
-
+1.  yarn install
+2.  yarn dev
+3.  yarn pro
