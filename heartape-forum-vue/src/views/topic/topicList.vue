@@ -41,7 +41,7 @@
           <span class="content">
             <el-image
               :src="item.coverUrl"
-              :alt="item.title + '的封面'"
+              :alt="item.title + '封面'"
               style="float: left;width: 160px; height: 120px; margin-right: 10px"
               fit="cover"
             />
@@ -123,15 +123,14 @@ export default {
 
 <style lang="scss" scoped>
 .box-card {
+  padding: 10px;
   width: 740px;
-  height: 160px;
+  height: 170px;
   background-color: #ffffff;
 
   .introduce {
-    float: right;
-    height: 100px;
-    width: 100%!important;
-    padding: 10px;
+    height: 100%;
+    width: 100%;
     .author-info-container {
       position: relative;
       top: 5px;
@@ -162,7 +161,7 @@ export default {
       width: 480px;
       height: 30px;
       line-height: 30px;
-      margin-bottom: 3px;
+      margin-bottom: 10px;
 
       .time {
         font-size: 13px;
@@ -175,9 +174,11 @@ export default {
         margin-right: 30px;
         height: 30px;
         width: 100px;
-        background-color: cadetblue;
         text-align: center;
-        color: #454545;
+        background-color: #ecf5ff;
+        color: #409EFF;
+        border: #b3d8ff 1px solid;
+        border-radius: 3px;
       }
     }
   }
@@ -185,7 +186,7 @@ export default {
 
 .image-box-card {
   width: 740px;
-  height: 240px;
+  height: 250px;
   background-color: #ffffff;
   .image-introduce {
     height: 180px;
