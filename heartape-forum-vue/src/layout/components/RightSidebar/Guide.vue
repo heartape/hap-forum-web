@@ -2,9 +2,13 @@
   <div class="guide-container">
     <el-table class="right-sidebar-guide-container" :data="guide" style="width: 100%" cell-class-name="guide" @row-click="rowClick">
       <el-table-column
+        type="index"
+        width="30"
+      />
+      <el-table-column
         prop="title"
         label="导航"
-        width="270"
+        width="240"
         highlight-current-row="true"
       />
     </el-table>

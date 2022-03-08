@@ -207,6 +207,7 @@ export default {
   height: 32px;
   margin-bottom: 10px;
   background-color: #ffffff;
+  border-radius: 4px;
   .label-choose-tag {
     min-width: 100px;
     float: left;
