@@ -182,9 +182,9 @@ export default {
     float: left;
     margin: 0 !important;
   }
-}
-.describe-container {
-  margin-top: 10px;
+  .button-new-label, .input-new-label {
+    margin-bottom: 10px;
+  }
 }
 .foot-container {
   height: 40px;

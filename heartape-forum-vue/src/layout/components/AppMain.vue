@@ -19,7 +19,7 @@ export default {
 
 <style scoped>
 .app-main {
-  min-height: 1200px;
+  min-height: 700px;
   float: left;
   width: 760px;
   position: relative;
