@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <div class="head-title">Hap</div>
+    <div class="head-title" @click="toIndex">Hap</div>
     <div class="head-content">heart like a ape, mind like a horse</div>
     <div class="right-menu">
       <el-dropdown class="avatar-container" trigger="click">
@@ -9,11 +9,11 @@
           <i class="el-icon-caret-bottom" />
         </div>
         <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item disabled>个人主页</el-dropdown-item>
+          <router-link to="/personal-center">
+            <el-dropdown-item>个人中心</el-dropdown-item>
           </router-link>
-          <a target="_blank" href="https://www.heartape.com">
-            <el-dropdown-item disabled>账号设置</el-dropdown-item>
+          <a target="_blank" href="#">
+            <el-dropdown-item disabled>偏好设置</el-dropdown-item>
           </a>
           <el-dropdown-item divided @click.native="logout">
             <span style="display:block;">退出登录</span>
@@ -34,6 +34,9 @@ export default {
     ])
   },
   methods: {
+    toIndex() {
+      this.$router.push(`/`)
+    },
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)

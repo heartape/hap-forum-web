@@ -5,6 +5,7 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import PersonalCenter from '@/personalCenter'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
@@ -231,34 +232,79 @@ export const constantRoutes = [
   //     }
   //   ]
   // },
-  //
-  // {
-  //   path: '/travel',
-  //   component: Layout,
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'Travel',
-  //       component: () => import('@/views/travel/index'),
-  //       meta: { title: '行万里路', icon: 'travel' }
-  //     }
-  //   ]
-  // },
-  //
-  // {
-  //   path: '/introduce',
-  //   component: Layout,
-  //   hidden: true,
-  //   children: [
-  //     {
-  //       path: '',
-  //       name: 'Introduce',
-  //       component: () => import('@/views/Introduce'),
-  //       meta: { title: '南阳布衣', icon: 'introduce' }
-  //     }
-  //   ]
-  // },
+
+  {
+    path: '/personal-center',
+    component: PersonalCenter,
+    name: 'personal-center',
+    children: [
+      {
+        path: 'home',
+        name: 'personal-center-home',
+        component: () => import('@/views/topic/index'),
+        meta: { title: '主页', icon: 'topic' }
+      },
+      {
+        path: 'manage',
+        name: 'personal-manage',
+        meta: { title: '管理', icon: 'topic' },
+        children: [
+          {
+            path: 'content',
+            name: 'personal-center-content',
+            component: () => import('@/views/personalCenter/ContentManage'),
+            meta: { title: '内容管理', icon: 'topic' },
+            redirect: '/personal-center/manage/content/all'
+          },
+          {
+            path: 'comment',
+            name: 'personal-content',
+            component: () => import('@/views/topic/index'),
+            meta: { title: '评论管理', icon: 'topic' }
+          }
+        ]
+      }
+    ]
+  },
+
+  {
+    path: '/personal-center/manage/content',
+    name: 'personal-center-content-tap',
+    component: PersonalCenter,
+    hidden: true,
+    children: [
+      {
+        path: 'all',
+        name: 'personal-center-content-all',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        hidden: true
+      },
+      {
+        path: 'article',
+        name: 'personal-center-content-article',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        hidden: true
+      },
+      {
+        path: 'topic',
+        name: 'personal-center-content-topic',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        hidden: true
+      },
+      {
+        path: 'discuss',
+        name: 'personal-center-content-discuss',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        hidden: true
+      },
+      {
+        path: 'comment',
+        name: 'personal-center-content-comment',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        hidden: true
+      }
+    ]
+  },
 
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }

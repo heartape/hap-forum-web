@@ -11,9 +11,7 @@
         :collapse-transition="true"
         mode="vertical"
       >
-        <div v-for="route in routes" :key="route.name">
-          <sidebar-item v-if="route.path.indexOf('/personal-center') !== 0" :item="route" :base-path="route.path" />
-        </div>
+        <sidebar-item v-for="route in routes" :key="route.name" :item="route" :base-path="'/personal-center/' + route.path" />
       </el-menu>
     </el-scrollbar>
   </div>
@@ -27,7 +25,12 @@ export default {
   components: { SidebarItem },
   computed: {
     routes() {
-      return this.$router.options.routes
+      for (const route of this.$router.options.routes) {
+        if (route.path.indexOf('/personal-center') === 0) {
+          return route.children
+        }
+      }
+      return []
     },
     activeMenu() {
       const route = this.$route
