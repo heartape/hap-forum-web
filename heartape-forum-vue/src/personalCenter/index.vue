@@ -1,8 +1,6 @@
 <template>
   <div class="personal-center">
-    <div class="head-container">
-      <navbar />
-    </div>
+    <navbar />
     <div class="personal-center-main-container">
       <sidebar class="sidebar-container personal-center-sidebar-container" />
       <app-main class="personal-center-in-main-container" />

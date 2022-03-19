@@ -1,9 +1,7 @@
 <template>
   <!-- 富文本 -->
   <div>
-    <div class="head-container">
-      <navbar />
-    </div>
+    <navbar />
     <div class="knowledge-publish-container">
       <el-input
         v-model="knowledge.title"

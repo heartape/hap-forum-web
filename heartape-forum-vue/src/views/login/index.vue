@@ -50,17 +50,14 @@
         <el-button class="oauth-login-button" type="primary" style="background-color: #a6e236" @click="qqLogin">qq</el-button>
       </el-form-item>
     </el-form>
-    <footer-bar />
   </div>
 </template>
 
 <script>
 import { validUsername } from '@/utils/validate'
-import FooterBar from '@/layout/components/FooterBar'
 
 export default {
   name: 'Login',
-  components: { FooterBar },
   data() {
     const validateUsername = (rule, value, callback) => {
       if (!validUsername(value)) {

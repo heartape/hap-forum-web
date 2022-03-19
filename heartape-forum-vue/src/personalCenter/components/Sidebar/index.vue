@@ -39,6 +39,9 @@ export default {
       if (meta.activeMenu) {
         return meta.activeMenu
       }
+      if (meta.categoryPath) {
+        return path.substring(0, path.lastIndexOf('/'))
+      }
       return path
     },
     variables() {

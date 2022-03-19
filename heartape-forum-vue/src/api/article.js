@@ -63,6 +63,14 @@ export function articleDetail(articleId) {
   })
 }
 
+export function removeArticle(articleId) {
+  return request({
+    url: '/article/' + articleId,
+    method: 'delete',
+    params: { articleId }
+  })
+}
+
 export function likeArticle(articleId) {
   return request({
     url: '/article/' + articleId + '/like',
@@ -119,5 +127,21 @@ export function disLikeComment(commentId) {
   return request({
     url: '/article/comment/' + commentId + '/dislike',
     method: 'put'
+  })
+}
+
+export function removeArticleComment(commentId) {
+  return request({
+    url: '/article/comment',
+    method: 'delete',
+    params: { commentId }
+  })
+}
+
+export function removeArticleCommentChild(commentId) {
+  return request({
+    url: '/article/comment/child',
+    method: 'delete',
+    params: { commentId }
   })
 }

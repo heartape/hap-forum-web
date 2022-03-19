@@ -1,5 +1,5 @@
 <template>
-  <div class="content-list-container">
+  <div class="comment-list-container">
     <el-date-picker
       v-model="dateBetween"
       type="daterange"
@@ -17,11 +17,8 @@
         <h3 class="title" @click.native="contentDetail(item)">{{ item.title }}</h3>
         <span class="content" @click.native="contentDetail(item)">{{ item.content }}</span>
         <div class="function-menu">
-          <span class="data">{{ item.reader }} 阅读</span>
-          <span class="data">{{ item.reader }} 点赞</span>
-          <span class="data">{{ item.reader }} 评论</span>
           <time class="data">{{ item.createdTime }}</time>
-          <el-button class="function-menu-button" size="mini" type="danger" @click="removeContent(item)">删除</el-button>
+          <el-button class="function-menu-button" size="mini" type="danger" @click="removeContentComment(item)">删除</el-button>
         </div>
       </el-card>
     </el-row>
@@ -38,13 +35,13 @@
 </template>
 
 <script>
-import { contentAll, contentArticle, contentComment, contentDiscuss, contentTopic } from '@/api/manage'
+import { commentAll, commentArticle, commentComment, commentDiscuss } from '@/api/manage'
 import { error } from '@/utils'
-import { removeArticle, removeArticleComment, removeArticleCommentChild } from '@/api/article'
-import { removeDiscussComment, removeDiscuss, removeTopic, removeDiscussCommentChild } from '@/api/topic'
+import { removeArticleComment, removeArticleCommentChild } from '@/api/article'
+import { removeDiscussComment, removeDiscussCommentChild } from '@/api/topic'
 
 export default {
-  name: 'ContentList',
+  name: 'CommentList',
   data() {
     return {
       content: {
@@ -115,15 +112,13 @@ export default {
       let request
       // 根据
       if (tab === 'all') {
-        request = contentAll(params)
+        request = commentAll(params)
       } else if (tab === 'article') {
-        request = contentArticle(params)
-      } else if (tab === 'topic') {
-        request = contentTopic(params)
+        request = commentArticle(params)
       } else if (tab === 'discuss') {
-        request = contentDiscuss(params)
+        request = commentDiscuss(params)
       } else if (tab === 'comment') {
-        request = contentComment(params)
+        request = commentComment(params)
       }
       request.then(res => {
         this.content = res.data
@@ -138,19 +133,21 @@ export default {
             {
               articleId: '710859085800538112',
               title: '关于俄乌冲突的分析',
-              content: '2022年2月23日，乌克兰议会批准在全国实施紧急状态。2月24日，俄罗斯总统普京已决定在顿巴斯地区进行特别军事行动；当日，俄军已登陆乌克兰敖德萨。',
+              content: '一定要消灭亚速营',
               createdTime: '2022-03-16 22:20:12',
               mainType: 'article',
-              type: 'article',
+              targetType: 'article',
+              targetId: '710859085800538114',
               reader: 1
             },
             {
               articleId: '710859085800538113',
               title: '关于俄乌冲突的分析',
-              content: '2022年2月23日，乌克兰议会批准在全国实施紧急状态。2月24日，俄罗斯总统普京已决定在顿巴斯地区进行特别军事行动；当日，俄军已登陆乌克兰敖德萨。',
+              content: '一定要消灭亚速营',
               createdTime: '2022-03-16 22:20:12',
               mainType: 'article',
-              type: 'article',
+              targetType: 'article',
+              targetId: '710859085800538115',
               reader: 1
             }
           ]
@@ -163,29 +160,17 @@ export default {
       this.$router.push('/' + mainType + '/' + id)
     },
     removeContent(item) {
-      const type = item.type
+      const targetType = item.targetType
+      const targetId = item.targetId
       let request
-      if (type === 'article') {
-        const id = item.articleId
-        request = removeArticle(id)
-      } else if (type === 'topic') {
-        const id = item.topicId
-        request = removeTopic(id)
-      } else if (type === 'discuss') {
-        const id = item.discussId
-        request = removeDiscuss(id)
-      } else if (type === 'articleComment') {
-        const id = item.commentId
-        request = removeArticleComment(id)
-      } else if (type === 'discussComment') {
-        const id = item.commentId
-        request = removeDiscussComment(id)
-      } else if (type === 'articleCommentChild') {
-        const id = item.commentId
-        request = removeArticleCommentChild(id)
-      } else if (type === 'discussCommentChild') {
-        const id = item.commentId
-        request = removeDiscussCommentChild(id)
+      if (targetType === 'article') {
+        request = removeArticleComment(targetId)
+      } else if (targetType === 'discuss') {
+        request = removeDiscussComment(targetId)
+      } else if (targetType === 'articleComment') {
+        request = removeArticleCommentChild(targetId)
+      } else if (targetType === 'discussComment') {
+        request = removeDiscussCommentChild(targetId)
       }
       request.then(() => this.handleLoadList).catch(err => {
         error(err)
@@ -199,14 +184,15 @@ export default {
 .box-card {
   padding: 20px 10px;
   width: 100%;
-  height: 180px;
+  height: 140px;
   background-color: #ffffff;
   .title {
     display: block;
     margin: 0 10px 10px;
     width: 100%;
-    height: 20px;
-    line-height: 20px;
+    height: 18px;
+    font-size: 16px;
+    line-height: 18px;
     overflow: hidden;
   }
 
@@ -214,8 +200,8 @@ export default {
     display: block;
     margin-left: 10px;
     width: 100%;
-    height: 60px;
-    font-size: 18px;
+    height: 30px;
+    font-size: 16px;
     line-height: 30px;
     overflow: hidden;
   }
@@ -224,7 +210,7 @@ export default {
     width: 100%;
     height: 30px;
     padding-right: 60px;
-    margin-top: 20px;
+    margin-top: 10px;
     line-height: 30px;
 
     .data {

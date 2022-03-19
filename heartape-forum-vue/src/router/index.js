@@ -237,11 +237,12 @@ export const constantRoutes = [
     path: '/personal-center',
     component: PersonalCenter,
     name: 'personal-center',
+    redirect: '/personal-center/home',
     children: [
       {
         path: 'home',
         name: 'personal-center-home',
-        component: () => import('@/views/topic/index'),
+        component: () => import('@/views/personalCenter'),
         meta: { title: '主页', icon: 'topic' }
       },
       {
@@ -258,9 +259,10 @@ export const constantRoutes = [
           },
           {
             path: 'comment',
-            name: 'personal-content',
-            component: () => import('@/views/topic/index'),
-            meta: { title: '评论管理', icon: 'topic' }
+            name: 'personal-center-comment',
+            component: () => import('@/views/personalCenter/CommentManage'),
+            meta: { title: '评论管理', icon: 'topic' },
+            redirect: '/personal-center/manage/comment/all'
           }
         ]
       }
@@ -277,30 +279,79 @@ export const constantRoutes = [
         path: 'all',
         name: 'personal-center-content-all',
         component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
         hidden: true
       },
       {
         path: 'article',
         name: 'personal-center-content-article',
         component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
         hidden: true
       },
       {
         path: 'topic',
         name: 'personal-center-content-topic',
         component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
         hidden: true
       },
       {
         path: 'discuss',
         name: 'personal-center-content-discuss',
         component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
         hidden: true
       },
       {
         path: 'comment',
         name: 'personal-center-content-comment',
         component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      }
+    ]
+  },
+
+  {
+    path: '/personal-center/manage/comment',
+    name: 'personal-center-comment-tap',
+    component: PersonalCenter,
+    hidden: true,
+    children: [
+      {
+        path: 'all',
+        name: 'personal-center-comment-all',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'article',
+        name: 'personal-center-comment-article',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'topic',
+        name: 'personal-center-comment-topic',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'discuss',
+        name: 'personal-center-comment-discuss',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'comment',
+        name: 'personal-center-comment-comment',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
         hidden: true
       }
     ]

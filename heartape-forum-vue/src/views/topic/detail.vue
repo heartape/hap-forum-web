@@ -84,6 +84,7 @@ export default {
       topicId: 1,
       title: 'title',
       // 长度分为long和short
+      // todo:改为isLong
       length: 'long',
       simpleDescription: 'description',
       description: 'description description description description description description description description description description description description description description description description description description description description description description description description description description description description description',

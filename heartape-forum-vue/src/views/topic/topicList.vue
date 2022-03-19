@@ -91,7 +91,7 @@ export default {
       const scrollTop = document.documentElement.scrollTop
       const clientHeight = document.documentElement.clientHeight
       const scrollHeight = document.documentElement.scrollHeight
-      if (scrollTop + clientHeight >= scrollHeight - 500) {
+      if (scrollTop + clientHeight >= scrollHeight - 100) {
         this.getTopic()
       }
     },

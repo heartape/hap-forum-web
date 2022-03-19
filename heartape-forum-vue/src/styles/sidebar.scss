@@ -1,17 +1,14 @@
 #app {
 
-  .head-container {
-    width: 100%;
-    min-width: 1000px;
-    height: 64px;
+  .navbar-container {
     background-color: $menuBg;
-    position: relative;
     box-shadow: 0 1px 4px rgba(0,21,41,.08);
   }
 
   .main-container {
-    width: 1200px;
     position: relative;
+    width: 1200px;
+    min-height: calc(100vh - 74px);
     margin: 0 auto;
     overflow: hidden;
   }
@@ -19,7 +16,8 @@
   .personal-center-main-container {
     position: relative;
     padding: 10px;
-    width: 100%;
+    margin: 0 auto;
+    width: 1600px;
     min-height: calc(100vh - 74px);
     min-width: 1200px;
   }
@@ -27,6 +25,7 @@
   .in-main-container {
     position: relative;
     left: 160px;
+    min-height: calc(100vh - 74px);
     margin-top: 10px;
     background-color: $menuBg;
   }
@@ -108,7 +107,6 @@
   }
 
   .personal-center-sidebar-container {
-    //width: 200px !important;
     margin-top: 0;
   }
 

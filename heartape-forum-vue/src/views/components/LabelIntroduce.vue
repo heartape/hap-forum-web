@@ -111,6 +111,7 @@ export default {
         // this.labelIsEmpty = true
         this.label = {
           labelId: 100,
+          // todo:属性改为overlength
           type: 'long',
           name: 'name',
           introduce: 'introduce https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',

@@ -1,5 +1,5 @@
 <template>
-  <div class="head-container">
+  <div class="news-publish-container">
     新闻发布
   </div>
 </template>

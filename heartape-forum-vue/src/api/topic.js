@@ -63,10 +63,26 @@ export function topicDetail(topicId) {
   })
 }
 
+export function removeTopic(topicId) {
+  return request({
+    url: '/topic',
+    method: 'delete',
+    params: { topicId }
+  })
+}
+
 export function likeTopic(topicId) {
   return request({
     url: '/topic/' + topicId + '/like',
     method: 'put'
+  })
+}
+
+export function removeDiscuss(discussId) {
+  return request({
+    url: '/topic/discuss',
+    method: 'delete',
+    params: { discussId }
   })
 }
 
@@ -111,6 +127,22 @@ export function showChildren(commentId, page) {
     url: '/topic/discuss/comment/' + commentId,
     method: 'get',
     params: { page }
+  })
+}
+
+export function removeDiscussComment(commentId) {
+  return request({
+    url: '/topic/discuss/comment',
+    method: 'delete',
+    params: { commentId }
+  })
+}
+
+export function removeDiscussCommentChild(commentId) {
+  return request({
+    url: '/topic/discuss/comment/child',
+    method: 'delete',
+    params: { commentId }
   })
 }
 

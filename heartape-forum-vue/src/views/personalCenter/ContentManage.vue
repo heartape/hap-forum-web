@@ -1,18 +1,16 @@
 <template>
   <div class="content-manage-container">
     <resource-tabs :menu="menu" />
-    <screening-conditions />
     <content-list />
   </div>
 </template>
 
 <script>
 import ResourceTabs from '@/views/components/ResourceTabs'
-import ScreeningConditions from '@/views/components/ScreeningConditions'
 import ContentList from '@/views/personalCenter/ContentList'
 export default {
   name: 'ContentManage',
-  components: { ContentList, ScreeningConditions, ResourceTabs },
+  components: { ContentList, ResourceTabs },
   data() {
     return {
       menu: [
@@ -23,11 +21,6 @@ export default {
         { index: '5', path: '/personal-center/manage/content/comment', name: '评论' }
       ]
     }
-  },
-  mounted() {
-    // console.log(this.$route.path)
-  },
-  methods: {
   }
 }
 </script>
