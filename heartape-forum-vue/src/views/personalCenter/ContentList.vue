@@ -49,6 +49,7 @@ export default {
     return {
       content: {
         pageNum: 0,
+        pageSize: 10,
         list: []
       },
       tab: '',
@@ -111,6 +112,7 @@ export default {
         params.endTime = 0
       }
       params.pageNum = this.content.pageNum
+      params.pageSize = this.content.pageSize
       const tab = this.tab
       let request
       // 根据
