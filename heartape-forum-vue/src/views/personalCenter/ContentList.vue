@@ -9,17 +9,17 @@
       start-placeholder="开始日期"
       end-placeholder="结束日期"
       :picker-options="pickerOptions"
-      style="margin: 10px 0 10px calc(50vh + 300px)"
+      style="margin: 10px 0 10px calc(100vw - 800px)"
       @change="handleLoadList"
     />
     <el-row v-for="(item, index) in content.list" :key="index">
       <el-card class="box-card" shadow="hover" :body-style="{ padding: '0px' }">
-        <h3 class="title" @click.native="contentDetail(item)">{{ item.title }}</h3>
-        <span class="content" @click.native="contentDetail(item)">{{ item.content }}</span>
+        <h3 class="title" @click="contentDetail(item)">{{ item.title }}</h3>
+        <span class="content" @click="contentDetail(item)">{{ item.content }}</span>
         <div class="function-menu">
-          <span class="data">{{ item.reader }} 阅读</span>
-          <span class="data">{{ item.reader }} 点赞</span>
-          <span class="data">{{ item.reader }} 评论</span>
+          <span class="data">{{ item.readerNumber }} 阅读</span>
+          <span class="data">{{ item.likeNumber }} 点赞</span>
+          <span class="data">{{ item.commentNumber }} 评论</span>
           <time class="data">{{ item.createdTime }}</time>
           <el-button class="function-menu-button" size="mini" type="danger" @click="removeContent(item)">删除</el-button>
         </div>
@@ -91,17 +91,6 @@ export default {
     this.handleLoadList()
   },
   methods: {
-    getMainTypeId(item) {
-      // 主体类型
-      const mainType = item.mainType
-      let id
-      if (mainType === 'article') {
-        id = item.articleId
-      } else if (mainType === 'topic') {
-        id = item.topicId
-      }
-      return id
-    },
     handleLoadList() {
       const params = {}
       if (this.dateBetween !== null) {
@@ -138,22 +127,28 @@ export default {
           total: 67,
           list: [
             {
-              articleId: '710859085800538112',
+              id: '710859085800538112',
+              mainId: '710859085800538112',
               title: '关于俄乌冲突的分析',
-              content: '2022年2月23日，乌克兰议会批准在全国实施紧急状态。2月24日，俄罗斯总统普京已决定在顿巴斯地区进行特别军事行动；当日，俄军已登陆乌克兰敖德萨。',
+              content: '2022年2月23日，乌克兰议会批准在全国实施紧急状态。2月24日，俄罗斯总统普京已决定在顿巴斯地区进行特别军事行动；当日，俄军已登陆乌克兰敖德萨。俄罗斯总统普京已决定在顿巴斯地区进行特别军事行动；当日，俄军已登陆乌克兰敖德萨',
               createdTime: '2022-03-16 22:20:12',
               mainType: 'article',
               type: 'article',
-              reader: 1
+              readerNumber: 1,
+              likeNumber: 1,
+              commentNumber: 1
             },
             {
-              articleId: '710859085800538113',
+              id: '710859085800538112',
+              mainId: '710859085800538112',
               title: '关于俄乌冲突的分析',
               content: '2022年2月23日，乌克兰议会批准在全国实施紧急状态。2月24日，俄罗斯总统普京已决定在顿巴斯地区进行特别军事行动；当日，俄军已登陆乌克兰敖德萨。',
               createdTime: '2022-03-16 22:20:12',
               mainType: 'article',
               type: 'article',
-              reader: 1
+              readerNumber: 1,
+              likeNumber: 1,
+              commentNumber: 1
             }
           ]
         }
@@ -161,32 +156,26 @@ export default {
     },
     contentDetail(item) {
       const mainType = item.mainType
-      const id = this.getMainTypeId(item)
+      const id = item.mainId
       this.$router.push('/' + mainType + '/' + id)
     },
     removeContent(item) {
       const type = item.type
+      const id = item.id
       let request
       if (type === 'article') {
-        const id = item.articleId
         request = removeArticle(id)
       } else if (type === 'topic') {
-        const id = item.topicId
         request = removeTopic(id)
       } else if (type === 'discuss') {
-        const id = item.discussId
         request = removeDiscuss(id)
       } else if (type === 'articleComment') {
-        const id = item.commentId
         request = removeArticleComment(id)
       } else if (type === 'discussComment') {
-        const id = item.commentId
         request = removeDiscussComment(id)
       } else if (type === 'articleCommentChild') {
-        const id = item.commentId
         request = removeArticleCommentChild(id)
       } else if (type === 'discussCommentChild') {
-        const id = item.commentId
         request = removeDiscussCommentChild(id)
       }
       request.then(() => this.handleLoadList).catch(err => {
@@ -201,24 +190,23 @@ export default {
 .box-card {
   padding: 20px 10px;
   width: 100%;
-  height: 180px;
   background-color: #ffffff;
   .title {
     display: block;
     margin: 0 10px 10px;
     width: 100%;
     height: 20px;
+    font-size: 16px;
     line-height: 20px;
     overflow: hidden;
   }
 
   .content {
     display: block;
-    margin-left: 10px;
+    padding: 0 10px;
     width: 100%;
-    height: 60px;
-    font-size: 18px;
-    line-height: 30px;
+    font-size: 14px;
+    line-height: 24px;
     overflow: hidden;
   }
 
@@ -226,7 +214,7 @@ export default {
     width: 100%;
     height: 30px;
     padding-right: 60px;
-    margin-top: 20px;
+    margin-top: 10px;
     line-height: 30px;
 
     .data {
@@ -235,6 +223,7 @@ export default {
       height: 30px;
       min-width: 60px;
       text-align: center;
+      font-size: 14px;
     }
     .function-menu-button {
       float: right;

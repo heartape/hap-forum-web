@@ -15,13 +15,13 @@
             style="float: left;width: 30px; height: 30px; margin-right: 10px"
             fit="cover"
           />
-          <span class="comment-username">{{ commentItem.nickname }}</span>
+          <span class="comment-username username">{{ commentItem.nickname }}</span>
           <p>{{ commentItem.content }}</p>
           <div class="parent-btn">
-            <el-button type="primary" plain size="small" @click="handLikeComment(commentItem)">赞同 {{ commentItem.like }}</el-button>
-            <el-button type="primary" plain size="small" @click="handDisLikeComment(commentItem)">踩 {{ commentItem.dislike }}</el-button>
-            <el-button class="discuss-comment-count" type="primary" plain size="small" @click="commentItem.childrenShow = !commentItem.childrenShow">{{ commentItem.children.total }} 个评论</el-button>
-            <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="commentItem.showInput = !commentItem.showInput">回复</el-button>
+            <el-button type="primary" plain size="mini" @click="handLikeComment(commentItem)">赞同 {{ commentItem.like }}</el-button>
+            <el-button type="primary" plain size="mini" @click="handDisLikeComment(commentItem)">踩 {{ commentItem.dislike }}</el-button>
+            <el-button class="discuss-comment-count" type="primary" plain size="mini" @click="handCommentDetailShow(commentItem)">全部 {{ commentItem.children.total }} 个评论</el-button>
+            <el-button type="text" size="mini" icon="el-icon-chat-dot-round" @click="commentItem.showInput = !commentItem.showInput">回复</el-button>
             <transition name="el-fade-in-linear">
               <el-input v-show="commentItem.showInput" v-model="commentItem.publishContent" class="publish-children-to-parent" placeholder="请输入评论">
                 <template slot="append">
@@ -31,7 +31,7 @@
             </transition>
           </div>
           <transition name="el-fade-in-linear">
-            <div v-show="commentItem.childrenShow" class="comment-children-container">
+            <div class="comment-children-container">
               <div v-for="childrenItem in commentItem.children.list.slice(0,2)" :key="childrenItem.commentId" class="children-item-container">
                 <el-image
                   :src="childrenItem.avatar"
@@ -39,12 +39,11 @@
                   style="float: left;width: 30px; height: 30px; margin-right: 10px"
                   fit="cover"
                 />
-                <span class="children-username">{{ childrenItem.nickname }}</span>
-                <p v-html="childrenItem.target" />
+                <span class="children-username username">{{ childrenItem.nickname }}</span>
                 <p v-text="childrenItem.content" />
-                <el-button type="primary" plain size="small" @click="handLikeComment(childrenItem)">赞同 {{ childrenItem.like }}</el-button>
-                <el-button type="primary" plain size="small" @click="handDisLikeComment(childrenItem)">踩 {{ childrenItem.dislike }}</el-button>
-                <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="childrenItem.showInput = !childrenItem.showInput">回复</el-button>
+                <el-button type="primary" plain size="mini" @click="handLikeComment(childrenItem)">赞同 {{ childrenItem.like }}</el-button>
+                <el-button type="primary" plain size="mini" @click="handDisLikeComment(childrenItem)">踩 {{ childrenItem.dislike }}</el-button>
+                <el-button type="text" size="mini" icon="el-icon-chat-dot-round" @click="childrenItem.showInput = !childrenItem.showInput">回复</el-button>
                 <transition name="el-fade-in-linear">
                   <el-input v-show="childrenItem.showInput" v-model="childrenItem.publishContent" class="publish-children-to-children" placeholder="请输入评论">
                     <template slot="append">
@@ -53,13 +52,6 @@
                   </el-input>
                 </transition>
               </div>
-              <el-button
-                v-if="commentItem.children.total > 2"
-                style="margin-left: 30px; padding: 0; font-size: 14px"
-                type="text"
-                size="small"
-                @click="handCommentDetailShow(commentItem)"
-              >查看全部</el-button>
               <el-dialog
                 title="全部评论"
                 :visible="commentChoose === commentItem.commentId"
@@ -122,7 +114,6 @@ export default {
   },
   mounted() {
     this.comment.list.map(parent => {
-      this.$set(parent, 'childrenShow', false)
       this.$set(parent, 'showInput', false)
       this.$set(parent, 'publishContent', '')
       parent.children.list.map(child => {
@@ -164,8 +155,8 @@ export default {
         this.commentChoose = comment.commentId
       }
     },
-    handCommentDetailPage(commentId, page, callback) {
-      this.$emit('handCommentDetailPage', commentId, page, value => {
+    handCommentDetailPage(commentId, pageNum, pageSize, callback) {
+      this.$emit('handCommentDetailPage', commentId, pageNum, pageSize, value => {
         callback(value)
       })
     },
@@ -193,6 +184,10 @@ export default {
     .comment-container-item {
       padding: 10px 10px 0 10px;
       border-bottom: #b5ccf3 solid 1px;
+      .username {
+        position: relative;
+        top: 5px
+      }
       .parent-btn {
         margin-bottom: 10px;
         .publish-children-to-parent {
@@ -214,6 +209,12 @@ export default {
     .el-button {
       font-size: 14px;
     }
+  }
+  p {
+    padding: 5px 40px;
+    font-size: 14px;
+    line-height: 18px;
+    margin-top: 15px;
   }
 }
 </style>

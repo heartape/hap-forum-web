@@ -12,9 +12,11 @@
           style="width: 40px; height: 40px;"
           fit="cover"
         />
-        <span style="position: relative; bottom: 15px; left: 10px">{{ article.nickname }}</span>
+        <span style="position: relative; bottom: 15px; left: 10px">
+          {{ article.nickname }}
+          <span style="margin-left: 20px; font-size: 14px">{{ article.profile }}</span>
+        </span>
       </span>
-      <p style="margin: 0 10px; font-size: 14px">{{ article.profile }}</p>
     </div>
     <div class="editor-content" v-html="article.content" />
     <div class="publish-time">发布于: {{ article.publishTime }}</div>
@@ -63,11 +65,11 @@ export default {
           allComment: 5,
           total: 2, current: 1, size: 10, pages: 1,
           list: [
-            { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
+            { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
               children: {
                 total: 4, current: 1, size: 2, pages: 2,
                 list: [
-                  { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+                  { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
                   { commentId: 11, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
                   { commentId: 12, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
                   { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
@@ -162,7 +164,7 @@ export default {
         // todo:前后端对接后删除
         const data = { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
           children: {
-            total: 4, current: 1, size: 2, pages: 2,
+            total: 14, pageNum: 1, pageSize: 10, pages: 2,
             list: [
               { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
               { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
@@ -179,8 +181,8 @@ export default {
         callback(data)
       })
     },
-    handCommentDetailPage(commentId, page, callback) {
-      loadChildren(commentId, page).then(res => {
+    handCommentDetailPage(commentId, pageNum, pageSize, callback) {
+      loadChildren(commentId, pageNum, pageSize).then(res => {
         res.data.list.map(child => {
           this.$set(child, 'showInput', false)
           this.$set(child, 'publishContent', '')
@@ -190,10 +192,10 @@ export default {
         error(err)
         // todo:前后端对接后删除
         const data = {
-          total: 4, current: 2, size: 2, pages: 2,
+          total: 14, pageNum: 1, pageSize: 10, pages: 2,
           list: [
-            { commentId: 12, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-            { commentId: 15, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
+            { commentId: 12, uid: 1, nickname: '灰太狼12', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+            { commentId: 15, uid: 1, nickname: '灰太狼15', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
           ]
         }
         data.list.map(child => {
@@ -213,12 +215,12 @@ export default {
   .article-label-container {
     margin-bottom: 20px;
   }
-}
-.editor-content{
-  margin-top: 20px;
-}
-.publish-time {
-  margin: 20px 0;
-  color: #74787f;
+  .editor-content{
+    margin-top: 20px;
+  }
+  .publish-time {
+    margin: 20px 0;
+    color: #74787f;
+  }
 }
 </style>

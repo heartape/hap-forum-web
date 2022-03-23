@@ -30,8 +30,10 @@
               style="float: left;width: 30px; height: 30px; margin-right: 10px"
               fit="cover"
             />
-            <span class="discuss-username">{{ discussItem.nickname }}</span>
-            <p>introduce</p>
+            <span class="discuss-username">
+              {{ discussItem.nickname }}
+              <span style="margin-left: 20px; font-size: 14px">{{ discussItem.profile }}</span>
+            </span>
           </div>
           <p>{{ discussItem.content }}</p>
           <div class="discuss-menu">
@@ -100,7 +102,7 @@ export default {
         page: 1,
         size: 10,
         list: [
-          { discussId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'discuss', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
+          { discussId: 1, uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
             comment: {
               allComment: 374,
               total: 112,
@@ -321,6 +323,10 @@ export default {
         width: 720px;
         padding-top: 20px;
         border-top: #e3e3e3 1px solid;
+        p {
+          margin: 30px 0 20px 0;
+          line-height: 20px;
+        }
         .discuss-creator-container {
           .discuss-username {
             position: relative;

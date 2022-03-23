@@ -1,10 +1,5 @@
 <template>
-  <el-col
-    v-infinite-scroll="loadChildrenPage"
-    infinite-scroll-distance="50px"
-    class="comment-detail-container"
-    style="overflow:auto"
-  >
+  <div class="comment-detail-container">
     <div class="comment-parent-container">
       <el-image
         :src="comment.avatar"
@@ -45,8 +40,17 @@
           </template>
         </el-input>
       </div>
+      <el-pagination
+        :current-page.sync="comment.children.pageNum"
+        :page-size="comment.children.pageSize"
+        :total="comment.children.total"
+        background
+        style="text-align: center; margin-top: 20px"
+        layout="total, prev, pager, next"
+        @current-change="loadChildrenPage"
+      />
     </div>
-  </el-col>
+  </div>
 </template>
 
 <script>
@@ -70,14 +74,10 @@ export default {
     },
     loadChildrenPage() {
       const commentId = this.comment.commentId
-      const current = this.comment.children.current
-      const oldList = this.comment.children.list
-      if (current >= this.comment.children.pages) {
-        return
-      }
-      this.$emit('handCommentDetailPage', commentId, current + 1, value => {
-        this.comment.children.list = oldList.concat(value.list)
-        this.comment.children.current = value.current
+      const pageNum = this.comment.children.pageNum
+      const pageSize = this.comment.children.pageSize
+      this.$emit('handCommentDetailPage', commentId, pageNum + 1, pageSize, value => {
+        this.comment.children = value
       })
     },
     handlePublishChildrenToParent(commentId, publishContent) {

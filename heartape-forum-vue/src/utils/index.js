@@ -4,7 +4,8 @@ import { Loading, Notification } from 'element-ui'
 export function error(message) {
   Notification.error({
     title: '请求失败',
-    message: message
+    message: message,
+    offset: 70
   })
 }
 

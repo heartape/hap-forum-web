@@ -9,13 +9,13 @@
       start-placeholder="开始日期"
       end-placeholder="结束日期"
       :picker-options="pickerOptions"
-      style="margin: 10px 0 10px calc(50vh + 300px)"
+      style="margin: 10px 0 10px calc(100vw - 800px)"
       @change="handleLoadList"
     />
     <el-row v-for="(item, index) in content.list" :key="index">
       <el-card class="box-card" shadow="hover" :body-style="{ padding: '0px' }">
-        <h3 class="title" @click.native="contentDetail(item)">{{ item.title }}</h3>
-        <span class="content" @click.native="contentDetail(item)">{{ item.content }}</span>
+        <h3 class="title" @click="contentDetail(item)">{{ item.title }}</h3>
+        <span class="content" @click="contentDetail(item)">{{ item.content }}</span>
         <div class="function-menu">
           <time class="data">{{ item.createdTime }}</time>
           <el-button class="function-menu-button" size="mini" type="danger" @click="removeContentComment(item)">删除</el-button>
@@ -133,7 +133,7 @@ export default {
             {
               articleId: '710859085800538112',
               title: '关于俄乌冲突的分析',
-              content: '一定要消灭亚速营',
+              content: '一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营',
               createdTime: '2022-03-16 22:20:12',
               mainType: 'article',
               targetType: 'article',
@@ -184,7 +184,6 @@ export default {
 .box-card {
   padding: 20px 10px;
   width: 100%;
-  height: 140px;
   background-color: #ffffff;
   .title {
     display: block;
@@ -198,11 +197,10 @@ export default {
 
   .content {
     display: block;
-    margin-left: 10px;
+    padding: 0 10px;
     width: 100%;
-    height: 30px;
-    font-size: 16px;
-    line-height: 30px;
+    font-size: 14px;
+    line-height: 24px;
     overflow: hidden;
   }
 
