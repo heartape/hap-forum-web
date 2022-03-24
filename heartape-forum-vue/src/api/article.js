@@ -100,19 +100,13 @@ export function publishParent(articleId, comment) {
     params: { comment }
   })
 }
-// init方法需要父评论信息
-export function initCommentDetail(commentId) {
-  return request({
-    url: '/article/comment/parent/' + commentId + '/init/',
-    method: 'get'
-  })
-}
-// load方法只需要子评论
-export function loadChildren(commentId, page) {
+
+// 评论详情页面
+export function loadChildren(commentId, pageNum, pageSize) {
   return request({
     url: '/article/comment/parent/' + commentId + '/load/',
     method: 'get',
-    params: { page }
+    params: { pageNum, pageSize }
   })
 }
 

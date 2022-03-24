@@ -10,8 +10,8 @@
       <span class="comment-username">{{ comment.nickname }}</span>
       <div class="comment-content">{{ comment.content }}</div>
       <div class="parent-btn">
-        <el-button type="primary" plain size="small" @click="handLikeComment(comment)">赞同 {{ comment.like }}</el-button>
-        <el-button type="primary" plain size="small" @click="handDisLikeComment(comment)">踩 {{ comment.dislike }}</el-button>
+        <el-button type="primary" plain size="mini" @click="handLikeComment(comment)">赞同 {{ comment.like }}</el-button>
+        <el-button type="primary" plain size="mini" @click="handDisLikeComment(comment)">踩 {{ comment.dislike }}</el-button>
         <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="comment.showInput = !comment.showInput">回复</el-button>
         <el-input v-show="comment.showInput" v-model="comment.publishContent" class="publish-commit-input" placeholder="请输入评论">
           <template slot="append">
@@ -31,8 +31,8 @@
         />
         <span class="comment-username">{{ childrenItem.nickname }}</span>
         <div class="comment-content" v-text="childrenItem.content" />
-        <el-button type="primary" plain size="small" @click="handLikeComment(childrenItem)">赞同 {{ childrenItem.like }}</el-button>
-        <el-button type="primary" plain size="small" @click="handDisLikeComment(childrenItem)">踩 {{ childrenItem.dislike }}</el-button>
+        <el-button type="primary" plain size="mini" @click="handLikeComment(childrenItem)">赞同 {{ childrenItem.like }}</el-button>
+        <el-button type="primary" plain size="mini" @click="handDisLikeComment(childrenItem)">踩 {{ childrenItem.dislike }}</el-button>
         <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="childrenItem.showInput = !childrenItem.showInput">回复</el-button>
         <el-input v-show="childrenItem.showInput" v-model="childrenItem.publishContent" class="publish-commit-input" placeholder="请输入评论">
           <template slot="append">
@@ -65,6 +65,11 @@ export default {
       }
     }
   },
+  mounted() {
+    this.comment.children.pageNum = 0
+    this.comment.children.pageSize = 10
+    this.loadChildrenPage()
+  },
   methods: {
     handLikeComment(comment) {
       this.$emit('handLikeComment', comment)
@@ -77,6 +82,10 @@ export default {
       const pageNum = this.comment.children.pageNum
       const pageSize = this.comment.children.pageSize
       this.$emit('handCommentDetailPage', commentId, pageNum + 1, pageSize, value => {
+        value.list.map(child => {
+          this.$set(child, 'showInput', false)
+          this.$set(child, 'publishContent', '')
+        })
         this.comment.children = value
       })
     },
@@ -115,12 +124,12 @@ export default {
   }
 }
 .comment-username {
-  font-size: 18px;
+  font-size: 16px;
   line-height: 30px;
 }
 .comment-content {
-  padding: 10px 0;
-  font-size: 15px;
+  padding: 5px 40px;
+  font-size: 14px;
   line-height: 24px;
 }
 .publish-commit-input {

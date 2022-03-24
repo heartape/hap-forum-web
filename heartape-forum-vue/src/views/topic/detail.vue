@@ -7,7 +7,7 @@
         </el-row>
         <h2>{{ topic.title }}</h2>
         <p>{{ topic.simpleDescription }}
-          <el-button v-if="topic.length === 'long'" type="text" class="show-description-btn" @click="showLong = !showLong">... 查看全部</el-button>
+          <el-button v-if="topic.isLong === true" type="text" class="show-description-btn" @click="showLong = !showLong">... 查看全部</el-button>
           <el-dialog
             :title="topic.name"
             :visible.sync="showLong"
@@ -19,9 +19,9 @@
         <el-button class="button" type="primary" plain size="small" @click="likeTopic(topic.topicId, topic)">点赞:{{ topic.like }}</el-button>
       </el-card>
     </div>
-    <div class="discuss-comment-number-container">{{ topic.discuss.total }} 个回答</div>
+    <div class="discuss-comment-number-container">{{ discuss.total }} 个回答</div>
     <div class="topic-discuss-container">
-      <div v-for="discussItem in topic.discuss.list" :key="discussItem.discussId" class="discuss-item-container">
+      <div v-for="(discussItem, index) in discuss.list" :key="discussItem.discussId" class="discuss-item-container">
         <div class="discuss-item-content-container">
           <div class="discuss-creator-container">
             <el-image
@@ -39,15 +39,15 @@
           <div class="discuss-menu">
             <el-button type="primary" plain size="small" @click="likeDiscuss(discussItem.discussId, discussItem)">赞同 {{ discussItem.like }}</el-button>
             <el-button type="primary" plain size="small" @click="disLikeDiscuss(discussItem.discussId, discussItem)">踩 {{ discussItem.dislike }}</el-button>
-            <el-button class="discuss-comment-count" type="primary" plain size="small" @click="discussItem.parentShow = !discussItem.parentShow">{{ discussItem.comment.allComment }} 个评论</el-button>
+            <el-button class="discuss-comment-count" type="primary" plain size="small" @click="handleCommentShow(discussItem, index)">{{ discussItem.allComment }} 个评论</el-button>
           </div>
         </div>
         <comment
-          :comment="discussItem.comment"
+          ref="comment"
+          :all-comment="discussItem.allComment"
           :show="discussItem.parentShow"
-          @handCommentDetailInit="handCommentDetailInit"
           @handCommentDetailPage="handCommentDetailPage"
-          @handCommentPage="handCommentPage"
+          @handCommentPage="handCommentPage(arguments, discussItem.discussId)"
           @handPublishParent="handPublishParent"
           @handlePublishChildrenToParent="handlePublishChildrenToParent"
           @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
@@ -55,133 +55,93 @@
           @handDisLikeComment="handDisLikeComment"
         />
       </div>
+      <el-pagination
+        class="comment-pagination"
+        background
+        layout="prev, pager, next"
+        :total="discuss.total"
+        :page-size="discuss.pageSize"
+        :current-page="discuss.pageNum"
+        @current-change="handleDiscussPage"
+      />
     </div>
   </div>
 </template>
 
 <script>
-import { topicDetail, likeTopic, likeDiscuss, dislikeDiscuss, likeComment, disLikeComment, showComment } from '@/api/topic'
+import { topicDetail, likeTopic, loadDiscussPage, likeDiscuss, dislikeDiscuss, likeComment, disLikeComment, showComment, loadChildren } from '@/api/topic'
 import Comment from '@/views/components/Comment'
 import { error } from '@/utils'
-import { initCommentDetail, loadChildren } from '@/api/article'
 
 export default {
   components: { Comment },
   data() {
     return {
       topic: {},
+      discuss: {},
       showLong: false,
       discussShow: { 1: false },
       childrenLoading: false
     }
   },
   created() {
-    const topicId = this.$route.params.topicId
-    // 获取topic数据
-    topicDetail(topicId).then(res => {
-      this.topic = res.data
-    }).catch(err => error(err))
-    // todo:后端联调后删除
-    this.topic = {
-      topicId: 1,
-      title: 'title',
-      // 长度分为long和short
-      // todo:改为isLong
-      length: 'long',
-      simpleDescription: 'description',
-      description: 'description description description description description description description description description description description description description description description description description description description description description description description description description description description description description',
-      label: [
-        { labelId: 1, name: '编程' },
-        { labelId: 2, name: '计算机' }
-      ],
-      publishTime: '2021-12-11 19:10',
-      like: 100,
-      dislike: 100,
-      discuss: {
-        total: 14,
-        page: 1,
-        size: 10,
-        list: [
-          { discussId: 1, uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss喝了编程discuss', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-            comment: {
-              allComment: 374,
-              total: 112,
-              page: 2,
-              size: 10,
-              list: [
-                { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-                  children: {
-                    total: 32,
-                    page: 1,
-                    size: 10,
-                    list: [
-                      { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-                      { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-                    ]
-                  }
-                },
-                { commentId: 3, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-                  children: {
-                    total: 32,
-                    page: 1,
-                    size: 10,
-                    list: [
-                      { commentId: 4, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-                    ]
-                  }
-                }
-              ]
-            }
-          },
-          { discussId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'discuss', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-            comment: {
-              allComment: 374,
-              total: 112,
-              page: 2,
-              size: 10,
-              list: [
-                { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-                  children: {
-                    total: 32,
-                    page: 1,
-                    size: 10,
-                    list: [
-                      { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-                      { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-                    ]
-                  }
-                },
-                { commentId: 3, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-                  children: {
-                    total: 32,
-                    page: 1,
-                    size: 10,
-                    list: [
-                      { commentId: 4, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-                    ]
-                  }
-                }
-              ]
-            }
-          }
-        ]
-      }
-    }
-  },
-  mounted() {
-    // todo:后端联调后并入到topicDetail的then
-    // 创建父评论与子评论的展示状态对象
-    const discussList = this.topic.discuss.list
-    discussList.forEach(item => {
-      // 动态新增
-      this.$set(item, 'parentShow', false)
-      const commentList = item.comment.list
-      commentList.forEach(item => {
-        this.$set(item, 'childrenShow', false)
-      })
-    })
+    this.handleTopicDetail()
+    this.discuss.pageNum = 0
+    this.discuss.pageSize = 10
+    this.handleDiscussPage()
   },
   methods: {
+    handleTopicDetail() {
+      const topicId = this.$route.params.topicId
+      // 获取topic数据
+      topicDetail(topicId).then(res => {
+        this.topic = res.data
+      }).catch(err => error(err))
+      // todo:后端联调后删除
+      this.topic = {
+        topicId: 1,
+        title: 'title',
+        isLong: true,
+        simpleDescription: 'description',
+        description: 'description description description description description description description description description description description description description description description description description description description description description description description description description description description description description',
+        label: [
+          { labelId: 1, name: '编程' },
+          { labelId: 2, name: '计算机' }
+        ],
+        publishTime: '2021-12-11 19:10',
+        like: 100,
+        dislike: 100
+      }
+    },
+    handleDiscussPage() {
+      const topicId = this.$route.params.topicId
+      const pageNum = this.discuss.pageNum
+      const pageSize = this.discuss.pageSize
+      loadDiscussPage(topicId, pageNum + 1, pageSize).then(res => {
+        res.list.forEach(item => {
+          // 动态新增
+          this.$set(item, 'parentShow', false)
+        })
+        this.discuss = res
+      }).catch(err => {
+        error(err)
+        const discuss = {
+          total: 14, pageNum: 1, pageSize: 10, allComment: 32,
+          list: [
+            { discussId: 1, uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '喝了编程', like: 100, dislike: 100, publishTime: '2021-12-11 19:10', allComment: 26 },
+            { discussId: 2, uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'discuss', like: 100, dislike: 100, publishTime: '2021-12-11 19:10', allComment: 26 },
+            { discussId: 3, uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'discuss', like: 100, dislike: 100, publishTime: '2021-12-11 19:10', allComment: 26 },
+            { discussId: 4, uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'discuss', like: 100, dislike: 100, publishTime: '2021-12-11 19:10', allComment: 26 },
+            { discussId: 5, uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'discuss', like: 100, dislike: 100, publishTime: '2021-12-11 19:10', allComment: 26 }
+          ]
+        }
+        discuss.list.forEach(item => {
+          // 动态新增
+          this.$set(item, 'parentShow', false)
+        })
+        this.discuss = discuss
+      })
+    },
     toLabelTopic(labelId) {
       // 跳转目标label的topic列表
       this.$router.push({ path: '/topic/label/' + labelId + '/hot' })
@@ -216,11 +176,49 @@ export default {
         comment.dislike++
       }).catch(err => error(err))
     },
-    handCommentPage(discussId, page, comment) {
+    handCommentPage(params, discussId) {
+      const pageNum = params[0]
+      const pageSize = params[1]
+      const callback = params[2]
       // 跳转页码
-      showComment(discussId, page).then(res => {
-        comment = res.data
-      }).catch(err => error(err))
+      showComment(discussId, pageNum, pageSize).then(res => {
+        callback(res.data)
+      }).catch(err => {
+        error(err)
+        const comment = {
+          total: 3, pageNum: 1, pageSize: 10, pages: 1,
+          list: [
+            { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
+              simpleChildren: {
+                total: 12,
+                list: [
+                  { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+                  { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
+                ]
+              }
+            },
+            { commentId: 7, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
+              simpleChildren: {
+                total: 12,
+                list: [
+                  { commentId: 9, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+                  { commentId: 8, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
+                ]
+              }
+            },
+            { commentId: 3, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
+              simpleChildren: {
+                total: 12,
+                list: [
+                  { commentId: 6, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+                  { commentId: 4, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', target: `@<a ref="https://www.baidu.com">百度</a>: `, content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
+                ]
+              }
+            }
+          ]
+        }
+        callback(comment)
+      })
     },
     handPublishParent(publishParentContent) {
       console.log(publishParentContent)
@@ -231,61 +229,28 @@ export default {
     handlePublishChildrenToChildren(commentId, publishContent) {
       console.log(publishContent)
     },
-    handCommentDetailInit(commentId, callback) {
-      initCommentDetail(commentId).then(res => {
-        this.$set(res.data, 'childrenShow', false)
-        this.$set(res.data, 'showInput', false)
-        this.$set(res.data, 'publishContent', '')
-        res.data.children.list.map(child => {
-          this.$set(child, 'showInput', false)
-          this.$set(child, 'publishContent', '')
-        })
+    handCommentDetailPage(commentId, pageNum, pageSize, callback) {
+      loadChildren(commentId, pageNum, pageSize).then(res => {
         callback(res.data)
       }).catch(err => {
         error(err)
         // todo:前后端对接后删除
-        const data = { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-          children: {
-            total: 4, current: 1, size: 2, pages: 2,
-            list: [
-              { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-              { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-            ]
-          }
-        }
-        this.$set(data, 'childrenShow', false)
-        this.$set(data, 'showInput', false)
-        this.$set(data, 'publishContent', '')
-        data.children.list.map(child => {
-          this.$set(child, 'showInput', false)
-          this.$set(child, 'publishContent', '')
-        })
-        callback(data)
-      })
-    },
-    handCommentDetailPage(commentId, page, callback) {
-      loadChildren(commentId, page).then(res => {
-        res.data.list.map(child => {
-          this.$set(child, 'showInput', false)
-          this.$set(child, 'publishContent', '')
-        })
-        callback(res.data)
-      }).catch(err => {
-        error(err)
-        // todo:前后端对接后删除
-        const data = {
-          total: 4, current: 2, size: 2, pages: 2,
+        const children = {
+          total: 14, pageNum: 1, pageSize: 10, pages: 2,
           list: [
-            { commentId: 12, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-            { commentId: 15, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
+            { commentId: 1, uid: 1, nickname: '灰太狼1', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '借款方comment借款方comment借款方comment借款方comment借款方comment借款方comment借款方comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+            { commentId: 2, uid: 1, nickname: '灰太狼2', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+            { commentId: 3, uid: 1, nickname: '灰太狼3', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+            { commentId: 4, uid: 1, nickname: '灰太狼4', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
+            { commentId: 5, uid: 1, nickname: '灰太狼5', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
           ]
         }
-        data.list.map(child => {
-          this.$set(child, 'showInput', false)
-          this.$set(child, 'publishContent', '')
-        })
-        callback(data)
+        callback(children)
       })
+    },
+    handleCommentShow(discussItem, index) {
+      discussItem.parentShow = !discussItem.parentShow
+      this.$refs.comment[index].$emit('handCommentInit')
     }
   }
 }

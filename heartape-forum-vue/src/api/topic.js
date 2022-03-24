@@ -78,6 +78,14 @@ export function likeTopic(topicId) {
   })
 }
 
+export function loadDiscussPage(topicId, pageNum, pageSize) {
+  return request({
+    url: '/topic/discuss',
+    method: 'get',
+    params: { topicId, pageNum, pageSize }
+  })
+}
+
 export function removeDiscuss(discussId) {
   return request({
     url: '/topic/discuss',
@@ -114,19 +122,19 @@ export function disLikeComment(commentId) {
   })
 }
 
-export function showComment(discussId, page) {
+export function showComment(discussId, pageNum, pageSize) {
   return request({
     url: '/topic/discuss/' + discussId,
     method: 'get',
-    params: { page }
+    params: { pageNum, pageSize }
   })
 }
 
-export function showChildren(commentId, page) {
+export function loadChildren(commentId, pageNum, pageSize) {
   return request({
     url: '/topic/discuss/comment/' + commentId,
     method: 'get',
-    params: { page }
+    params: { pageNum, pageSize }
   })
 }
 

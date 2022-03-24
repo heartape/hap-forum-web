@@ -133,7 +133,7 @@ export const constantRoutes = [
         meta: { title: '读书万卷', icon: 'article' }
       },
       {
-        path: ':aid',
+        path: ':articleId',
         name: 'article-detail',
         component: () => import('@/views/article/detail'),
         meta: { title: '读书万卷', icon: 'article' },
@@ -179,7 +179,7 @@ export const constantRoutes = [
         meta: { title: '人生漫谈', icon: 'topic' }
       },
       {
-        path: ':tid',
+        path: ':topicId',
         name: 'topic-detail',
         component: () => import('@/views/topic/detail'),
         meta: { title: '人生漫谈', icon: 'topic' },
