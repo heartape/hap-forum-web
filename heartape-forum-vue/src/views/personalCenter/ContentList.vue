@@ -1,21 +1,21 @@
 <template>
   <div class="content-list-container">
-    <el-date-picker
-      v-model="dateBetween"
-      type="daterange"
-      align="right"
-      unlink-panels
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-      :picker-options="pickerOptions"
-      style="margin: 10px 0 10px calc(100vw - 800px)"
-      @change="handleLoadList"
-    />
+    <el-row class="date-picker-container">
+      <el-date-picker
+        v-model="dateBetween"
+        type="daterange"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+        @change="handleLoadList"
+      />
+    </el-row>
     <el-row v-for="(item, index) in content.list" :key="index">
       <el-card class="box-card" shadow="hover" :body-style="{ padding: '0px' }">
-        <h3 class="title" @click="contentDetail(item)">{{ item.title }}</h3>
-        <span class="content" @click="contentDetail(item)">{{ item.content }}</span>
+        <h3 class="title" style="cursor : pointer" @click="contentDetail(item)">{{ item.title }}</h3>
+        <span class="content">{{ item.content }}</span>
         <div class="function-menu">
           <span class="data">{{ item.readerNumber }} 阅读</span>
           <span class="data">{{ item.likeNumber }} 点赞</span>
@@ -25,23 +25,25 @@
         </div>
       </el-card>
     </el-row>
-    <el-pagination
-      :current-page.sync="content.pageNum"
-      :page-size="content.pageSize"
-      :total="content.total"
-      background
-      style="text-align: center; margin-top: 20px"
-      layout="total, prev, pager, next"
-      @current-change="handleLoadList"
-    />
+    <el-row class="page-container">
+      <el-pagination
+        :current-page.sync="content.pageNum"
+        :page-size="content.pageSize"
+        :total="content.total"
+        background
+        style="text-align: center; margin-top: 20px"
+        layout="total, prev, pager, next"
+        @current-change="handleLoadList"
+      />
+    </el-row>
   </div>
 </template>
 
 <script>
-import { contentAll, contentArticle, contentComment, contentDiscuss, contentTopic } from '@/api/manage'
-import { error } from '@/utils'
-import { removeArticle, removeArticleComment, removeArticleCommentChild } from '@/api/article'
-import { removeDiscussComment, removeDiscuss, removeTopic, removeDiscussCommentChild } from '@/api/topic'
+import { contentAll, contentArticle, contentDiscuss, contentTopic } from '@/api/manage'
+import { error, formatDate } from '@/utils'
+import { removeArticle } from '@/api/article'
+import { removeDiscuss, removeTopic } from '@/api/topic'
 
 export default {
   name: 'ContentList',
@@ -50,7 +52,8 @@ export default {
       content: {
         pageNum: 0,
         pageSize: 10,
-        list: []
+        list: [],
+        isActive: true
       },
       tab: '',
       dateBetween: null,
@@ -94,11 +97,13 @@ export default {
     handleLoadList() {
       const params = {}
       if (this.dateBetween !== null) {
-        params.startTime = Date.parse(this.dateBetween[0])
-        params.endTime = Date.parse(this.dateBetween[1])
+        const startDate = new Date(this.dateBetween[0])
+        const endDate = new Date(this.dateBetween[1])
+        params.startTime = formatDate(startDate, 'yyyy-MM-dd')
+        params.endTime = formatDate(endDate, 'yyyy-MM-dd')
       } else {
-        params.startTime = 0
-        params.endTime = 0
+        params.startTime = undefined
+        params.endTime = undefined
       }
       params.pageNum = this.content.pageNum
       params.pageSize = this.content.pageSize
@@ -113,8 +118,6 @@ export default {
         request = contentTopic(params)
       } else if (tab === 'discuss') {
         request = contentDiscuss(params)
-      } else if (tab === 'comment') {
-        request = contentComment(params)
       }
       request.then(res => {
         this.content = res.data
@@ -169,14 +172,6 @@ export default {
         request = removeTopic(id)
       } else if (type === 'discuss') {
         request = removeDiscuss(id)
-      } else if (type === 'articleComment') {
-        request = removeArticleComment(id)
-      } else if (type === 'discussComment') {
-        request = removeDiscussComment(id)
-      } else if (type === 'articleCommentChild') {
-        request = removeArticleCommentChild(id)
-      } else if (type === 'discussCommentChild') {
-        request = removeDiscussCommentChild(id)
       }
       request.then(() => this.handleLoadList).catch(err => {
         error(err)
@@ -187,6 +182,10 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.date-picker-container {
+  margin: 10px 0 10px 50%;
+  width: 350px;
+}
 .box-card {
   padding: 20px 10px;
   width: 100%;
@@ -230,5 +229,9 @@ export default {
       margin-right: 20px;
     }
   }
+}
+.page-container {
+  height: 180px;
+  margin: 20px 0 40px 0;
 }
 </style>

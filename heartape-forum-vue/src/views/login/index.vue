@@ -42,12 +42,12 @@
         <p>其他方式</p>
       </div>
       <el-form-item>
-        <el-button class="other-login-button" type="primary" style="background-color: #2b2f3a" @click="emailLogin">验证码登录</el-button>
-        <el-button class="other-login-button" type="primary" style="background-color: #e27b36" @click="phoneLogin">手机登录</el-button>
+        <el-button class="other-login-button" type="primary" style="background-color: #2b2f3a">验证码登录</el-button>
+        <el-button class="other-login-button" type="primary" style="background-color: #e27b36">手机登录</el-button>
       </el-form-item>
       <el-form-item>
         <span style="margin: 0 20px">社交账号登录:</span>
-        <el-button class="oauth-login-button" type="primary" style="background-color: #a6e236" @click="qqLogin">qq</el-button>
+        <el-button class="oauth-login-button" type="primary" style="background-color: #a6e236">qq</el-button>
       </el-form-item>
     </el-form>
   </div>

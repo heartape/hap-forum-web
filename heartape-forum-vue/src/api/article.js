@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function articleRecommend(page) {
   return request({
-    url: '/article/recommend',
+    url: '/business/article/recommend',
     method: 'get',
     params: { page }
   })
@@ -10,7 +10,7 @@ export function articleRecommend(page) {
 
 export function articleHot(page) {
   return request({
-    url: '/article/hot',
+    url: '/business/article/hot',
     method: 'get',
     params: { page }
   })
@@ -18,7 +18,7 @@ export function articleHot(page) {
 
 export function articleFollow(page) {
   return request({
-    url: '/article/follow',
+    url: '/business/article/follow',
     method: 'get',
     params: { page }
   })
@@ -26,7 +26,7 @@ export function articleFollow(page) {
 
 export function articleInLabelRecommend(labelId, page) {
   return request({
-    url: '/article/label/' + labelId + '/recommend',
+    url: '/business/article/label/' + labelId + '/recommend',
     method: 'get',
     params: { page }
   })
@@ -34,7 +34,7 @@ export function articleInLabelRecommend(labelId, page) {
 
 export function articleInLabelHot(labelId, page) {
   return request({
-    url: '/article/label/' + labelId + '/hot',
+    url: '/business/article/label/' + labelId + '/hot',
     method: 'get',
     params: { page }
   })
@@ -42,7 +42,7 @@ export function articleInLabelHot(labelId, page) {
 
 export function articleInLabelFollow(labelId, page) {
   return request({
-    url: '/article/label/' + labelId + '/follow',
+    url: '/business/article/label/' + labelId + '/follow',
     method: 'get',
     params: { page }
   })
@@ -50,7 +50,7 @@ export function articleInLabelFollow(labelId, page) {
 
 export function searchArticle(keyword, page) {
   return request({
-    url: '/article/search',
+    url: '/business/article/search',
     method: 'get',
     params: { keyword: keyword, page }
   })
@@ -58,14 +58,14 @@ export function searchArticle(keyword, page) {
 
 export function articleDetail(articleId) {
   return request({
-    url: '/article/' + articleId,
+    url: '/business/article/' + articleId,
     method: 'get'
   })
 }
 
 export function removeArticle(articleId) {
   return request({
-    url: '/article/' + articleId,
+    url: '/business/article/' + articleId,
     method: 'delete',
     params: { articleId }
   })
@@ -73,21 +73,21 @@ export function removeArticle(articleId) {
 
 export function likeArticle(articleId) {
   return request({
-    url: '/article/' + articleId + '/like',
+    url: '/business/article/' + articleId + '/like',
     method: 'put'
   })
 }
 
 export function dislikeArticle(articleId) {
   return request({
-    url: '/article/' + articleId + '/dislike',
+    url: '/business/article/' + articleId + '/dislike',
     method: 'put'
   })
 }
 
 export function showComment(articleId, page) {
   return request({
-    url: '/article/' + articleId,
+    url: '/business/article/' + articleId,
     method: 'get',
     params: { page }
   })
@@ -95,7 +95,7 @@ export function showComment(articleId, page) {
 
 export function publishParent(articleId, comment) {
   return request({
-    url: '/article/comment/parent/' + articleId,
+    url: '/business/article/comment/parent/' + articleId,
     method: 'post',
     params: { comment }
   })
@@ -104,7 +104,7 @@ export function publishParent(articleId, comment) {
 // 评论详情页面
 export function loadChildren(commentId, pageNum, pageSize) {
   return request({
-    url: '/article/comment/parent/' + commentId + '/load/',
+    url: '/business/article/comment/parent/' + commentId + '/load/',
     method: 'get',
     params: { pageNum, pageSize }
   })
@@ -112,21 +112,21 @@ export function loadChildren(commentId, pageNum, pageSize) {
 
 export function likeComment(commentId) {
   return request({
-    url: '/article/comment/' + commentId + '/like',
+    url: '/business/article/comment/' + commentId + '/like',
     method: 'put'
   })
 }
 
 export function disLikeComment(commentId) {
   return request({
-    url: '/article/comment/' + commentId + '/dislike',
+    url: '/business/article/comment/' + commentId + '/dislike',
     method: 'put'
   })
 }
 
 export function removeArticleComment(commentId) {
   return request({
-    url: '/article/comment',
+    url: '/business/article/comment',
     method: 'delete',
     params: { commentId }
   })
@@ -134,7 +134,7 @@ export function removeArticleComment(commentId) {
 
 export function removeArticleCommentChild(commentId) {
   return request({
-    url: '/article/comment/child',
+    url: '/business/article/comment/child',
     method: 'delete',
     params: { commentId }
   })

@@ -1,44 +1,55 @@
 <template>
   <div class="comment-list-container">
-    <el-date-picker
-      v-model="dateBetween"
-      type="daterange"
-      align="right"
-      unlink-panels
-      range-separator="至"
-      start-placeholder="开始日期"
-      end-placeholder="结束日期"
-      :picker-options="pickerOptions"
-      style="margin: 10px 0 10px calc(100vw - 800px)"
-      @change="handleLoadList"
-    />
+    <el-row class="date-picker-container">
+      <el-date-picker
+        v-model="dateBetween"
+        type="daterange"
+        unlink-panels
+        range-separator="至"
+        start-placeholder="开始日期"
+        end-placeholder="结束日期"
+        :picker-options="pickerOptions"
+        @change="handleLoadList"
+      />
+    </el-row>
     <el-row v-for="(item, index) in content.list" :key="index">
       <el-card class="box-card" shadow="hover" :body-style="{ padding: '0px' }">
-        <h3 class="title" @click="contentDetail(item)">{{ item.title }}</h3>
-        <span class="content" @click="contentDetail(item)">{{ item.content }}</span>
+        <h3 class="title" style="cursor : pointer" @click="contentDetail(item)">{{ item.title }}</h3>
+        <span class="content">
+          <el-image
+            :src="item.avatar"
+            :alt="item.nickname"
+            style="float: left;width: 20px; height: 20px; margin-right: 10px"
+            fit="cover"
+          />
+          <el-link href="#" target="_blank">{{ item.nickname }}</el-link>
+          <span> : {{ item.comment }}</span>
+        </span>
         <div class="function-menu">
           <time class="data">{{ item.createdTime }}</time>
-          <el-button class="function-menu-button" size="mini" type="danger" @click="removeContentComment(item)">删除</el-button>
+          <el-button class="function-menu-button" size="mini" type="danger" @click="removeComment(item)">删除</el-button>
         </div>
       </el-card>
     </el-row>
-    <el-pagination
-      :current-page.sync="content.pageNum"
-      :page-size="content.pageSize"
-      :total="content.total"
-      background
-      style="text-align: center; margin-top: 20px"
-      layout="total, prev, pager, next"
-      @current-change="handleLoadList"
-    />
+    <el-row class="page-container">
+      <el-pagination
+        :current-page.sync="content.pageNum"
+        :page-size="content.pageSize"
+        :total="content.total"
+        background
+        style="text-align: center"
+        layout="total, prev, pager, next"
+        @current-change="handleLoadList"
+      />
+    </el-row>
   </div>
 </template>
 
 <script>
-import { commentAll, commentArticle, commentComment, commentDiscuss } from '@/api/manage'
-import { error } from '@/utils'
-import { removeArticleComment, removeArticleCommentChild } from '@/api/article'
-import { removeDiscussComment, removeDiscussCommentChild } from '@/api/topic'
+import { commentAll, commentArticle, commentDiscuss } from '@/api/manage'
+import { error, formatDate } from '@/utils'
+import { removeArticleComment } from '@/api/article'
+import { removeDiscussComment } from '@/api/topic'
 
 export default {
   name: 'CommentList',
@@ -46,6 +57,7 @@ export default {
     return {
       content: {
         pageNum: 0,
+        pageSize: 10,
         list: []
       },
       tab: '',
@@ -87,27 +99,19 @@ export default {
     this.handleLoadList()
   },
   methods: {
-    getMainTypeId(item) {
-      // 主体类型
-      const mainType = item.mainType
-      let id
-      if (mainType === 'article') {
-        id = item.articleId
-      } else if (mainType === 'topic') {
-        id = item.topicId
-      }
-      return id
-    },
     handleLoadList() {
       const params = {}
       if (this.dateBetween !== null) {
-        params.startTime = Date.parse(this.dateBetween[0])
-        params.endTime = Date.parse(this.dateBetween[1])
+        const startDate = new Date(this.dateBetween[0])
+        const endDate = new Date(this.dateBetween[1])
+        params.startTime = formatDate(startDate, 'yyyy-MM-dd')
+        params.endTime = formatDate(endDate, 'yyyy-MM-dd')
       } else {
-        params.startTime = 0
-        params.endTime = 0
+        params.startTime = undefined
+        params.endTime = undefined
       }
       params.pageNum = this.content.pageNum
+      params.pageSize = this.content.pageSize
       const tab = this.tab
       let request
       // 根据
@@ -117,8 +121,6 @@ export default {
         request = commentArticle(params)
       } else if (tab === 'discuss') {
         request = commentDiscuss(params)
-      } else if (tab === 'comment') {
-        request = commentComment(params)
       }
       request.then(res => {
         this.content = res.data
@@ -131,24 +133,30 @@ export default {
           total: 67,
           list: [
             {
-              articleId: '710859085800538112',
-              title: '关于俄乌冲突的分析',
-              content: '一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营',
-              createdTime: '2022-03-16 22:20:12',
-              mainType: 'article',
+              commentId: '710859085800538112',
               targetType: 'article',
-              targetId: '710859085800538114',
-              reader: 1
+              mainType: 'article',
+              mainId: '710859085800538114',
+              title: '关于俄乌冲突的分析',
+              uid: 1,
+              avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
+              nickname: '灰太狼',
+              profile: '羊村死敌',
+              comment: '一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营一定要消灭亚速营',
+              createdTime: '2022-03-16 22:20:12'
             },
             {
-              articleId: '710859085800538113',
-              title: '关于俄乌冲突的分析',
-              content: '一定要消灭亚速营',
-              createdTime: '2022-03-16 22:20:12',
-              mainType: 'article',
+              commentId: '710859085800538113',
               targetType: 'article',
-              targetId: '710859085800538115',
-              reader: 1
+              mainType: 'article',
+              mainId: '710859085800538114',
+              title: '关于俄乌冲突的分析',
+              uid: 1,
+              avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
+              nickname: '灰太狼',
+              profile: '羊村死敌',
+              comment: '一定要消灭亚速营',
+              createdTime: '2022-03-16 22:20:12'
             }
           ]
         }
@@ -156,21 +164,17 @@ export default {
     },
     contentDetail(item) {
       const mainType = item.mainType
-      const id = this.getMainTypeId(item)
-      this.$router.push('/' + mainType + '/' + id)
+      const mainId = item.mainId
+      this.$router.push('/' + mainType + '/' + mainId)
     },
-    removeContent(item) {
+    removeComment(item) {
       const targetType = item.targetType
-      const targetId = item.targetId
+      const commentId = item.commentId
       let request
       if (targetType === 'article') {
-        request = removeArticleComment(targetId)
+        request = removeArticleComment(commentId)
       } else if (targetType === 'discuss') {
-        request = removeDiscussComment(targetId)
-      } else if (targetType === 'articleComment') {
-        request = removeArticleCommentChild(targetId)
-      } else if (targetType === 'discussComment') {
-        request = removeDiscussCommentChild(targetId)
+        request = removeDiscussComment(commentId)
       }
       request.then(() => this.handleLoadList).catch(err => {
         error(err)
@@ -181,47 +185,57 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.box-card {
-  padding: 20px 10px;
-  width: 100%;
-  background-color: #ffffff;
-  .title {
-    display: block;
-    margin: 0 10px 10px;
-    width: 100%;
-    height: 18px;
-    font-size: 16px;
-    line-height: 18px;
-    overflow: hidden;
+.comment-list-container {
+  .date-picker-container {
+    margin: 10px 0 10px 50%;
+    width: 350px;
   }
-
-  .content {
-    display: block;
-    padding: 0 10px;
+  .box-card {
+    padding: 20px 10px;
     width: 100%;
-    font-size: 14px;
-    line-height: 24px;
-    overflow: hidden;
-  }
+    background-color: #ffffff;
+    .title {
+      display: block;
+      margin: 0 10px 10px;
+      width: 100%;
+      height: 18px;
+      font-size: 16px;
+      line-height: 18px;
+      overflow: hidden;
+    }
 
-  .function-menu {
-    width: 100%;
-    height: 30px;
-    padding-right: 60px;
-    margin-top: 10px;
-    line-height: 30px;
-
-    .data {
-      float: left;
+    .content {
+      display: block;
       padding: 0 10px;
+      width: 100%;
+      font-size: 14px;
+      line-height: 24px;
+      overflow: hidden;
+    }
+
+    .function-menu {
+      width: 100%;
       height: 30px;
-      min-width: 60px;
-      text-align: center;
+      padding-right: 60px;
+      margin-top: 10px;
+      line-height: 30px;
+
+      .data {
+        float: left;
+        padding: 0 10px;
+        height: 30px;
+        min-width: 60px;
+        text-align: center;
+      }
+      .function-menu-button {
+        float: right;
+        margin-right: 20px;
+      }
     }
-    .function-menu-button {
-      float: right;
-      margin-right: 20px;
-    }
+  }
+  .page-container {
+    height: 180px;
+    margin: 20px 0 40px 0;
   }
 }
 </style>

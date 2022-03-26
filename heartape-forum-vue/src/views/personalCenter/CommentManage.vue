@@ -16,8 +16,7 @@ export default {
       menu: [
         { index: '1', path: '/personal-center/manage/comment/all', name: '全部' },
         { index: '2', path: '/personal-center/manage/comment/article', name: '文章' },
-        { index: '3', path: '/personal-center/manage/comment/discuss', name: '讨论' },
-        { index: '4', path: '/personal-center/manage/comment/comment', name: '评论' }
+        { index: '3', path: '/personal-center/manage/comment/discuss', name: '讨论' }
       ]
     }
   }
