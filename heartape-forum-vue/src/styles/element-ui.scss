@@ -57,4 +57,12 @@
   .el-table__body tr:hover > td{
     background-color: $menuHover !important;
   }
+
+  .el-button:hover {
+    color: #2b2f3a;
+  }
+}
+
+.el-loading-parent--hidden {
+  overflow: auto !important;
 }

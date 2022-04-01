@@ -53,8 +53,10 @@ export default {
   data() {
     // To fix https://github.com/PanJiaChen/vue-admin-template/issues/237
     // TODO: refactor with render function
-    this.onlyOneChild = null
-    return {}
+    // this.onlyOneChild = null
+    return {
+      onlyOneChild: {}
+    }
   },
   methods: {
     hasOneShowingChild(children = [], parent) {

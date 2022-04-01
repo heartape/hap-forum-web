@@ -117,7 +117,7 @@
   color:black;
 }
 .calendar td.selected span{
-  background-color: #30d4f5;
+  background-color: lightskyblue;
   color: black;
 }
 .calendar td .text{
@@ -137,11 +137,11 @@
   color:black;
 }
 .calendar td.selected span.red{
-  background-color: #e17272;
+  background-color: darksalmon;
   color: black;
 }
 .calendar td.selected span.red:hover{
-  background-color: #e17272;
+  background-color: darksalmon;
   color: black;
 }
 .calendar thead td {

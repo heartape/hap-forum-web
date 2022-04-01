@@ -1,16 +1,58 @@
 <template>
-  <div class="app-container">
-    话题
+  <div class="topic-container">
+    <head-menu resource-name="话题" title="话题 . 表达" slogan="千万话题，畅所欲言" @searchResource="searchTopic" />
+    <resource-tabs :menu="menu" />
+    <topic-list @getTopic="getTopic" />
   </div>
 </template>
 
 <script>
-export default {
+import ResourceTabs from '@/views/components/ResourceTabs'
+import HeadMenu from '@/views/components/HeadMenu'
+import TopicList from '@/views/topic/topicList'
+import { topicFollow, topicHot, topicRecommend } from '@/api/topic'
+import { error } from '@/utils'
 
+export default {
+  components: {
+    HeadMenu,
+    ResourceTabs,
+    TopicList
+  },
+  data() {
+    return {
+      menu: [
+        { index: '1', path: '/topic/recommend', name: '推荐' },
+        { index: '2', path: '/topic/hot', name: '热点' },
+        { index: '3', path: '/topic/follow', name: '关注' }
+      ]
+    }
+  },
+  methods: {
+    chooseTopicType(path, pageNum, pageSize) {
+      if (path.endsWith('recommend')) {
+        return topicRecommend(pageNum, pageSize)
+      } else if (path.endsWith('hot')) {
+        return topicHot(pageNum, pageSize)
+      } else if (path.endsWith('follow')) {
+        return topicFollow(pageNum, pageSize)
+      }
+    },
+    getTopic(pageNum, pageSize, callback) {
+      const path = this.$route.path
+      this.chooseTopicType(path, pageNum, pageSize).then(res => {
+        callback(res.data)
+      }).catch(res => error(res))
+    },
+    searchTopic(keyword) {
+      this.$router.push({ path: '/topic/search', query: { keyword }})
+    }
+  }
 }
 </script>
 
-<style scoped>
-
+<style lang="scss" scoped>
+.topic-container {
+  padding: 10px;
+}
 </style>
-

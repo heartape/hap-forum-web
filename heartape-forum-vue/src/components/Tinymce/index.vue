@@ -1,13 +1,6 @@
 <template>
   <div :class="{fullscreen:fullscreen}" class="tinymce-container" :style="{width:containerWidth}">
     <textarea :id="tinymceId" class="tinymce-textarea" />
-    <el-button
-      v-loading.fullscreen.lock="fullscreenLoading"
-      class="publish-button"
-      type="info"
-      icon="el-icon-finished"
-      @click="contentUpload"
-    >发布</el-button>
   </div>
 </template>
 
@@ -19,9 +12,8 @@
 import plugins from './plugins'
 import toolbar from './toolbar'
 import load from './dynamicLoadScript'
-import { publish } from '@/api/upload'
+// const tinymceCDN = '/public/js/tinymce@5.10.2.min.js'
 
-// why use this cdn, detail see https://github.com/PanJiaChen/tinymce-all-in-one
 // const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce-all-in-one@4.9.3/tinymce.min.js'
 const tinymceCDN = 'https://cdn.jsdelivr.net/npm/tinymce@5.10.2/tinymce.min.js'
 
@@ -124,10 +116,9 @@ export default {
       const _this = this
       window.tinymce.init({
         selector: `#${this.tinymceId}`,
+        min_height: 800,
         language: this.languageTypeList['zh'],
-        // language_url: '/Tinymce/languages/zh_CN.js',
         language_url: require('./plugins/languages/zh_CN.js'),
-        indent2em_url: require('./plugins/indent2em/plugin.js'),
         fontsize_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',
         height: this.height,
         body_class: 'panel-body ',
@@ -175,17 +166,6 @@ export default {
         }
       })
     },
-    contentUpload: function(body, url) {
-      this.fullscreenLoading = true
-      // todo:丢失请求体
-      publish(body, url).then(() => {
-        this.fullscreenLoading = false
-        alert('发布成功')
-      }).catch(() => {
-        this.fullscreenLoading = false
-        alert('发布失败')
-      })
-    },
     destroyTinymce() {
       const tinymce = window.tinymce.get(this.tinymceId)
       if (this.fullscreen) {
@@ -201,6 +181,15 @@ export default {
     },
     getContent() {
       window.tinymce.get(this.tinymceId).getContent()
+    },
+    getCount() {
+      return window.tinymce.get(this.tinymceId).plugins.wordcount.body.getCharacterCountWithoutSpaces()
+    },
+    error() {
+      this.$notify.error({
+        title: '请求失败',
+        message: '请检查网络或联系管理员'
+      })
     }
   }
 }
@@ -229,7 +218,6 @@ export default {
   position: absolute;
   right: 4px;
   top: 4px;
-  /*z-index: 2005;*/
 }
 
 .fullscreen .editor-custom-btn-container {
@@ -237,19 +225,17 @@ export default {
   position: fixed;
 }
 
-.editor-upload-btn {
-  display: inline-block;
-}
-
-.publish-button {
+.publish-button, .cover-upload-button {
   position: absolute;
   right: 0;
   top: 0;
-  height: 34px;
+  height: 40px;
   border-color: transparent;
   border-radius: 0;
   padding: 10px;
   z-index: 1000;
 }
-
+.cover-upload-button {
+  right: 80px;
+}
 </style>

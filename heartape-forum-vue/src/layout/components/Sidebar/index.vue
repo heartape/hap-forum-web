@@ -11,7 +11,9 @@
         :collapse-transition="true"
         mode="vertical"
       >
-        <sidebar-item v-for="route in routes" :key="route.path" :item="route" :base-path="route.path" />
+        <div v-for="route in routes" :key="route.name">
+          <sidebar-item v-if="route.path.indexOf('/personal-center') !== 0" :item="route" :base-path="route.path" />
+        </div>
       </el-menu>
     </el-scrollbar>
   </div>

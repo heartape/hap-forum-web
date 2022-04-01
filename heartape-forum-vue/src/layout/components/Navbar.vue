@@ -1,25 +1,27 @@
 <template>
-  <div class="navbar">
-    <div class="head-title">Savour Hub</div>
-    <div class="head-content">heart like a capering monkey, mind like a galloping horse</div>
-    <div class="right-menu">
-      <el-dropdown class="avatar-container" trigger="click">
-        <div class="avatar-wrapper">
-          <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
-          <i class="el-icon-caret-bottom" />
-        </div>
-        <el-dropdown-menu slot="dropdown" class="user-dropdown">
-          <router-link to="/">
-            <el-dropdown-item>个人主页</el-dropdown-item>
-          </router-link>
-          <a target="_blank" href="https://panjiachen.github.io/vue-element-admin-site/#/">
-            <el-dropdown-item>账号设置</el-dropdown-item>
-          </a>
-          <el-dropdown-item divided @click.native="logout">
-            <span style="display:block;">退出登录</span>
-          </el-dropdown-item>
-        </el-dropdown-menu>
-      </el-dropdown>
+  <div class="navbar-container">
+    <div class="navbar-main-container">
+      <div class="head-title" style="cursor : pointer" @click="toIndex">Hap</div>
+      <div class="head-content">heart like a ape, mind like a horse</div>
+      <div class="right-menu">
+        <el-dropdown class="avatar-container" trigger="click">
+          <div class="avatar-wrapper">
+            <img :src="avatar+'?imageView2/1/w/80/h/80'" class="user-avatar">
+            <i class="el-icon-caret-bottom" />
+          </div>
+          <el-dropdown-menu slot="dropdown" class="user-dropdown">
+            <router-link to="/personal-center">
+              <el-dropdown-item>个人中心</el-dropdown-item>
+            </router-link>
+            <a target="_blank" href="#">
+              <el-dropdown-item disabled>偏好设置</el-dropdown-item>
+            </a>
+            <el-dropdown-item divided @click.native="logout">
+              <span style="display:block;">退出登录</span>
+            </el-dropdown-item>
+          </el-dropdown-menu>
+        </el-dropdown>
+      </div>
     </div>
   </div>
 </template>
@@ -34,6 +36,9 @@ export default {
     ])
   },
   methods: {
+    toIndex() {
+      this.$router.push(`/`)
+    },
     async logout() {
       await this.$store.dispatch('user/logout')
       this.$router.push(`/login?redirect=${this.$route.fullPath}`)
@@ -43,27 +48,31 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.navbar {
-  height: 100%;
-  width: 1200px;
+.navbar-container {
+  height: 64px;
+  width: 100%;
   overflow: hidden;
   position: relative;
-  left:50%;
-  margin-left: -600px;
-  padding-left: 60px;
   font-family: jetBrains Mono;
+
+  .navbar-main-container {
+    width: 90%;
+    margin: 0 auto;
+  }
 
   .head-title, .head-content {
     float: left;
+    margin-left: 24%;
     height: 100%;
-    width: 150px;
+    width: 6%;
     line-height:65px;
     text-align: center
   }
 
   .head-content {
-    margin-left: 50px;
-    width: 500px;
+    width: 15%;
+    min-width: 300px;
+    margin-left: 6%;
   }
 
   .right-menu {

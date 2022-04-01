@@ -5,10 +5,10 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
+import PersonalCenter from '@/personalCenter'
 
 /**
  * Note: sub-menu only appear when route children.length >= 1
- * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
  *
  * hidden: true                   if set true, item will not show in the sidebar(default is false)
  * alwaysShow: true               if set true, will always show the root menu
@@ -33,51 +33,113 @@ import Layout from '@/layout'
 export const constantRoutes = [
   {
     path: '/login',
+    name: 'login',
     component: () => import('@/views/login/index'),
     hidden: true
   },
 
   {
     path: '/404',
+    name: '404',
     component: () => import('@/views/404'),
     hidden: true
   },
 
   {
     path: '/article/publish',
+    name: 'article-publish',
     component: () => import('@/views/article/publish'),
     hidden: true
   },
 
   {
-    path: '/article/:aid',
-    component: () => import('@/views/article/detail'),
+    path: '/topic/publish',
+    name: 'topic-publish',
+    component: () => import('@/views/topic/publish'),
+    hidden: true
+  },
+
+  {
+    path: '/knowledge/publish',
+    name: 'knowledge-publish',
+    component: () => import('@/views/knowledge/publish'),
+    hidden: true
+  },
+
+  {
+    path: '/news/publish',
+    name: 'news-publish',
+    component: () => import('@/views/news/publish'),
     hidden: true
   },
 
   {
     path: '/',
     component: Layout,
-    redirect: '/article',
+    redirect: '/article/recommend',
     children: [
       {
-        path: 'article',
-        name: 'Article',
+        path: 'article/recommend',
+        name: 'article-recommend',
         component: () => import('@/views/article/index'),
-        meta: { title: '文章阅读', icon: 'article' }
+        meta: { title: '读书万卷', icon: 'article' }
       }
     ]
   },
 
   {
-    path: '/knowledge',
+    path: '/article',
     component: Layout,
-    children: [{
-      path: '',
-      name: 'Knowledge',
-      component: () => import('@/views/knowledge/index'),
-      meta: { title: '知识分享', icon: 'knowledge' }
-    }]
+    redirect: '/article/recommend',
+    hidden: true,
+    children: [
+      {
+        path: 'hot',
+        name: 'article-hot',
+        component: () => import('@/views/article/index'),
+        meta: { title: '读书万卷', icon: 'article' }
+      },
+      {
+        path: 'follow',
+        name: 'article-follow',
+        component: () => import('@/views/article/index'),
+        meta: { title: '读书万卷', icon: 'article' }
+      },
+      {
+        path: 'label/:labelId/recommend',
+        name: 'article-label-recommend',
+        component: () => import('@/views/article/articleInLabel'),
+        meta: { title: '读书万卷', icon: 'article' },
+        hidden: true
+      },
+      {
+        path: 'label/:labelId/hot',
+        name: 'article-label-hot',
+        component: () => import('@/views/article/articleInLabel'),
+        meta: { title: '读书万卷', icon: 'article' },
+        hidden: true
+      },
+      {
+        path: 'label/:labelId/follow',
+        name: 'article-label-follow',
+        component: () => import('@/views/article/articleInLabel'),
+        meta: { title: '读书万卷', icon: 'article' },
+        hidden: true
+      },
+      {
+        path: 'search',
+        name: 'article-search',
+        component: () => import('@/views/article/articleInSearch'),
+        meta: { title: '读书万卷', icon: 'article' }
+      },
+      {
+        path: ':articleId',
+        name: 'article-detail',
+        component: () => import('@/views/article/detail'),
+        meta: { title: '读书万卷', icon: 'article' },
+        hidden: true
+      }
+    ]
   },
 
   {
@@ -85,47 +147,198 @@ export const constantRoutes = [
     component: Layout,
     children: [
       {
-        path: '',
-        name: 'Topic',
+        path: 'recommend',
+        name: 'topic-recommend',
         component: () => import('@/views/topic/index'),
-        meta: { title: '话题讨论', icon: 'topic' }
+        meta: { title: '人生漫谈', icon: 'topic' }
       }
     ]
   },
 
   {
-    path: '/news',
+    path: '/topic',
     component: Layout,
+    hidden: true,
     children: [
       {
-        path: '',
-        name: 'News',
-        component: () => import('@/views/news/index'),
-        meta: { title: '站内热点', icon: 'news' }
+        path: 'hot',
+        name: 'topic-hot',
+        component: () => import('@/views/topic/index'),
+        meta: { title: '人生漫谈', icon: 'topic' }
+      },
+      {
+        path: 'follow',
+        name: 'topic-follow',
+        component: () => import('@/views/topic/index'),
+        meta: { title: '人生漫谈', icon: 'topic' }
+      },
+      {
+        path: 'search',
+        name: 'topic-search',
+        component: () => import('@/views/topic/topicInSearch'),
+        meta: { title: '人生漫谈', icon: 'topic' }
+      },
+      {
+        path: ':topicId',
+        name: 'topic-detail',
+        component: () => import('@/views/topic/detail'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
+      },
+      {
+        path: 'label/:labelId/recommend',
+        name: 'topic-label-recommend',
+        component: () => import('@/views/topic/topicInLabel'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
+      },
+      {
+        path: 'label/:labelId/hot',
+        name: 'topic-label-hot',
+        component: () => import('@/views/topic/topicInLabel'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
+      },
+      {
+        path: 'label/:labelId/follow',
+        name: 'topic-label-follow',
+        component: () => import('@/views/topic/topicInLabel'),
+        meta: { title: '人生漫谈', icon: 'topic' },
+        hidden: true
+      }
+    ]
+  },
+
+  // {
+  //   path: '/knowledge',
+  //   component: Layout,
+  //   children: [{
+  //     path: '',
+  //     name: 'Knowledge',
+  //     component: () => import('@/views/knowledge/index'),
+  //     meta: { title: '授人以渔', icon: 'knowledge' }
+  //   }]
+  // },
+  //
+  // {
+  //   path: '/news',
+  //   component: Layout,
+  //   children: [
+  //     {
+  //       path: '',
+  //       name: 'News',
+  //       component: () => import('@/views/news/index'),
+  //       meta: { title: '古今中外', icon: 'news' }
+  //     }
+  //   ]
+  // },
+
+  {
+    path: '/personal-center',
+    component: PersonalCenter,
+    name: 'personal-center',
+    redirect: '/personal-center/home',
+    children: [
+      {
+        path: 'home',
+        name: 'personal-center-home',
+        component: () => import('@/views/personalCenter'),
+        meta: { title: '主页', icon: 'topic' }
+      },
+      {
+        path: 'manage',
+        name: 'personal-manage',
+        meta: { title: '管理', icon: 'topic' },
+        children: [
+          {
+            path: 'content',
+            name: 'personal-center-content',
+            component: () => import('@/views/personalCenter/ContentManage'),
+            meta: { title: '内容管理', icon: 'topic' },
+            redirect: '/personal-center/manage/content/all'
+          },
+          {
+            path: 'comment',
+            name: 'personal-center-comment',
+            component: () => import('@/views/personalCenter/CommentManage'),
+            meta: { title: '评论管理', icon: 'topic' },
+            redirect: '/personal-center/manage/comment/all'
+          }
+        ]
       }
     ]
   },
 
   {
-    path: '/picture',
-    component: Layout,
+    path: '/personal-center/manage/content',
+    name: 'personal-center-content-tap',
+    component: PersonalCenter,
+    hidden: true,
     children: [
       {
-        path: '',
-        name: 'Picture',
-        component: () => import('@/views/picture/index'),
-        meta: { title: '精彩瞬间', icon: 'picture' }
+        path: 'all',
+        name: 'personal-center-content-all',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'article',
+        name: 'personal-center-content-article',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'topic',
+        name: 'personal-center-content-topic',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'discuss',
+        name: 'personal-center-content-discuss',
+        component: () => import('@/views/personalCenter/ContentManage'),
+        meta: { categoryPath: true },
+        hidden: true
       }
     ]
   },
 
   {
-    path: 'external-link',
-    component: Layout,
+    path: '/personal-center/manage/comment',
+    name: 'personal-center-comment-tap',
+    component: PersonalCenter,
+    hidden: true,
     children: [
       {
-        path: 'https://panjiachen.github.io/vue-element-admin-site/#/',
-        meta: { title: '我的链接', icon: 'link' }
+        path: 'all',
+        name: 'personal-center-comment-all',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'article',
+        name: 'personal-center-comment-article',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'topic',
+        name: 'personal-center-comment-topic',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
+        hidden: true
+      },
+      {
+        path: 'discuss',
+        name: 'personal-center-comment-discuss',
+        component: () => import('@/views/personalCenter/CommentManage'),
+        meta: { categoryPath: true },
+        hidden: true
       }
     ]
   },

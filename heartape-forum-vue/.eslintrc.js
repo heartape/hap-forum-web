@@ -1,4 +1,7 @@
 module.exports = {
+  globals: {
+    CommonShare: true,
+  },
   root: true,
   parserOptions: {
     parser: 'babel-eslint',
