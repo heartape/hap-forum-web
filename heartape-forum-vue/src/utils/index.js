@@ -9,6 +9,24 @@ export function error(message) {
   })
 }
 
+/**
+ * 验证url是否为图片
+ * @param imgUrl
+ * @returns {Promise<unknown>}
+ */
+export function checkImgExists(imgUrl) {
+  return new Promise(function(resolve, reject) {
+    const ImgObj = new Image()
+    ImgObj.src = imgUrl
+    ImgObj.onload = function(res) {
+      resolve(res)
+    }
+    ImgObj.onerror = function(err) {
+      reject(err)
+    }
+  })
+}
+
 const options = {
   lock: true,
   text: 'Loading . . .'

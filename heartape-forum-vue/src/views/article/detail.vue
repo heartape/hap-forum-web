@@ -3,23 +3,23 @@
     <el-row class="article-label-container">
       <el-button v-for="labelItem in article.label" :key="labelItem.labelId" class="article-label-item" type="primary" plain round size="mini" @click="toLabelArticle(labelItem.labelId)">{{ labelItem.name }}</el-button>
     </el-row>
-    <div class="editor-content" v-html="article.title" />
+    <div class="editor-title" v-html="article.title" />
     <div class="creator-container">
       <span>
         <el-image
           :src="article.avatar"
           :alt="article.nickname"
-          style="width: 40px; height: 40px;"
+          style="float: left; margin-right: 10px; width: 40px; height: 40px;"
           fit="cover"
         />
-        <span style="position: relative; bottom: 15px; left: 10px">
-          {{ article.nickname }}
-          <span style="margin-left: 20px; font-size: 14px">{{ article.profile }}</span>
+        <span class="username-profile-container">
+          <el-button class="username" type="text" @click="showCreator(article.uid)">{{ article.nickname }}</el-button>
+          <span class="profile">{{ article.profile }}</span>
         </span>
       </span>
     </div>
     <div class="editor-content" v-html="article.content" />
-    <div class="publish-time">发布于: {{ article.publishTime }}</div>
+    <div class="publish-time">发布于: {{ article.createdTime }}</div>
     <article-menu
       :like="article.like"
       :dislike="article.dislike"
@@ -27,6 +27,7 @@
       @disLikeArticle="disLikeArticle"
     />
     <comment
+      ref="comment"
       :comment="article.comment"
       :show="true"
       @handCommentDetailPage="handCommentDetailPage"
@@ -36,12 +37,29 @@
       @handlePublishChildrenToChildren="handlePublishChildrenToChildren"
       @handLikeComment="handLikeComment"
       @handDisLikeComment="handDisLikeComment"
+      @removeComment="removeComment"
+      @removeCommentChild="removeCommentChild"
     />
   </div>
 </template>
 
 <script>
-import { articleDetail, dislikeArticle, likeArticle, showComment, publishParent, loadChildren, disLikeComment, likeComment } from '@/api/article'
+import {
+  articleDetail,
+  dislikeArticle,
+  likeArticle,
+  showComment,
+  publishParent,
+  loadChildren,
+  disLikeComment,
+  likeComment,
+  likeCommentChild,
+  disLikeCommentChild,
+  publishChild,
+  publishChildToChild,
+  removeArticleComment,
+  removeArticleCommentChild
+} from '@/api/article'
 import Comment from '@/views/components/Comment'
 import ArticleMenu from '@/views/article/ArticleMenu'
 import { error } from '@/utils'
@@ -51,20 +69,11 @@ export default {
   components: { ArticleMenu, Comment },
   data() {
     return {
-      article: {
-        articleId: 1, like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-        title: `<h1 style="text-align: center;">this is title!</h1>`,
-        content: `<h1 style="text-align: center;">Welcome to the TinyMCE demo!</h1>`,
-        uid: 1, nickname: '灰太狼', profile: '羊村死敌', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
-        label: [
-          { labelId: 1, name: '编程' },
-          { labelId: 2, name: '计算机' }
-        ]
-      }
+      article: {}
     }
   },
   mounted() {
-    const articleId = this.$route.params.aid
+    const articleId = this.$route.params.articleId
     this.articleDetail(articleId)
   },
   methods: {
@@ -72,55 +81,26 @@ export default {
       // 跳转目标label的article列表
       this.$router.push({ path: '/article/label/' + labelId + '/recommend' })
     },
-    success(message) {
-      this.$notify.success({
-        title: '成功',
-        message: message
-      })
-    },
     articleDetail(articleId) {
       articleDetail(articleId).then(res => {
         this.article = res.data
       }).catch(err => error(err))
     },
-    handPublishParent(publishParentContent) {
+    handPublishParent(content) {
       const articleId = this.article.articleId
-      publishParent(articleId, publishParentContent).then(() => {
-        this.articleDetail(articleId)
+      const data = {
+        articleId: articleId,
+        content: content
+      }
+      publishParent(data).then(() => {
+        this.$refs.comment.handCommentPage()
       }).catch(err => error(err))
     },
     handCommentPage(pageNum, pageSize, callback) {
-      const articleId = this.article.articleId
+      const articleId = this.$route.params.articleId
       showComment(articleId, pageNum, pageSize).then(res => {
         callback(res.data)
-      }).catch(err => {
-        error(err)
-        const comment = {
-          allComment: 26,
-          total: 2, pageNum: 1, pageSize: 10, pages: 1,
-          list: [
-            { commentId: 1, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-              simpleChildren: {
-                total: 12,
-                list: [
-                  { commentId: 2, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-                  { commentId: 5, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-                ]
-              }
-            },
-            { commentId: 3, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10',
-              simpleChildren: {
-                total: 12,
-                list: [
-                  { commentId: 6, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: '万剑归宗', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-                  { commentId: 4, uid: 1, nickname: '灰太狼', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', target: `@<a ref="https://www.baidu.com">百度</a>: `, content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-                ]
-              }
-            }
-          ]
-        }
-        callback(comment)
-      })
+      }).catch(err => error(err))
     },
     likeArticle() {
       likeArticle().then(() => {
@@ -144,31 +124,62 @@ export default {
         comment.dislike++
       }).catch(err => error(err))
     },
-    handlePublishChildrenToParent(commentId, publishContent) {
-      console.log(publishContent)
+    handLikeCommentChild(comment) {
+      // 评论点赞加一,后台对比是否有点赞记录
+      likeCommentChild(comment.commentId).then(() => {
+        comment.like++
+      }).catch(err => error(err))
     },
-    handlePublishChildrenToChildren(commentId, publishContent) {
-      console.log(publishContent)
+    handDisLikeCommentChild(comment) {
+      // 评论踩加一,后台对比是否有踩记录
+      disLikeCommentChild(comment.commentId).then(() => {
+        comment.dislike++
+      }).catch(err => error(err))
+    },
+    handlePublishChildrenToParent(parentId, content) {
+      const articleId = this.$route.params.articleId
+      const data = {
+        articleId: articleId,
+        parentId: parentId,
+        content: content
+      }
+      publishChild(data).then(() => {
+        this.$refs.comment.handCommentPage()
+      }).catch(err => error(err))
+    },
+    handlePublishChildrenToChildren(parentId, childTarget, content, callback) {
+      const articleId = this.$route.params.articleId
+      const data = {
+        articleId: articleId,
+        parentId: parentId,
+        childTarget: childTarget,
+        content: content
+      }
+      publishChildToChild(data).then(() => {
+        this.$refs.comment.handCommentPage()
+        callback()
+      }).catch(err => error(err))
     },
     // 评论详细页面分页
     handCommentDetailPage(commentId, pageNum, pageSize, callback) {
       loadChildren(commentId, pageNum, pageSize).then(res => {
         callback(res.data)
-      }).catch(err => {
-        error(err)
-        // todo:前后端对接后删除
-        const children = {
-          total: 14, pageNum: 1, pageSize: 10, pages: 2,
-          list: [
-            { commentId: 1, uid: 1, nickname: '灰太狼1', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-            { commentId: 2, uid: 1, nickname: '灰太狼2', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-            { commentId: 3, uid: 1, nickname: '灰太狼3', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-            { commentId: 4, uid: 1, nickname: '灰太狼4', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' },
-            { commentId: 5, uid: 1, nickname: '灰太狼5', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', content: 'comment', like: 100, dislike: 100, publishTime: '2021-12-11 19:10' }
-          ]
-        }
-        callback(children)
+      }).catch(err => error(err))
+    },
+    removeComment(commentId) {
+      removeArticleComment(commentId).then(() => {
+        this.$refs.comment.handCommentPage()
       })
+    },
+    removeCommentChild(commentId, callback) {
+      removeArticleCommentChild(commentId).then(() => {
+        this.$refs.comment.handCommentPage()
+        callback()
+      })
+    },
+    // 用户主页
+    showCreator(creatorId) {
+      console.log(creatorId)
     }
   }
 }
@@ -178,10 +189,30 @@ export default {
 .article-detail-container {
   padding: 20px;
   .article-label-container {
-    margin-bottom: 20px;
+    //margin-bottom: 20px;
+  }
+  .editor-title {
+    padding: 20px 0;
+    font-size: 16px;
+    font-weight: bold;
+  }
+  .creator-container {
+    .username-profile-container {
+      .username {
+        font-size: 16px;
+        line-height: 16px;
+      }
+      .profile {
+        margin-left: 20px;
+        font-size: 14px;
+        line-height: 8px;
+      }
+    }
   }
   .editor-content{
-    margin-top: 20px;
+    margin-top: 10px;
+    line-height: 26px;
+    font-size: 14px;
   }
   .publish-time {
     margin: 20px 0;

@@ -302,13 +302,6 @@ export const constantRoutes = [
         component: () => import('@/views/personalCenter/ContentManage'),
         meta: { categoryPath: true },
         hidden: true
-      },
-      {
-        path: 'comment',
-        name: 'personal-center-content-comment',
-        component: () => import('@/views/personalCenter/ContentManage'),
-        meta: { categoryPath: true },
-        hidden: true
       }
     ]
   },
@@ -343,13 +336,6 @@ export const constantRoutes = [
       {
         path: 'discuss',
         name: 'personal-center-comment-discuss',
-        component: () => import('@/views/personalCenter/CommentManage'),
-        meta: { categoryPath: true },
-        hidden: true
-      },
-      {
-        path: 'comment',
-        name: 'personal-center-comment-comment',
         component: () => import('@/views/personalCenter/CommentManage'),
         meta: { categoryPath: true },
         hidden: true

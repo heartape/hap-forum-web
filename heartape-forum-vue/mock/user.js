@@ -24,28 +24,6 @@ const users = {
 }
 
 module.exports = [
-  // user login
-  {
-    url: '/login',
-    type: 'post',
-    response: config => {
-      const { username } = config.body
-      const token = tokens[username]
-
-      // mock error
-      if (!token) {
-        return {
-          code: 60204,
-          message: 'Account and password are incorrect.'
-        }
-      }
-
-      return {
-        code: 1,
-        data: token
-      }
-    }
-  },
 
   // get user info
   {

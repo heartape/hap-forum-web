@@ -30,35 +30,38 @@
       </div>
     </div>
     <el-input
-      v-model="topic.describe"
-      class="describe-container"
+      v-model="topic.description"
+      class="description-container"
       type="textarea"
       resize="none"
       :autosize="{ minRows: 4, maxRows: 8}"
       placeholder="请输入话题描述 ( 选填 )"
     />
     <div class="foot-container">
-      <el-upload
-        v-if="fileList.length === 0"
-        class="cover-upload"
-        action="https://jsonplaceholder.typicode.com/posts/"
-        :limit="1"
-        :on-success="handleSuccess"
-        :on-error="handleError"
-        :on-preview="handlePreview"
-        :on-remove="handleRemove"
-        :file-list="fileList"
-      >
-        <el-button type="primary">添加封面</el-button>
-      </el-upload>
-      <el-button v-else class="cover-upload-preview-btn" type="primary" @click="dialogVisible = false">预 览</el-button>
-      <el-button class="topic-publish-btn" type="primary" @click="publishTopic">发 布</el-button>
+      <!--      <el-upload-->
+      <!--        v-if="fileList.length === 0"-->
+      <!--        class="mainPicture-upload"-->
+      <!--        action="https://jsonplaceholder.typicode.com/posts/"-->
+      <!--        :limit="1"-->
+      <!--        :on-success="handleSuccess"-->
+      <!--        :on-error="handleError"-->
+      <!--        :on-preview="handlePreview"-->
+      <!--        :on-remove="handleRemove"-->
+      <!--        :file-list="fileList"-->
+      <!--        disabled-->
+      <!--      >-->
+      <!--        <el-button type="primary">添加封面</el-button>-->
+      <!--      </el-upload>-->
+      <!--      <el-button v-else class="mainPicture-upload-preview-btn" type="primary" @click="dialogVisible = false">预 览</el-button>-->
+      <el-button class="topic-publish-btn" type="primary" @click="checkAndPublishTopic">发 布</el-button>
     </div>
   </div>
 </template>
 
 <script>
 import { publish } from '@/api/topic'
+import { searchLabel } from '@/api/label'
+import { checkImgExists, error } from '@/utils'
 
 export default {
   name: 'Publish',
@@ -66,27 +69,17 @@ export default {
     return {
       topic: {
         title: `如何看待「流调中最辛苦的中国人」？`,
-        describe: `1月19日，在北京市召开的第269场新冠疫情防控新闻发布会上`,
-        cover: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg',
-        label: []
+        description: `1月19日，在北京市召开的第269场新冠疫情防控新闻发布会上`,
+        isPicture: false,
+        mainPicture: undefined,
+        labelId: []
       },
       inputVisible: false,
       labelInput: {},
       labelChoose: [],
-      labelSearch: [],
       maxLabelNumber: 5,
       fileList: []
     }
-  },
-  created() {
-    // todo:改为接口获取
-    this.labelSearch = [
-      { labelId: 1, value: '计算机' },
-      { labelId: 2, value: '数学' },
-      { labelId: 3, value: '云计算' },
-      { labelId: 4, value: '人工智能' },
-      { labelId: 5, value: '微服务' }
-    ]
   },
   methods: {
     error(message) {
@@ -99,7 +92,7 @@ export default {
     handleClose(label) {
       const labelId = label.labelId
       this.labelChoose.splice(this.labelChoose.indexOf(label), 1)
-      this.topic.label.splice(this.topic.label.indexOf(labelId), 1)
+      this.topic.labelId.splice(this.topic.labelId.indexOf(labelId), 1)
     },
     showInput() {
       this.inputVisible = true
@@ -108,22 +101,26 @@ export default {
       })
     },
     // label模糊搜索
-    querySearch(queryString, cb) {
-      const label = this.labelSearch
-      const result = queryString ? label.filter(item => item.value.match(queryString)) : label
-      // const result = queryString ? label.filter(item => item.value.match('/^.*' + queryString + '.*$/')) : label
-      cb(result)
+    querySearch(name, cb) {
+      const pageNum = 1
+      const pageSize = 10
+      searchLabel(name, pageNum, pageSize).then(res => {
+        res.data.list.forEach(label => {
+          label.value = label.name
+        })
+        cb(res.data.list)
+      }).catch(err => error(err))
     },
     // 选择
     handleSelect(item) {
       // 判断重复
       const labelId = item.labelId
-      if (this.topic.label.includes(labelId)) {
+      if (this.topic.labelId.includes(labelId)) {
         this.error('标签已存在，请勿重复添加')
         return
       }
       this.labelChoose.push(item)
-      this.topic.label.push(labelId)
+      this.topic.labelId.push(labelId)
       this.inputVisible = false
       this.labelInput = {}
     },
@@ -154,12 +151,31 @@ export default {
       console.log('handlePreview')
       console.log(file)
     },
+    checkAndPublishTopic() {
+      if (this.topic.title.trim() === `` || this.topic.description.trim() === ``) {
+        error('内容为空')
+        return
+      }
+      const url = this.topic.mainPicture
+      if (url === undefined || url === '') {
+        this.publishTopic()
+        return
+      }
+      checkImgExists(url).then(() => {
+        this.topic.isPicture = true
+        this.publishTopic()
+      }).catch(() => this.publishTopic())
+    },
     publishTopic() {
-      const topic = this.topic
-      console.log(topic)
-      publish(topic).then(res => {
-        const topicId = res.data
-        this.$router.push('/topic/' + topicId)
+      publish(this.topic).then(() => {
+        this.topic = {
+          title: ``,
+          description: ``,
+          isPicture: false,
+          mainPicture: undefined,
+          labelId: []
+        }
+        this.labelChoose = []
       }).catch(error => this.error(error))
     }
   }
@@ -189,10 +205,10 @@ export default {
 .foot-container {
   height: 40px;
   margin-top: 20px;
-  .cover-upload {
+  .mainPicture-upload {
     float: left;
   }
-  .cover-upload-preview-btn {
+  .mainPicture-upload-preview-btn {
     float: left;
   }
   .topic-publish-btn {
@@ -201,7 +217,7 @@ export default {
 }
 </style>
 <style scoped>
-.cover-upload /deep/ .el-upload-list__item {
+.mainPicture-upload /deep/ .el-upload-list__item {
   margin-top: 0;
 }
 </style>

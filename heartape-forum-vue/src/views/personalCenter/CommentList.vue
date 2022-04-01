@@ -176,7 +176,9 @@ export default {
       } else if (targetType === 'discuss') {
         request = removeDiscussComment(commentId)
       }
-      request.then(() => this.handleLoadList).catch(err => {
+      request.then(() => {
+        this.handleLoadList()
+      }).catch(err => {
         error(err)
       })
     }

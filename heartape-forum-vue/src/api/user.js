@@ -10,7 +10,7 @@ export function login(data) {
 
 export function getInfo(token) {
   return request({
-    url: '/user/info',
+    url: '/api/oauth/info',
     method: 'get',
     params: { token }
   })

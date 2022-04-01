@@ -173,7 +173,9 @@ export default {
       } else if (type === 'discuss') {
         request = removeDiscuss(id)
       }
-      request.then(() => this.handleLoadList).catch(err => {
+      request.then(() => {
+        this.handleLoadList()
+      }).catch(err => {
         error(err)
       })
     }

@@ -3,12 +3,12 @@
     <el-table class="right-sidebar-guide-container" :data="guide" style="width: 100%" cell-class-name="guide" @row-click="rowClick">
       <el-table-column
         type="index"
-        width="30"
+        width="40"
       />
       <el-table-column
         prop="title"
         label="导航"
-        width="240"
+        width="230"
         highlight-current-row="true"
       />
     </el-table>
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import { guide } from '@/api/guide'
+import { guideHot } from '@/api/guide'
 import { error } from '@/utils'
 
 export default {
@@ -34,10 +34,10 @@ export default {
       window.open(column.path)
     },
     guideInfo() {
-      this.loading = true
-      guide().then(res => {
+      const pageNum = 1
+      const pageSize = 10
+      guideHot(pageNum, pageSize).then(res => {
         this.guide = res.data
-        this.loading = false
       }).catch(err => {
         error(err)
         this.guide = [{
@@ -47,7 +47,6 @@ export default {
           title: 'ppt',
           path: 'https://ppt.heartape.com'
         }]
-        this.loading = false
       })
     }
   }

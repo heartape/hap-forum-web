@@ -7,17 +7,18 @@
         style="float: left;width: 30px; height: 30px; margin-right: 10px"
         fit="cover"
       />
-      <span class="comment-username">{{ comment.nickname }}</span>
+      <el-button class="comment-username" type="text" @click="showCreator(comment.uid)">{{ comment.nickname }}</el-button>
       <div class="comment-content">{{ comment.content }}</div>
       <div class="parent-btn">
         <el-button type="primary" plain size="mini" @click="handLikeComment(comment)">赞同 {{ comment.like }}</el-button>
         <el-button type="primary" plain size="mini" @click="handDisLikeComment(comment)">踩 {{ comment.dislike }}</el-button>
-        <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="comment.showInput = !comment.showInput">回复</el-button>
-        <el-input v-show="comment.showInput" v-model="comment.publishContent" class="publish-commit-input" placeholder="请输入评论">
-          <template slot="append">
-            <el-button @click="handlePublishChildrenToParent(comment.commentId, comment.publishContent)">发布</el-button>
-          </template>
-        </el-input>
+        <!--父评论回复功能删除-->
+        <!--        <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="comment.showInput = !comment.showInput">回复</el-button>-->
+        <!--        <el-input v-show="comment.showInput" v-model="comment.publishContent" class="publish-commit-input" placeholder="请输入评论">-->
+        <!--          <template slot="append">-->
+        <!--            <el-button @click="handlePublishChildrenToParent(comment.commentId, comment.publishContent)">发布</el-button>-->
+        <!--          </template>-->
+        <!--        </el-input>-->
       </div>
     </div>
     <div class="comment-children-number-container">{{ comment.children.total }} 条回复</div>
@@ -29,14 +30,20 @@
           style="float: left;width: 30px; height: 30px; margin-right: 10px"
           fit="cover"
         />
-        <span class="comment-username">{{ childrenItem.nickname }}</span>
-        <div class="comment-content" v-text="childrenItem.content" />
-        <el-button type="primary" plain size="mini" @click="handLikeComment(childrenItem)">赞同 {{ childrenItem.like }}</el-button>
-        <el-button type="primary" plain size="mini" @click="handDisLikeComment(childrenItem)">踩 {{ childrenItem.dislike }}</el-button>
+        <el-button class="comment-username" type="text" @click="showCreator(childrenItem.uid)">{{ childrenItem.nickname }}</el-button>
+        <div v-if="childrenItem.childToChild === false" class="comment-content" v-text="childrenItem.content" />
+        <div v-else class="comment-content">
+          <span>回复 </span>
+          <el-button type="text" @click="showCreator(childrenItem.childTarget)">{{ childrenItem.childTargetName }}</el-button>
+          <span> : {{ childrenItem.content }}</span>
+        </div>
+        <el-button type="primary" plain size="mini" @click="handLikeCommentChild(childrenItem)">赞同 {{ childrenItem.like }}</el-button>
+        <el-button type="primary" plain size="mini" @click="handDisLikeCommentChild(childrenItem)">踩 {{ childrenItem.dislike }}</el-button>
         <el-button type="text" size="small" icon="el-icon-chat-dot-round" @click="childrenItem.showInput = !childrenItem.showInput">回复</el-button>
+        <el-button v-if="childrenItem.uid === $store.getters.uid" class="remove-comment-btn" type="text" size="mini" @click="removeCommentChild(childrenItem.commentId)">删除</el-button>
         <el-input v-show="childrenItem.showInput" v-model="childrenItem.publishContent" class="publish-commit-input" placeholder="请输入评论">
           <template slot="append">
-            <el-button @click="handlePublishChildrenToChildren(childrenItem.commentId, childrenItem.publishContent)">发布</el-button>
+            <el-button @click="handlePublishChildrenToChildren(comment.commentId, childrenItem.commentId, childrenItem.publishContent)">发布</el-button>
           </template>
         </el-input>
       </div>
@@ -66,9 +73,8 @@ export default {
     }
   },
   mounted() {
-    this.comment.children.pageNum = 0
+    this.comment.children.pageNum = 1
     this.comment.children.pageSize = 10
-    this.loadChildrenPage()
   },
   methods: {
     handLikeComment(comment) {
@@ -77,11 +83,26 @@ export default {
     handDisLikeComment(comment) {
       this.$emit('handDisLikeComment', comment)
     },
+    handLikeCommentChild(comment) {
+      this.$emit('handLikeCommentChild', comment)
+    },
+    handDisLikeCommentChild(comment) {
+      this.$emit('handDisLikeCommentChild', comment)
+    },
+    reloadChildren() {
+      const comment = this.comment
+      if (comment.total !== comment.children.total) {
+        this.loadChildrenPage()
+      }
+    },
     loadChildrenPage() {
       const commentId = this.comment.commentId
-      const pageNum = this.comment.children.pageNum
-      const pageSize = this.comment.children.pageSize
-      this.$emit('handCommentDetailPage', commentId, pageNum + 1, pageSize, value => {
+      const children = this.comment.children
+      if (children.pageNum === undefined || children.pageSize === undefined) {
+        this.comment.children.pageNum = 1
+        this.comment.children.pageSize = 10
+      }
+      this.$emit('handCommentDetailPage', commentId, children.pageNum, children.pageSize, value => {
         value.list.map(child => {
           this.$set(child, 'showInput', false)
           this.$set(child, 'publishContent', '')
@@ -89,13 +110,20 @@ export default {
         this.comment.children = value
       })
     },
-    handlePublishChildrenToParent(commentId, publishContent) {
-      // 对父评论进行评论
-      this.$emit('handlePublishChildrenToParent', commentId, publishContent)
-    },
-    handlePublishChildrenToChildren(commentId, publishContent) {
+    handlePublishChildrenToChildren(parentId, childTarget, content) {
       // 对子评论进行评论
-      this.$emit('handlePublishChildrenToChildren', commentId, publishContent)
+      this.$emit('handlePublishChildrenToChildren', parentId, childTarget, content, () => {
+        this.loadChildrenPage()
+      })
+    },
+    // 用户主页
+    showCreator(creatorId) {
+      console.log(creatorId)
+    },
+    removeCommentChild(commentId) {
+      this.$emit('removeCommentChild', commentId, () => {
+        this.loadChildrenPage()
+      })
     }
   }
 }
@@ -121,16 +149,19 @@ export default {
       padding: 10px 0;
       border-top: #dbddde 1px solid;
     }
+    .remove-comment-btn{
+      margin-left: 40px;
+    }
   }
 }
 .comment-username {
   font-size: 16px;
-  line-height: 30px;
+  line-height: 8px;
 }
 .comment-content {
-  padding: 5px 40px;
+  padding: 5px 40px 10px 40px;
   font-size: 14px;
-  line-height: 24px;
+  line-height: 22px;
 }
 .publish-commit-input {
   margin-top: 10px;

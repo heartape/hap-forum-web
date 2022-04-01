@@ -1,8 +1,9 @@
 import request from '@/utils/request'
 
-export function guide() {
+export function guideHot(pageNum, pageSize) {
   return request({
-    url: '/guide',
-    method: 'get'
+    url: '/business/link-guide',
+    method: 'get',
+    params: { pageNum, pageSize }
   })
 }

@@ -1,71 +1,86 @@
 import request from '@/utils/request'
 
-export function articleRecommend(page) {
+/**
+ * 由于没有集成推荐模块，所以目前为全量查询
+ */
+
+export function articleRecommend(pageNum, pageSize) {
+  return articleHot(pageNum, pageSize)
+  // return request({
+  //   url: '/business/article/list/recommend',
+  //   method: 'get',
+  //   params: { pageNum, pageSize }
+  // })
+}
+
+export function articleHot(pageNum, pageSize) {
   return request({
-    url: '/business/article/recommend',
+    url: '/business/article/list/hot',
     method: 'get',
-    params: { page }
+    params: { pageNum, pageSize }
   })
 }
 
-export function articleHot(page) {
+export function articleFollow(pageNum, pageSize) {
+  return articleHot(pageNum, pageSize)
+  // return request({
+  //   url: '/business/article/list/follow',
+  //   method: 'get',
+  //   params: { pageNum, pageSize }
+  // })
+}
+
+export function articleInLabelRecommend(labelId, pageNum, pageSize) {
   return request({
-    url: '/business/article/hot',
+    url: '/business/article/label/recommend',
     method: 'get',
-    params: { page }
+    params: { labelId, pageNum, pageSize }
   })
 }
 
-export function articleFollow(page) {
+export function articleInLabelHot(labelId, pageNum, pageSize) {
   return request({
-    url: '/business/article/follow',
+    url: '/business/article/label/hot',
     method: 'get',
-    params: { page }
+    params: { labelId, pageNum, pageSize }
   })
 }
 
-export function articleInLabelRecommend(labelId, page) {
+export function articleInLabelFollow(labelId, pageNum, pageSize) {
   return request({
-    url: '/business/article/label/' + labelId + '/recommend',
+    url: '/business/article/label/follow',
     method: 'get',
-    params: { page }
+    params: { labelId, pageNum, pageSize }
   })
 }
 
-export function articleInLabelHot(labelId, page) {
-  return request({
-    url: '/business/article/label/' + labelId + '/hot',
-    method: 'get',
-    params: { page }
-  })
-}
-
-export function articleInLabelFollow(labelId, page) {
-  return request({
-    url: '/business/article/label/' + labelId + '/follow',
-    method: 'get',
-    params: { page }
-  })
-}
-
-export function searchArticle(keyword, page) {
+export function searchArticle(keyword, pageNum, pageSize) {
   return request({
     url: '/business/article/search',
     method: 'get',
-    params: { keyword: keyword, page }
+    params: { keyword, pageNum, pageSize }
   })
 }
 
 export function articleDetail(articleId) {
   return request({
-    url: '/business/article/' + articleId,
-    method: 'get'
+    url: '/business/article',
+    method: 'get',
+    params: { articleId }
+  })
+}
+
+export function publishArticle(data) {
+  return request({
+    url: '/business/article',
+    method: 'post',
+    data
   })
 }
 
 export function removeArticle(articleId) {
   return request({
-    url: '/business/article/' + articleId,
+    url: '/business/article',
     method: 'delete',
     params: { articleId }
   })
@@ -73,54 +88,90 @@ export function removeArticle(articleId) {
 
 export function likeArticle(articleId) {
   return request({
-    url: '/business/article/' + articleId + '/like',
-    method: 'put'
+    url: '/business/article/like',
+    method: 'put',
+    params: { articleId }
   })
 }
 
 export function dislikeArticle(articleId) {
   return request({
-    url: '/business/article/' + articleId + '/dislike',
-    method: 'put'
+    url: '/business/article/dislike',
+    method: 'put',
+    params: { articleId }
   })
 }
 
-export function showComment(articleId, page) {
+export function showComment(articleId, pageNum, pageSize) {
   return request({
-    url: '/business/article/' + articleId,
+    url: '/business/article/comment/list',
     method: 'get',
-    params: { page }
+    params: { articleId, pageNum, pageSize }
   })
 }
 
-export function publishParent(articleId, comment) {
+export function publishParent(data) {
   return request({
-    url: '/business/article/comment/parent/' + articleId,
+    url: '/business/article/comment',
     method: 'post',
-    params: { comment }
+    data
+  })
+}
+
+export function publishChild(data) {
+  return request({
+    url: '/business/article/comment/child',
+    method: 'post',
+    data
+  })
+}
+
+export function publishChildToChild(data) {
+  return request({
+    url: '/business/article/comment/child/to-child',
+    method: 'post',
+    data
   })
 }
 
 // 评论详情页面
 export function loadChildren(commentId, pageNum, pageSize) {
   return request({
-    url: '/business/article/comment/parent/' + commentId + '/load/',
+    url: '/business/article/comment/child/list',
     method: 'get',
-    params: { pageNum, pageSize }
+    params: { commentId, pageNum, pageSize }
   })
 }
 
 export function likeComment(commentId) {
   return request({
-    url: '/business/article/comment/' + commentId + '/like',
-    method: 'put'
+    url: '/business/article/comment/like',
+    method: 'put',
+    params: { commentId }
   })
 }
 
 export function disLikeComment(commentId) {
   return request({
-    url: '/business/article/comment/' + commentId + '/dislike',
-    method: 'put'
+    url: '/business/article/comment/dislike',
+    method: 'put',
+    params: { commentId }
+  })
+}
+
+export function likeCommentChild(commentId) {
+  return request({
+    url: '/business/article/comment/child/like',
+    method: 'put',
+    params: { commentId }
+  })
+}
+
+export function disLikeCommentChild(commentId) {
+  return request({
+    url: '/business/article/comment/child/dislike',
+    method: 'put',
+    params: { commentId }
   })
 }
 

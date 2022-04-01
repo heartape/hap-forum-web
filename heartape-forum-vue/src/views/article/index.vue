@@ -35,39 +35,20 @@ export default {
     /**
      * 这里不使用menu->path来拼接url请求后端，为了接口请求更清楚，牺牲代码量和灵活性
      */
-    chooseArticleType(path, page) {
+    chooseArticleType(path, pageNum, pageSize) {
       if (path.endsWith('recommend')) {
-        return articleRecommend(page)
+        return articleRecommend(pageNum, pageSize)
       } else if (path.endsWith('hot')) {
-        return articleHot(page)
+        return articleHot(pageNum, pageSize)
       } else if (path.endsWith('follow')) {
-        return articleFollow(page)
+        return articleFollow(pageNum, pageSize)
       }
     },
-    getArticle(page, callback) {
+    getArticle(pageNum, pageSize, callback) {
       const path = this.$route.path
-      this.chooseArticleType(path, page).then(res => {
+      this.chooseArticleType(path, pageNum, pageSize).then(res => {
         callback(res.data)
-      }).catch(res => {
-        error(res)
-        // todo:对接后删除
-        callback({
-          current: 2,
-          list: [
-            { articleId: 1, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
-            { articleId: 2, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
-            { articleId: 3, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'picture', url: 'https://shadow.elemecdn.com/app/element/hamburger.9cf7b091-55e9-11e9-a976-7f4d0b07eef6.png' },
-            { articleId: 4, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 5, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 6, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 7, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 8, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 9, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 10, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null },
-            { articleId: 11, title: '好吃的汉堡', content: '好吃的汉堡啊', like: 256, publishTime: '2021-11-22', type: 'text', url: null }
-          ]
-        })
-      })
+      }).catch(res => error(res))
     }
   }
 }

@@ -29,34 +29,20 @@ export default {
     }
   },
   methods: {
-    chooseTopicType(path, page) {
+    chooseTopicType(path, pageNum, pageSize) {
       if (path.endsWith('recommend')) {
-        return topicRecommend(page)
+        return topicRecommend(pageNum, pageSize)
       } else if (path.endsWith('hot')) {
-        return topicHot(page)
+        return topicHot(pageNum, pageSize)
       } else if (path.endsWith('follow')) {
-        return topicFollow(page)
+        return topicFollow(pageNum, pageSize)
       }
     },
-    getTopic(page, callback) {
+    getTopic(pageNum, pageSize, callback) {
       const path = this.$route.path
-      this.chooseTopicType(path, page).then(res => {
+      this.chooseTopicType(path, pageNum, pageSize).then(res => {
         callback(res.data)
-      }).catch(res => {
-        error(res)
-        // todo:对接后删除
-        callback({
-          current: 2,
-          pages: 10,
-          list: [
-            { tid: 1, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description description description description description description description description description description description', hot: 256, publishTime: '2021-11-22' },
-            { tid: 2, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: true, coverUrl: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', description: 'description', hot: 256, publishTime: '2021-11-22' },
-            { tid: 3, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' },
-            { tid: 4, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' },
-            { tid: 5, title: 'title', avatar: 'https://gitee.com/heartape/photo-url/raw/master/avatar/1.jpeg', nickname: '灰太狼', profile: '羊村死敌', cover: false, coverUrl: '', description: 'description', hot: 256, publishTime: '2021-11-22' }
-          ]
-        })
-      })
+      }).catch(res => error(res))
     },
     searchTopic(keyword) {
       this.$router.push({ path: '/topic/search', query: { keyword }})

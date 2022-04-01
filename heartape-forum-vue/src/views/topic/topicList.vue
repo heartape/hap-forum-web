@@ -1,47 +1,23 @@
 <template>
   <div class="topic-container-body">
-    <el-row v-for="item in topic.list" :key="item.tid" @click.native="topicDetail(item.tid)">
-      <el-card v-if="item.cover === false" class="box-card" shadow="hover" :body-style="{ padding: '0px' }">
+    <el-row v-for="item in topic.list" :key="item.tid">
+      <el-card v-if="item.isPicture === false" class="box-card" shadow="hover" :body-style="{ padding: '0px' }">
         <div class="introduce">
-          <span class="author-container">
-            <el-image
-              :src="item.avatar"
-              :alt="item.nickname"
-              style="float: left;width: 30px; height: 30px; margin-right: 10px"
-              fit="cover"
-            />
-            <span class="author-info-container">
-              <span>{{ item.nickname }}</span>
-              <i style="font-size: 14px; margin-left: 20px">{{ item.profile }}</i>
-            </span>
-          </span>
-          <h3 class="title">{{ item.title }}</h3>
-          <span class="content">{{ item.description }}</span>
+          <h3 class="title" style="cursor : pointer" @click="topicDetail(item.topicId)">{{ item.title }}</h3>
+          <span class="content">{{ item.simpleDescription }}</span>
           <div class="bottom clearfix" style="width: 680px">
             <span class="hot">热度:{{ item.hot }}</span>
-            <time class="time">{{ item.publishTime }}</time>
+            <time class="time">{{ item.createdTime }}</time>
           </div>
         </div>
       </el-card>
       <el-card v-else class="box-card image-box-card" shadow="hover" :body-style="{ padding: '0px' }">
         <div class="introduce image-introduce">
-          <span class="author-container">
-            <el-image
-              :src="item.avatar"
-              :alt="item.nickname"
-              style="float: left;width: 30px; height: 30px; margin-right: 10px"
-              fit="cover"
-            />
-            <span class="author-info-container">
-              <span>{{ item.nickname }}</span>
-              <i style="font-size: 14px; margin-left: 20px">{{ item.profile }}</i>
-            </span>
-          </span>
-          <h3 class="title">{{ item.title }}</h3>
+          <h3 class="title" style="cursor : pointer" @click="topicDetail(item.topicId)">{{ item.title }}</h3>
           <span class="content">
             <el-image
-              :src="item.coverUrl"
-              :alt="item.title + '封面'"
+              :src="item.mainPicture"
+              :alt="item.title"
               style="float: left;width: 160px; height: 120px; margin-right: 10px"
               fit="cover"
             />
@@ -80,7 +56,8 @@ export default {
   },
   methods: {
     init() {
-      this.topic.current = 0
+      this.topic.pageNum = 1
+      this.topic.pageSize = 10
       this.getTopic()
     },
     // 滚动触发加载时机
@@ -91,19 +68,20 @@ export default {
       const scrollTop = document.documentElement.scrollTop
       const clientHeight = document.documentElement.clientHeight
       const scrollHeight = document.documentElement.scrollHeight
-      if (scrollTop + clientHeight >= scrollHeight - 100) {
+      if (scrollTop + clientHeight >= scrollHeight - 200) {
         this.getTopic()
       }
     },
     getTopic() {
       this.showStatus = true
       this.scrollLoading = true
-      const page = this.topic.current + 1
-      // if (page > this.topic.pages) {
-      //   return
-      // }
+      const pageNum = this.topic.pageNum
+      const pageSize = this.topic.pageSize
+      if (pageNum !== 1 && pageNum > this.topic.pages || this.topic.pages === 1) {
+        return
+      }
       const beforeList = this.topic.list
-      this.$emit('getTopic', page, val => {
+      this.$emit('getTopic', pageNum, pageSize, val => {
         if (val.current > 1) {
           val.list = [...beforeList, ...val.list]
         }
@@ -125,22 +103,19 @@ export default {
 .box-card {
   padding: 10px;
   width: 740px;
-  height: 170px;
+  min-height: 130px;
   background-color: #ffffff;
 
   .introduce {
     height: 100%;
     width: 100%;
-    .author-info-container {
-      position: relative;
-      top: 5px;
-    }
 
     .title {
       display: block;
       margin-bottom: 5px;
       width: 100%;
       height: 18px;
+      font-size: 16px;
       line-height: 18px;
       overflow: hidden;
     }
@@ -149,8 +124,7 @@ export default {
       display: block;
       padding-top: 5px;
       width: 100%;
-      height: 50px;
-      font-size: 18px;
+      font-size: 14px;
       line-height: 22px;
       overflow: hidden;
     }
@@ -186,13 +160,9 @@ export default {
 
 .image-box-card {
   width: 740px;
-  height: 250px;
   background-color: #ffffff;
   .image-introduce {
     height: 180px;
-    .content {
-      height: 130px;
-    }
   }
 }
 

@@ -1,5 +1,13 @@
 import request from '@/utils/request'
 
+export function searchLabel(name, pageNum, pageSize) {
+  return request({
+    url: '/business/label/list',
+    method: 'get',
+    params: { name, pageNum, pageSize }
+  })
+}
+
 export function showLabel(labelId) {
   return request({
     url: '/label/' + labelId,

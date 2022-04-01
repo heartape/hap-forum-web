@@ -1,4 +1,4 @@
-import { login, logout, getInfo } from '@/api/user'
+import { login, getInfo } from '@/api/user'
 import { getToken, setToken, removeToken } from '@/utils/auth'
 import { resetRouter } from '@/router'
 
@@ -6,6 +6,7 @@ const getDefaultState = () => {
   return {
     token: getToken(),
     uid: '',
+    account: '',
     name: '',
     avatar: ''
   }
@@ -23,6 +24,9 @@ const mutations = {
   SET_UID: (state, uid) => {
     state.uid = uid
   },
+  SET_ACCOUNT: (state, account) => {
+    state.account = account
+  },
   SET_NAME: (state, name) => {
     state.name = name
   },
@@ -32,61 +36,59 @@ const mutations = {
 }
 
 const actions = {
-  // todo:先完成登录,后修改状态码
-  // user login
   login({ commit }, userInfo) {
-    commit('SET_TOKEN', 'token')
-    setToken('token')
-    // const { username, password } = userInfo
-    // return new Promise((resolve, reject) => {
-    //   login({ username: username.trim(), password: password }).then(response => {
-    //     const { data } = response
-    //     commit('SET_TOKEN', data.token)
-    //     setToken(data.token)
-    //     resolve()
-    //   }).catch(error => {
-    //     reject(error)
-    //   })
-    // })
-  },
-
-  // get user info
-  getInfo({ commit, state }) {
-    commit('SET_UID', '1')
-    commit('SET_NAME', '灰太狼')
-    commit('SET_AVATAR', 'https://gitee.com/heartape/photo-url/raw/master/avatar/73781120_p0.jpg')
-    // return new Promise((resolve, reject) => {
-    //   getInfo(state.token).then(response => {
-    //     const { data } = response
-    //
-    //     if (!data) {
-    //       return reject('Verification failed, please Login again.')
-    //     }
-    //
-    //     // const { name, avatar } = data
-    //     const { name } = data
-    //
-    //     commit('SET_NAME', name)
-    //     commit('SET_AVATAR', 'https://gitee.com/heartape/photo-url/raw/master/avatar/73781120_p0.jpg')
-    //     resolve(data)
-    //   }).catch(error => {
-    //     reject(error)
-    //   })
-    // })
-  },
-
-  // user logout
-  logout({ commit, state }) {
+    const { username, password } = userInfo
+    // application/x-www-form-urlencoded类型的提交数据需要用URLSearchParams包裹
+    const formData = new URLSearchParams()
+    formData.append('username', username.trim())
+    formData.append('password', password.trim())
     return new Promise((resolve, reject) => {
-      logout(state.token).then(() => {
-        removeToken() // must remove  token  first
-        resetRouter()
-        commit('RESET_STATE')
+      login(formData).then(response => {
+        const token = response.data
+        commit('SET_TOKEN', token)
+        setToken(token)
         resolve()
       }).catch(error => {
         reject(error)
       })
     })
+  },
+
+  // get user info
+  getInfo({ commit, state }) {
+    return new Promise((resolve, reject) => {
+      getInfo(state.token).then(response => {
+        const { data } = response
+        if (!data) {
+          return reject('Verification failed, please Login again.')
+        }
+        const { uid, username, nickname, avatar } = data
+        commit('SET_UID', uid)
+        commit('SET_ACCOUNT', username)
+        commit('SET_NAME', nickname)
+        commit('SET_AVATAR', avatar)
+        resolve(data)
+      }).catch(error => {
+        reject(error)
+      })
+    })
+  },
+
+  // user logout
+  logout({ commit, state }) {
+    removeToken() // must remove  token  first
+    resetRouter()
+    commit('RESET_STATE')
+    // return new Promise((resolve, reject) => {
+    //   logout(state.token).then(() => {
+    //     removeToken() // must remove  token  first
+    //     resetRouter()
+    //     commit('RESET_STATE')
+    //     resolve()
+    //   }).catch(error => {
+    //     reject(error)
+    //   })
+    // })
   },
 
   // remove token

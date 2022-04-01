@@ -1,65 +1,68 @@
 import request from '@/utils/request'
 
-export function topicRecommend(page) {
+export function topicRecommend(pageNum, pageSize) {
+  return topicHot(pageNum, pageSize)
+  // return request({
+  //   url: '/business/topic/recommend',
+  //   method: 'get',
+  //   params: { pageNum, pageSize }
+  // })
+}
+
+export function topicHot(pageNum, pageSize) {
   return request({
-    url: '/business/topic/recommend',
+    url: '/business/topic/list/hot',
     method: 'get',
-    params: { page }
+    params: { pageNum, pageSize }
   })
 }
 
-export function topicHot(page) {
+export function topicFollow(pageNum, pageSize) {
+  return topicHot(pageNum, pageSize)
+  // return request({
+  //   url: '/business/topic/follow',
+  //   method: 'get',
+  //   params: { pageNum, pageSize }
+  // })
+}
+
+export function topicInLabelRecommend(labelId, pageNum, pageSize) {
   return request({
-    url: '/business/topic/hot',
+    url: '/business/topic/label/recommend',
     method: 'get',
-    params: { page }
+    params: { labelId, pageNum, pageSize }
   })
 }
 
-export function topicFollow(page) {
+export function topicInLabelHot(labelId, pageNum, pageSize) {
   return request({
-    url: '/business/topic/follow',
+    url: '/business/topic/label/hot',
     method: 'get',
-    params: { page }
+    params: { labelId, pageNum, pageSize }
   })
 }
 
-export function topicInLabelRecommend(labelId, page) {
+export function topicInLabelFollow(labelId, pageNum, pageSize) {
   return request({
-    url: '/business/topic/label/' + labelId + '/recommend',
+    url: '/business/topic/label/follow',
     method: 'get',
-    params: { page }
+    params: { labelId, pageNum, pageSize }
   })
 }
 
-export function topicInLabelHot(labelId, page) {
-  return request({
-    url: '/business/topic/label/' + labelId + '/hot',
-    method: 'get',
-    params: { page }
-  })
-}
-
-export function topicInLabelFollow(labelId, page) {
-  return request({
-    url: '/business/topic/label/' + labelId + '/follow',
-    method: 'get',
-    params: { page }
-  })
-}
-
-export function SearchTopic(keyword, page) {
+export function SearchTopic(keyword, pageNum, pageSize) {
   return request({
     url: '/business/topic/search',
     method: 'get',
-    params: { keyword: keyword, page }
+    params: { keyword, pageNum, pageSize }
   })
 }
 
 export function topicDetail(topicId) {
   return request({
-    url: '/business/topic/' + topicId,
-    method: 'get'
+    url: '/business/topic',
+    method: 'get',
+    params: { topicId }
   })
 }
 
@@ -73,14 +76,23 @@ export function removeTopic(topicId) {
 
 export function likeTopic(topicId) {
   return request({
-    url: '/business/topic/' + topicId + '/like',
-    method: 'put'
+    url: '/business/topic/like',
+    method: 'put',
+    params: { topicId }
+  })
+}
+
+export function dislikeTopic(topicId) {
+  return request({
+    url: '/business/topic/dislike',
+    method: 'put',
+    params: { topicId }
   })
 }
 
 export function loadDiscussPage(topicId, pageNum, pageSize) {
   return request({
-    url: '/business/topic/discuss',
+    url: '/business/topic/discuss/list',
     method: 'get',
     params: { topicId, pageNum, pageSize }
   })
@@ -96,45 +108,49 @@ export function removeDiscuss(discussId) {
 
 export function likeDiscuss(discussId) {
   return request({
-    url: '/business/topic/discuss/' + discussId + '/like',
-    method: 'put'
+    url: '/business/topic/discuss/like',
+    method: 'put',
+    params: { discussId }
   })
 }
 
 export function dislikeDiscuss(discussId) {
   return request({
-    url: '/business/topic/discuss/' + discussId + '/dislike',
-    method: 'put'
+    url: '/business/topic/discuss/dislike',
+    method: 'put',
+    params: { discussId }
   })
 }
 
 export function likeComment(commentId) {
   return request({
-    url: '/business/topic/discuss/comment/' + commentId + '/like',
-    method: 'put'
+    url: '/business/topic/discuss/comment/like',
+    method: 'put',
+    params: { commentId }
   })
 }
 
 export function disLikeComment(commentId) {
   return request({
-    url: '/business/topic/discuss/comment/' + commentId + '/dislike',
-    method: 'put'
+    url: '/business/topic/discuss/comment/dislike',
+    method: 'put',
+    params: { commentId }
   })
 }
 
 export function showComment(discussId, pageNum, pageSize) {
   return request({
-    url: '/business/topic/discuss/' + discussId,
+    url: '/business/topic/discuss/comment/list',
     method: 'get',
-    params: { pageNum, pageSize }
+    params: { discussId, pageNum, pageSize }
   })
 }
 
 export function loadChildren(commentId, pageNum, pageSize) {
   return request({
-    url: '/business/topic/discuss/comment/' + commentId,
+    url: '/business/topic/discuss/comment/child/list',
     method: 'get',
-    params: { pageNum, pageSize }
+    params: { commentId, pageNum, pageSize }
   })
 }
 
@@ -157,6 +173,39 @@ export function removeDiscussCommentChild(commentId) {
 export function publish(data) {
   return request({
     url: '/business/topic',
+    method: 'post',
+    data
+  })
+}
+
+export function publishDiscuss(data) {
+  return request({
+    url: '/business/topic/discuss',
+    method: 'post',
+    data
+  })
+}
+
+export function publishDiscussComment(topicId, discussId, content) {
+  const data = { topicId, discussId, content }
+  return request({
+    url: '/business/topic/discuss/comment',
+    method: 'post',
+    data
+  })
+}
+
+export function publishDiscussCommentChild(data) {
+  return request({
+    url: '/business/topic/discuss/comment/child',
+    method: 'post',
+    data
+  })
+}
+
+export function publishDiscussCommentChildToChild(data) {
+  return request({
+    url: '/business/topic/discuss/comment/child/to-child',
     method: 'post',
     data
   })

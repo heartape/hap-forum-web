@@ -1,16 +1,16 @@
 <template>
   <!--文章列表-->
   <div class="article-list-container">
-    <el-row v-for="item in article.list" :key="item.articleId" @click.native="articleDetail(item.articleId)">
-      <el-card v-if="item.type === 'picture'" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ffffff' }">
+    <el-row v-for="item in article.list" :key="item.articleId">
+      <el-card v-if="item.isPicture === true" class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ffffff' }">
         <el-image
           style="width: 200px; height: 140px; margin: 10px"
-          :src="item.url"
+          :src="item.mainPicture"
           :fit="'cover'"
         />
         <div class="introduce">
-          <span class="title">{{ item.title }}</span>
-          <span class="content">{{ item.content }}</span>
+          <span class="title" style="cursor : pointer" @click="articleDetail(item.articleId)">{{ item.title }}</span>
+          <span class="content">{{ item.simpleContent }}</span>
           <div class="bottom clearfix">
             <time class="time">{{ item.publishTime }}</time>
             <span class="article-hot">热度:{{ item.like }}</span>
@@ -19,8 +19,8 @@
       </el-card>
       <el-card v-else class="box-card" :body-style="{ padding: '0px', backgroundColor: '#ffffff' }">
         <div class="introduce" style="width: 700px">
-          <span class="title">{{ item.title }}</span>
-          <span class="content">{{ item.content }}</span>
+          <span class="title" style="cursor : pointer" @click="articleDetail(item.articleId)">{{ item.title }}</span>
+          <span class="content">{{ item.simpleContent }}</span>
           <div class="bottom clearfix" style="width: 680px">
             <time class="time">{{ item.publishTime }}</time>
             <span class="article-hot">热度:{{ item.like }}</span>
@@ -58,7 +58,7 @@ export default {
   },
   methods: {
     init() {
-      this.article.current = 0
+      this.article.pageNum = 0
       this.getArticle()
     },
     // 滚动触发加载时机
@@ -69,31 +69,28 @@ export default {
       const scrollTop = document.documentElement.scrollTop
       const clientHeight = document.documentElement.clientHeight
       const scrollHeight = document.documentElement.scrollHeight
-      if (scrollTop + clientHeight >= scrollHeight - 100) {
+      // console.log(scrollTop + clientHeight >= scrollHeight - 200)
+      if (scrollTop + clientHeight >= scrollHeight - 200) {
         this.getArticle()
       }
     },
     getArticle() {
       this.showStatus = true
-      this.scrollLoading = true
-      const page = this.article.current + 1
-      if (page > this.article.pages) {
+      const pageNum = this.article.pageNum + 1
+      const pageSize = 10
+      if (pageNum !== 1 && pageNum > this.article.pages) {
         return
       }
       const beforeList = this.article.list
-      this.$emit('getArticle', page, val => {
-        if (val.current > 1) {
+      this.$emit('getArticle', pageNum, pageSize, val => {
+        if (val.pageNum > 1) {
           val.list = [...beforeList, ...val.list]
         }
         this.$set(this, 'article', val)
-        this.scrollLoading = false
-        setTimeout(() => {
-          this.showStatus = false
-        }, 1000)
       })
     },
-    articleDetail(aid) {
-      this.$router.push('/article/' + aid)
+    articleDetail(articleId) {
+      this.$router.push('/article/' + articleId)
     }
   }
 }
@@ -119,6 +116,7 @@ export default {
         width: 100%;
         height: 25px;
         line-height: 25px;
+        font-weight: bold;
         overflow: hidden;
       }
 
@@ -160,7 +158,7 @@ export default {
     }
   }
   .status-container {
-    height:200px;
+    height:100px;
   }
 }
 

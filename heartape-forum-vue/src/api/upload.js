@@ -16,12 +16,3 @@ export function getFileUrl(fileName) {
     params: { fileName }
   })
 }
-
-// 富文本发布
-export function publishArticle(body) {
-  return request({
-    url: '/article',
-    method: 'post',
-    body
-  })
-}
